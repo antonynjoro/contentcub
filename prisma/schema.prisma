@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  clients   Client[]
+  forms     Form[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  requests  Request[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Request {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  String   @db.ObjectId
+  formData  FormData? 
+  formDataId String? @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Form {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  fields    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FormData {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  request   Request  @relation(fields: [requestId], references: [id])
+  requestId String   @unique @db.ObjectId
+  formId    String  // To link FormData to the specific Form it was created from.
+  data      Json
+  createdAt DateTime @default(now())
+}
+
+
