@@ -23,8 +23,8 @@ async function handler(request) {
     try {
         evt = wh.verify(payload, heads);
         
-    } catch (_) {
-        return NextResponse.json({ error: `Invalid signature ${heads}` }, { status: 400 });
+    } catch (error) {
+        return NextResponse.json({ error: `Invalid signature Heads: ${heads},  Error: ${error}` }, { status: 400 });
     }
 
     if (evt.type === "user.created") {
