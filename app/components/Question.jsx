@@ -2,6 +2,7 @@ import React from "react";
 import { UploadDropzone, UploadButton } from "./uploadthing";
 import ShortAnswerField from "./ShortAnswerField.jsx";
 import LongAnswerField from "./LongAnswerField.jsx";
+import { toast } from "react-hot-toast";
 
 export default function Question({ id, type, title, description }) {
   function handleType(type) {
@@ -13,15 +14,15 @@ export default function Question({ id, type, title, description }) {
       return (
         <UploadButton
           className=" left"
-          endpoint="imageUploader"
+          endpoint="pdfUploader"
           onClientUploadComplete={(res) => {
             // Do something with the response
             console.log("Files: ", res);
-            alert("Upload Completed");
+            toast.success("Upload Completed");
           }}
           onUploadError={(error) => {
             // Do something with the error.
-            alert(`ERROR! ${error.message}`);
+            toast.error("Upload Failed, please try again.");
           }}
         />
       );
@@ -32,21 +33,39 @@ export default function Question({ id, type, title, description }) {
           onClientUploadComplete={(res) => {
             // Do something with the response
             console.log("Files: ", res);
-            alert("Upload Completed");
+            toast.success("Upload Completed");
           }}
           onUploadError={(error) => {
             // Do something with the error.
-            alert(`ERROR! ${error.message}`);
+            toast.error("Upload Failed, please try again.");
+            console.log(error);
           }}
         />
       );
-    } else {
+    } else if (type === "imageUploadMultiple") {
+      return (
+        <UploadDropzone
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            // Do something with the response
+            console.log("Files: ", res);
+            toast.success("Upload Completed");
+          }}
+          onUploadError={(error) => {
+            // Do something with the error.
+            toast.error(`ERROR! ${error.message}`);
+          }}
+        />
+      );
+    } 
+    
+    else {
       return <p>Invalid Type</p>;
     }
   }
 
   return (
-    <div className="flex w-full flex-col items-stretch justify-center p-20">
+    <div className="flex w-full flex-col items-stretch justify-center flex-grow p-20">
       <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
       <p className="text-base text-gray-600">{description}</p>
       <div className="flex pt-4">{handleType(type)}</div>

@@ -9,49 +9,53 @@ datasource db {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  externalId String   @unique
   email     String   @unique
   clients   Client[]
-  forms     Form[]
+  requests  Request[]
+  atrributes Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Client {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
   email     String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.ObjectId
   requests  Request[]
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("userId") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Request {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  client    Client   @relation(fields: [clientId], references: [id])
-  clientId  String   @db.ObjectId
-  formData  FormData? 
-  formDataId String? @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Form {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  questions Question[]
   user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.ObjectId
-  fields    Json
+  userId    String   @map("userId") @db.ObjectId
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  String   @map("clientId") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model FormData {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  request   Request  @relation(fields: [requestId], references: [id])
-  requestId String   @unique @db.ObjectId
-  formId    String  // To link FormData to the specific Form it was created from.
-  data      Json
+type Question {
+  id        String   @db.ObjectId
+  type      QuestionType
+  title     String
+  description String?
+  answers    String[]
   createdAt DateTime @default(now())
+}
+
+enum QuestionType {
+  textShort
+  textLong
+  imageUpload
+  imageUploadMultiple
+  fileUpload
 }
 
 

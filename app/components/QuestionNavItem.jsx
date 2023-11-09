@@ -1,5 +1,5 @@
-import React from "react";
-import { BsImages, BsTextParagraph } from "react-icons/bs";
+
+import { BsImages, BsImage, BsTextParagraph } from "react-icons/bs";
 import { MdShortText } from "react-icons/md";
 import { HiOutlineUpload } from "react-icons/hi";
 
@@ -14,7 +14,7 @@ import { HiOutlineUpload } from "react-icons/hi";
  * Props:
  * - `questionType`: Specifies the type of question. Default is 'textShort'.
  *    Acceptable values are:
- *    textShort, textLong, fileUpload, imageUpload
+ *    textShort, textLong, fileUpload, imageUpload, ImageUploadMultiple
  *
  * - `label`: The textual label for the question. Not currently used but reserved for future enhancement.
  *
@@ -55,8 +55,13 @@ const questionTypes = {
   },
   imageUpload: {
     description: "Image Upload",
-    icon: BsImages,
+    icon: BsImage,
     colorClass: "bg-rose-200",
+  },
+  imageUploadMultiple: {
+    description: "Multiple Image Upload",
+    icon: BsImages,
+    colorClass: "bg-yellow-200",
   },
 };
 
