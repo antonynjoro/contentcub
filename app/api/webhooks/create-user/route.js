@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { Webhook } from "@svix/svix";
 
 const webhookSecret = process.env.WEBHOOK_SECRET;
 
