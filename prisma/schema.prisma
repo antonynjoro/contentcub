@@ -11,9 +11,11 @@ model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   externalId String   @unique
   email     String   @unique
+  firstName String
+  lastName  String
   clients   Client[]
   requests  Request[]
-  atrributes Json
+  attributes Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -32,13 +34,21 @@ model Client {
 model Request {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  status    Status   @default(draft)
   questions Question[]
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("userId") @db.ObjectId
-  client    Client   @relation(fields: [clientId], references: [id])
-  clientId  String   @map("clientId") @db.ObjectId
+  client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?   @map("clientId") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  draft
+  sent
+  answered
+  closed
 }
 
 type Question {

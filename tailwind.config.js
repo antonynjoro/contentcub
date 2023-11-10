@@ -9,7 +9,7 @@ export default withUt({
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-league_spartan)'],
+        sans: ['var(--font-fira_sans)'],
       },
     },
   },

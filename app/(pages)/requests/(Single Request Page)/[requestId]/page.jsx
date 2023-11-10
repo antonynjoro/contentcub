@@ -1,14 +1,15 @@
 "use client";
-import NavBar from "../../components/NavBar";
+import NavBar from "../../../../components/NavBar";
 import React from "react";
-import IconButton from "../../components/IconButton.jsx";
-import QuestionNavItem from "../../components/QuestionNavItem.jsx";
-import Question from "../../components/Question.jsx";
+import IconButton from "../../../../components/IconButton.jsx";
+import QuestionNavItem from "../../../../components/QuestionNavItem.jsx";
+import Question from "../../../../components/Question.jsx";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import AddQuestionModal from "../../components/AddQuestionModal.jsx";
+import AddQuestionModal from "../../../../components/AddQuestionModal.jsx";
 import { HiTrash } from "react-icons/hi2";
-import QuestionNavigationButtons from "../../components/QuestionNavigationButtons.jsx";
+import QuestionNavigationButtons from "../../../../components/QuestionNavigationButtons.jsx";
+import Button from "../../../../components/Button";
 
 // const questions = [
 //   {
@@ -247,16 +248,17 @@ export default function Page() {
                   title={currentQuestion.title}
                   description={currentQuestion.description}
                 />
-                <div className="bg-blue flex justify-end">
-                  <button className="flex align-middle pt-3 gap-2 rounded-md bg-red-100 border border-red-500 text-gray-900 px-4 py-2 hover:bg-gray-800  mr-2" title="Delete this question"
-                    onClick={handleDeleteQuestion}
+                <div className="bg-blue flex justify-end gap-3">
+                  <Button
+                    handleClick={handleDeleteQuestion}
+                    isDestructive={true}
                   >
                     <HiTrash 
-                      className="h-6 w-6 text-red-500 -mt-1"
+                      className="h-5 w-5 text-red-500 "
                     />
 
                     Delete Question
-                  </button>
+                  </Button>
                   <QuestionNavigationButtons
                     handleNextButtonClick={handleNextButtonClick}
                     handlePreviousButtonClick={handlePreviousButtonClick}

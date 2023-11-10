@@ -6,6 +6,8 @@ import { MdShortText } from "react-icons/md";
 import { HiOutlineUpload } from "react-icons/hi";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Button from "./Button";
+import ModalContainer from "./ModalContainer";
 
 const questionTypes = {
   textShort: {
@@ -68,14 +70,7 @@ export default function AddQuestionModal({ handleModalClose, setQuestions }) {
     }
   }
   return (
-    <div
-      className="fixed left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center bg-black bg-opacity-50"
-      onClick={() => handleModalClose()}
-    >
-      <div
-        className="flex w-[600px] flex-col gap-6 rounded-xl bg-white p-12 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <ModalContainer handleModalClose={handleModalClose}>
         <h3 className="text-2xl font-bold">Add a new question</h3>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
@@ -131,21 +126,15 @@ export default function AddQuestionModal({ handleModalClose, setQuestions }) {
             }
           />
           <div className="flex justify-end gap-2">
-            <button
-              className="rounded-md bg-gray-200 px-4 py-2 pt-3 hover:bg-gray-300"
-              onClick={() => handleModalClose()}
+            <Button
+              handleClick={() => handleModalClose()}
+              isSecondary={true}
             >
               Cancel
-            </button>
-            <button
-              className="rounded-md bg-gray-900 px-4 py-2 pt-3 text-white hover:bg-gray-800"
-              onClick={handleClickAddButton}
-            >
-              Add
-            </button>
+            </Button>
+            <Button handleClick={handleClickAddButton}>Add</Button>
           </div>
         </div>
-      </div>
-    </div>
+      </ModalContainer>
   );
 }

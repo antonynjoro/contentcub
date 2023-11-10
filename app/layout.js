@@ -1,14 +1,15 @@
-import { Inter } from "next/font/google";
+import { Fira_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import ToasterContext from "./context/ToasterContext.jsx";
-import { League_Spartan } from "next/font/google";
 import NavBar from "./components/NavBar.jsx";
 
-const league_spartan = League_Spartan({
+const fira_sans = Fira_Sans({
   subsets: ["latin"],
-  variable: "--font-league_spartan"
-})
+  variable: "--font-fira_sans",
+  weight: ['100','200','300','400','500','600','700','800','900'],
+
+});
 
 
 export const metadata = {
@@ -19,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`h-full ${league_spartan.variable}` }>
+      <html lang="en" className={`h-full ${fira_sans.variable}` }>
         <body className="h-full">
           <ToasterContext />
           {children}

@@ -27,16 +27,15 @@ export default function ShortAnswerField({
           onChange={(e) => handleChange(e.target.value)}
         />
       </div>
-      {helpText ||
-        (hasError && (
-          <p
-            className={`mt-1 text-sm ${
-              hasError ? "text-red-700" : "text-gray-500"
-            }`}
-          >
-            {hasError ? "This field is required" : helpText}
-          </p>
-        ))}
+      {(helpText || hasError) && (
+        <p
+          className={`mt-1 ml-1 text-sm ${
+            hasError ? "text-red-700" : "text-gray-500"
+          }`}
+        >
+          {hasError ? "This field is required" : helpText}
+        </p>
+      )}
     </div>
   );
 }

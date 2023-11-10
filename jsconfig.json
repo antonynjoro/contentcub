@@ -6,6 +6,7 @@
       "@/components/*": ["app/components/*"],
       "@/actions/*": ["app/actions/*"],
       "@/context/*": ["app/context/*"],
+      "@/libs/*": ["app/libs/*"],
     }
   }
 }

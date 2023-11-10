@@ -55,6 +55,8 @@ export default function Question({ id, type, title, description }) {
             // Do something with the error.
             toast.error(`ERROR! ${error.message}`);
           }}
+          className="w-full h-full ut-label:text-gray-900 ut-upload-icon:text-yellow-400"
+          
         />
       );
     } 
@@ -65,10 +67,10 @@ export default function Question({ id, type, title, description }) {
   }
 
   return (
-    <div className="flex w-full flex-col items-stretch justify-center flex-grow p-20">
+    <div className="flex w-full flex-col items-stretch justify-center flex-grow p-20 max-w-full">
       <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
       <p className="text-base text-gray-600">{description}</p>
-      <div className="flex pt-4">{handleType(type)}</div>
+      <div className="flex max-w-full pt-4">{handleType(type)}</div>
     </div>
   );
 }

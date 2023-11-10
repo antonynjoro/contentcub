@@ -2,9 +2,9 @@ import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 
 export default function QuestionNavigationButtons({handleNextButtonClick, handlePreviousButtonClick}) {
   return (
-    <>
+    <div className="flex gap-[1px]">
       <button
-        className="rounded-l-md border-r border-r-white bg-gray-900 px-4 py-2 hover:bg-gray-800"
+        className="rounded-l-md bg-gray-900 px-4 py-2 hover:bg-gray-800"
         title="Next question"
         onClick={() => handleNextButtonClick()}
       >
@@ -17,6 +17,6 @@ export default function QuestionNavigationButtons({handleNextButtonClick, handle
       >
         <HiOutlineChevronUp className="h-6 w-6 text-white" />
       </button>
-    </>
+    </div>
   );
 }
