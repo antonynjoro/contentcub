@@ -6,14 +6,14 @@ export default function Button({
 }) {
   return (
     <button
-      className={`flex  items-center gap-1 rounded-md  px-4 py-2   ${
+      className={`flex  justify-center gap-1 rounded-md  px-4 py-2   ${
         isSecondary
           ? "bg-gray-200 text-gray-900 hover:bg-gray-300"
           : "bg-gray-900 text-white hover:bg-gray-800"
       }
       ${
         isDestructive &&
-        "border border-transparent bg-red-50 text-red-950 hover:border-red-300 hover:bg-red-100"
+        "border border-transparent bg-red-50 text-red-900 hover:border-red-300 hover:bg-red-100"
       }
       `}
       onClick={handleClick}

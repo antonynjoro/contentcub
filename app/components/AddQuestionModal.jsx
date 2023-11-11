@@ -8,6 +8,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import ModalContainer from "./ModalContainer";
+import saveQuestion from "../actions/saveQuestion";
+
 
 const questionTypes = {
   textShort: {
@@ -37,7 +39,7 @@ const questionTypes = {
   },
 };
 
-export default function AddQuestionModal({ handleModalClose, setQuestions }) {
+export default function AddQuestionModal({ handleModalClose, setQuestions, requestId }) {
   const [selectedQuestionType, setSelectedQuestionType] = useState(undefined);
   const [questionTypehasError, setQuestionTypehasError] = useState(false);
   const [questionTitlehasError, setQuestionTitlehasError] = useState(false);
@@ -66,6 +68,7 @@ export default function AddQuestionModal({ handleModalClose, setQuestions }) {
       return;
     } else {
       setQuestions((prevState) => [...prevState, question]);
+      saveQuestion(requestId, question);
       handleModalClose();
     }
   }

@@ -53,12 +53,8 @@ export default function IconButton({
       : "hover:bg-slate-100 text-gray-600 group-hover:text-gray-800";
   
     return (
-      <div className="group relative flex flex-shrink">
-        {tooltipText && (
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 position absolute -top-8 right-0 hidden w-max rounded-md border bg-white px-2 py-1 shadow-sm group-hover:block">
-            <p className="text-xs">{tooltipText}</p>
-          </div>
-        )}
+      <div className="group relative flex flex-shrink" title={tooltipText}>
+        
         <button
           aria-label="Icon Action"
           className={`

@@ -1,6 +1,6 @@
 "use client";
 import NavBar from "../../../../components/NavBar";
-import React from "react";
+import React, { Suspense, use } from "react";
 import IconButton from "../../../../components/IconButton.jsx";
 import QuestionNavItem from "../../../../components/QuestionNavItem.jsx";
 import Question from "../../../../components/Question.jsx";
@@ -10,6 +10,10 @@ import AddQuestionModal from "../../../../components/AddQuestionModal.jsx";
 import { HiTrash } from "react-icons/hi2";
 import QuestionNavigationButtons from "../../../../components/QuestionNavigationButtons.jsx";
 import Button from "../../../../components/Button";
+import fetchRequest from "./fetchRequest";
+import RequestHeader from "../../../../components/RequestHeader.jsx";
+import Chip from "../../../../components/Chip";
+import deleteQuestion from"../../../../actions/deleteQuestion"
 
 // const questions = [
 //   {
@@ -112,26 +116,46 @@ import Button from "../../../../components/Button";
 //   },
 // ];
 
-export default function Page() {
+export default function Page({ params }) {
+  const [requestId] = useState(params.requestId);
+
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(undefined);
   const [addQuestionModalOpen, setAddQuestionModalOpen] = useState(false);
-  
+  const [requestStatus, setRequestStatus] = useState(""); // ["draft", "sent", "answered" "closed"]
+  const [requestTitle, setRequestTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // TODO: Fetch questions from the server
-    if (questions.length === 0) {
-      console.log("no questions");
-      console.log(questions);
-      setAddQuestionModalOpen(true);
-    } else {
-      console.log("setting current question");
-      console.log(questions);
-      setCurrentQuestion(questions[0]);
+    async function fetchQuestions() {
+      setIsLoading(true);
+      const request = await fetchRequest(requestId);
+      console.log("request", request);
+      setQuestions(request.questions);
+      console.log("questions", questions);
+      setRequestStatus(request.status);
+      console.log("status", request.status);
+      setRequestTitle(request.title);
+      console.log("title", request.title);
+      setIsLoading(false);
     }
-  }, [questions]);
+    fetchQuestions();
+  }, []);
 
-  //TODO: Save questions to the server as they are added
+  useEffect(() => {
+    if (!isLoading) {
+      if (questions.length === 0) {
+        setAddQuestionModalOpen(true);
+      } else {
+        setAddQuestionModalOpen(false);
+        console.log("setting current question");
+        console.log(questions);
+        setCurrentQuestion(questions[0]);
+      }
+    }
+  }, [questions, isLoading]);
+
 
   function handleNavItemClick(id) {
     setCurrentQuestion(questions.find((question) => question.id === id));
@@ -139,35 +163,33 @@ export default function Page() {
 
   function handleNextButtonClick() {
     const currentQuestionIndex = questions.findIndex(
-      (question) => question.id === currentQuestion.id
+      (question) => question.id === currentQuestion.id,
     );
     if (currentQuestionIndex === questions.length - 1) {
       setCurrentQuestion(questions[0]);
-    }
-    else {
+    } else {
       setCurrentQuestion(questions[currentQuestionIndex + 1]);
     }
   }
 
   function handlePreviousButtonClick() {
     const currentQuestionIndex = questions.findIndex(
-      (question) => question.id === currentQuestion.id
+      (question) => question.id === currentQuestion.id,
     );
     if (currentQuestionIndex === 0) {
       setCurrentQuestion(questions[questions.length - 1]);
-    }
-    else {
+    } else {
       setCurrentQuestion(questions[currentQuestionIndex - 1]);
     }
   }
 
   function handleDeleteQuestion() {
     const currentQuestionIndex = questions.findIndex(
-      (question) => question.id === currentQuestion.id
+      (question) => question.id === currentQuestion.id,
     );
 
     const newQuestions = questions.filter(
-      (question) => question.id !== currentQuestion.id
+      (question) => question.id !== currentQuestion.id,
     );
 
     setQuestions(newQuestions);
@@ -175,8 +197,10 @@ export default function Page() {
     if (questions.length <= 1) {
       setCurrentQuestion(undefined);
     }
-  }
 
+    // delete question from server
+    deleteQuestion(requestId, currentQuestion.id);
+  }
 
   const variants = {
     initial: { opacity: 0, y: 50 }, // Start a bit down from the final position
@@ -187,7 +211,11 @@ export default function Page() {
   return (
     <div className="flex h-screen flex-col  ">
       <div className="flex-shrink">
-        <NavBar />
+        <RequestHeader
+          title={requestTitle}
+          status={requestStatus}
+          requestId={requestId}
+        />
       </div>
       <div className=" flex flex-grow overflow-hidden    sm:grid sm:grid-cols-12">
         {/* first column */}
@@ -196,7 +224,7 @@ export default function Page() {
             <h2 className="flex-grow align-middle  text-base  ">Content</h2>
             <IconButton
               size="sm"
-              helptext={"Create a new Question"}
+              tooltipText={"Create a new Question"}
               handleClick={() =>
                 setAddQuestionModalOpen((prevState) => !prevState)
               }
@@ -207,10 +235,12 @@ export default function Page() {
                   setAddQuestionModalOpen((prevState) => !prevState)
                 }
                 setQuestions={setQuestions}
+                requestId={requestId}
               />
             )}
           </div>
           {/* Content Nav */}
+          <Suspense fallback={<div>Loading...</div>}>
           <div className="flex h-full flex-grow flex-col items-stretch gap-2 overflow-y-auto border-b py-2">
             {questions.map((question) => (
               <div className="flex gap-1" key={question.id}>
@@ -223,11 +253,27 @@ export default function Page() {
                 />
               </div>
             ))}
+            
           </div>
+          </Suspense>
+          <div className="px-3 py-2 flex-col flex flex-grow ">
+            <Button 
+              handleClick={() => setAddQuestionModalOpen(true)}
+
+            >
+              Add Question
+            </Button>
+            </div>
         </div>
         {/* Second Column */}
         <div className="col-span-8  flex flex-col border-x bg-gray-100 ">
+          {isLoading ? (
+            <div className="m-4 flex flex-grow justify-center items-center rounded-md border bg-white p-12 shadow-sm">
+              Loading...
+            </div>
+          ) : (
           <AnimatePresence mode="wait">
+
             {currentQuestion === undefined ? (
               <div className="m-4 flex flex-grow rounded-md border bg-white p-12 shadow-sm">
                 No questions yet
@@ -253,10 +299,7 @@ export default function Page() {
                     handleClick={handleDeleteQuestion}
                     isDestructive={true}
                   >
-                    <HiTrash 
-                      className="h-5 w-5 text-red-500 "
-                    />
-
+                    <HiTrash className="h-5 w-5 text-red-500 " />
                     Delete Question
                   </Button>
                   <QuestionNavigationButtons
@@ -266,11 +309,21 @@ export default function Page() {
                 </div>
               </motion.div>
             )}
+
           </AnimatePresence>
+          )}
         </div>
         {/* Third Colun */}
         <div className="col-span-2 overflow-y-auto bg-white">
-          status: {currentQuestion?.id}
+          {currentQuestion && (
+          <div className="flex p-3 gap-1 items-center">
+            <p className=" text-sm">Status: </p>
+            <Chip chipType={currentQuestion?.answers?.length>0 ? "success" : "warning"} >
+              {currentQuestion?.answers?.length > 0 ? "Answered" : "Unanswered"}
+            </Chip>
+         
+          </div>
+          )}
         </div>
       </div>
     </div>

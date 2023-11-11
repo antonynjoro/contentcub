@@ -52,7 +52,7 @@ enum Status {
 }
 
 type Question {
-  id        String   @db.ObjectId
+  id        String    @default(uuid())
   type      QuestionType
   title     String
   description String?

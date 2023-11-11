@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 export default function Question({ id, type, title, description }) {
   function handleType(type) {
     if (type === "textShort") {
-      return <ShortAnswerField />;
+      return <ShortAnswerField handleChange={()=> console.log("hello") }/>;
     } else if (type === "textLong") {
       return <LongAnswerField />;
     } else if (type === "fileUpload") {
@@ -65,6 +65,7 @@ export default function Question({ id, type, title, description }) {
       return <p>Invalid Type</p>;
     }
   }
+  
 
   return (
     <div className="flex w-full flex-col items-stretch justify-center flex-grow p-20 max-w-full">
