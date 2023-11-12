@@ -1,13 +1,15 @@
+
 import React from "react";
 import { UploadDropzone, UploadButton } from "./uploadthing";
 import ShortAnswerField from "./ShortAnswerField.jsx";
-import LongAnswerField from "./LongAnswerField.jsx";
+import LongAnswerField from "./LongAnswerField";
 import { toast } from "react-hot-toast";
+
 
 export default function Question({ id, type, title, description }) {
   function handleType(type) {
     if (type === "textShort") {
-      return <ShortAnswerField handleChange={()=> console.log("hello") }/>;
+      return <ShortAnswerField handleChange={()=> console.log("hello") } autoFocus={true}/>;
     } else if (type === "textLong") {
       return <LongAnswerField />;
     } else if (type === "fileUpload") {
@@ -68,10 +70,14 @@ export default function Question({ id, type, title, description }) {
   
 
   return (
-    <div className="flex w-full flex-col items-stretch justify-center flex-grow p-20 max-w-full">
+    <div className={`flex w-full flex-col items-stretch justify-center flex-grow p-6 sm:p-20 max-w-full ${type === "textLong" && "sm:p-4 sm:pb-6"}`}>
       <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
       <p className="text-base text-gray-600">{description}</p>
-      <div className="flex max-w-full pt-4">{handleType(type)}</div>
+      <div 
+        className={`flex max-w-full pt-4 ${type === "textLong" && "h-full"}`}
+      
+      >{handleType(type)}
+      </div>
     </div>
   );
 }

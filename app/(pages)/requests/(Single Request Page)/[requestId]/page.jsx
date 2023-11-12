@@ -14,6 +14,8 @@ import fetchRequest from "./fetchRequest";
 import RequestHeader from "../../../../components/RequestHeader.jsx";
 import Chip from "../../../../components/Chip";
 import deleteQuestion from"../../../../actions/deleteQuestion"
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation.js";
 
 // const questions = [
 //   {
@@ -117,7 +119,9 @@ import deleteQuestion from"../../../../actions/deleteQuestion"
 // ];
 
 export default function Page({ params }) {
+  const router = useRouter();
   const [requestId] = useState(params.requestId);
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(undefined);
@@ -130,7 +134,14 @@ export default function Page({ params }) {
     // TODO: Fetch questions from the server
     async function fetchQuestions() {
       setIsLoading(true);
-      const request = await fetchRequest(requestId);
+      if (!isLoaded) return;
+      if (!isSignedIn) return;
+      console.log("fetching questions");
+      const request = await fetchRequest(requestId, user.id);
+      if (!request) {
+        router.push("/404");
+        return;
+      }
       console.log("request", request);
       setQuestions(request.questions);
       console.log("questions", questions);
@@ -141,7 +152,7 @@ export default function Page({ params }) {
       setIsLoading(false);
     }
     fetchQuestions();
-  }, []);
+  }, [isLoaded, isSignedIn, user, requestId]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -286,7 +297,7 @@ export default function Page({ params }) {
                 animate="animate"
                 exit="exit"
                 transition={{ duration: 0.3, type: "tween" }} // You can adjust the type of transition if you want to
-                className="m-4 flex flex-grow flex-col justify-stretch rounded-md border bg-white p-12 shadow-sm"
+                className="m-4 flex flex-grow flex-col justify-stretch rounded-md border bg-white p-6 sm:p-12 shadow-sm"
               >
                 <Question
                   id={currentQuestion.id}

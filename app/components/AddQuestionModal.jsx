@@ -118,6 +118,7 @@ export default function AddQuestionModal({ handleModalClose, setQuestions, reque
               setQuestionTitlehasError(false);
             }}
             hasError={questionTitlehasError}
+            autoFocus={true}
           />
           <ShortAnswerField
             label={"Description"}
