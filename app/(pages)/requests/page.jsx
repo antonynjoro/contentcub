@@ -8,7 +8,7 @@ import AddRequestModal from "../../components/AddRequestModal";
 import { useUser } from "@clerk/nextjs";
 import RequestListItem from "../../components/RequestListItem.jsx";
 
-export default function page() {
+export default function Request() {
   const [requests, setRequests] = useState([]);
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
@@ -17,12 +17,9 @@ export default function page() {
     fetchRequests().then((data) => {
       setRequests(data);
     });
-    console.log(requests);
   }, []);
 
   async function handleAddRequest(title) {
-    console.log("clicked");
-    console.log(title);
     setAddRequestModalOpen((prevstate) => !prevstate);
 
     createRequest(user.id, title).then((data) => {
