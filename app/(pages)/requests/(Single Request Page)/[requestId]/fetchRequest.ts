@@ -31,7 +31,7 @@ export default async function fetchRequest(
             externalId: true,
           },
         },
-        client: {
+        clients: {
           select: {
             id: true,
             externalId: true,

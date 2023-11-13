@@ -119,6 +119,7 @@ export default function AddQuestionModal({ handleModalClose, setQuestions, reque
             }}
             hasError={questionTitlehasError}
             autoFocus={true}
+            value={question.title}
           />
           <ShortAnswerField
             label={"Description"}
@@ -128,6 +129,7 @@ export default function AddQuestionModal({ handleModalClose, setQuestions, reque
                 description: value,
               }))
             }
+            value={question.description}
           />
           <div className="flex justify-end gap-2">
             <Button

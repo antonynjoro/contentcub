@@ -3,30 +3,40 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
 import Button from "./Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 import Chip from "../components/Chip.tsx";
+import SendRequestModal from "./SendRequestModal.jsx";
 
 export default function RequestHeader({ title, status, requestId }) {
   const [buttonLabel, setButtonLabel] = useState("Send to Client");
-
-  function handleSendToClient() {
-    setButtonLabel("Sending...");
-  }
+  const [showSendRequestModal, setShowSendRequestModal] = useState(false);
 
   return (
     <div className="flex gap-4 border-b border-b-gray-200 px-4 py-2">
       <div className="flex flex-grow items-center gap-2">
-        <Link className="flex items-center text-gray-600 hover:text-gray-900" href="/requests" title="Back to Requests">
+        <Link
+          className="flex items-center text-gray-600 hover:text-gray-900"
+          href="/requests"
+          title="Back to Requests"
+        >
           <HiOutlineArrowSmLeft className="text-2xl" />
           {/* <p className="text-sm ">Back to Requests</p> */}
         </Link>
         <div className="flex items-center justify-center gap-2">
-          <h1 className=" text-gray-900  text-lg">{title}</h1>
-          <Chip chipType="primary" >{status}</Chip>
+          <h1 className=" text-lg  text-gray-900">{title}</h1>
+          <Chip chipType="primary">{status}</Chip>
         </div>
       </div>
-      <Button isSecondary handleClick={handleSendToClient}>{buttonLabel}</Button>
+      {showSendRequestModal && (
+        <SendRequestModal
+          requestId={requestId}
+          handleModalClose={setShowSendRequestModal}
+        />
+      )}
+      <Button isSecondary handleClick={() => setShowSendRequestModal(true)}>
+        {buttonLabel}
+      </Button>
       <Link
         href={`/chat/${requestId}`}
         className="group relative flex items-center gap-2"

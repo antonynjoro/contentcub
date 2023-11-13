@@ -22,10 +22,11 @@ model User {
 
 model Client {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  externalId String   @unique
-  name      String
+  externalId String?   @unique
+  name      String?
   email     String   @unique
-  requests  Request[]
+  requestIds  String[]  @db.ObjectId
+  requests    Request[] @relation(fields: [requestIds], references: [id])
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("userId") @db.ObjectId
   createdAt DateTime @default(now())
@@ -39,8 +40,8 @@ model Request {
   questions Question[]
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("userId") @db.ObjectId
-  client    Client?   @relation(fields: [clientId], references: [id])
-  clientId  String?   @map("clientId") @db.ObjectId
+  clientIds   String[]  @db.ObjectId
+  clients     Client[]  @relation(fields: [clientIds], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

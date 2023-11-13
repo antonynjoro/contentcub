@@ -12,7 +12,16 @@ export async function fetchRequests() {
       externalId: userId,
     },
     include: {
-      requests: true,
+      requests: {
+        include: {
+          clients: {  
+            select: {
+              id: true,
+              email: true,  
+            },
+          },
+        },
+      }
     },
   });
 
