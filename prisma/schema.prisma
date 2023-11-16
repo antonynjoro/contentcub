@@ -30,7 +30,7 @@ model Client {
   requests    Request[] @relation(fields: [requestIds], references: [id])
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("userId") @db.ObjectId
-  attributes Json
+  attributes Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
