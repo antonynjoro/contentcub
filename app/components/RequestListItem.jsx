@@ -12,12 +12,13 @@ function classNames(...classes) {
 export default function RequestListItem({ request }) {
   const longDate = formatLongDate(request.createdAt);
   const relativeDate = formatRelativeDate(request.createdAt);
+  const singleRequestPage = `/requests/${request.id}`;
   return (
     <li
       key={request.id}
-      className="flex items-center  gap-x-6 px-2 py-5 hover:bg-gray-50"
+      className="flex items-center  gap-x-6   hover:bg-gray-100 odd:bg-gray-50 first:border-b-0 border-b border-gray-200 px-6"
     >
-      <Link href={`/requests/${request.id}`} className=" flex-grow">
+      <Link href={singleRequestPage} className=" flex-grow py-5">
         <div className="min-w-0">
           <div className="flex items-start gap-x-3">
             <p className="text-sm font-semibold leading-6 text-gray-900">
@@ -50,7 +51,7 @@ export default function RequestListItem({ request }) {
       </Link>
       <div className="flex flex-none items-center gap-x-4">
         <a
-          href={request.href}
+          href={singleRequestPage}
           className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
         >
           View request<span className="sr-only">, {request.title}</span>

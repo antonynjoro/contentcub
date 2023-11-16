@@ -1,181 +1,210 @@
 "use client";
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { HiArrowPath, HiBars3, HiCloudArrowUp, HiFingerPrint, HiLockClosed, HiXMark, HiCheck } from 'react-icons/hi2';
-import { UserButton } from '@clerk/nextjs';
-import { useUser } from '@clerk/nextjs';
-
-
+import { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import {
+  HiArrowPath,
+  HiBars3,
+  HiCloudArrowUp,
+  HiFingerPrint,
+  HiLockClosed,
+  HiXMark,
+  HiCheck,
+} from "react-icons/hi2";
+import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 const navigation = [
-  { name: 'Home', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Pricing', href: '#' },
-  { name: 'Signup', href: '#' },
-]
+  { name: "Home", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Pricing", href: "#" },
+  { name: "Signup", href: "#" },
+];
 const features = [
   {
-    name: 'Easy to Use',
+    name: "Easy to Use",
     description:
-      'Directly send a content request link to your clients and monitor their progress in real-time.',
+      "Directly send a content request link to your clients and monitor their progress in real-time.",
     icon: HiCloudArrowUp,
   },
   {
-    name: 'Voice-to-Text Conversion',
+    name: "Voice-to-Text Conversion",
     description:
-      'Clients can speak their thoughts, and ContentCub transforms them into structured, ready-to-use website copy.',
+      "Clients can speak their thoughts, and ContentCub transforms them into structured, ready-to-use website copy.",
     icon: HiLockClosed,
   },
   {
-    name: 'Automated Reminders',
+    name: "Automated Reminders",
     description:
-      'Keep your project on track with automatic reminders to clients for incomplete content',
+      "Keep your project on track with automatic reminders to clients for incomplete content",
     icon: HiArrowPath,
   },
   {
-    name: 'Centralized Content Management',
+    name: "Centralized Content Management",
     description:
-      'Access all submitted content in one place. Copy directly from ContentCub for efficient website design',
+      "Access all submitted content in one place. Copy directly from ContentCub for efficient website design",
     icon: HiFingerPrint,
   },
-]
+];
 const tiers = [
   {
-    name: 'Freelancer',
-    id: 'tier-freelancer',
-    href: '#',
-    priceMonthly: '$24',
-    description: 'The essentials to provide your best work for clients.',
-    features: ['5 products', 'Up to 1,000 subscribers', 'Basic analytics', '48-hour support response time'],
+    name: "Freelancer",
+    id: "tier-freelancer",
+    href: "#",
+    priceMonthly: "$24",
+    description: "The essentials to provide your best work for clients.",
+    features: [
+      "5 products",
+      "Up to 1,000 subscribers",
+      "Basic analytics",
+      "48-hour support response time",
+    ],
     mostPopular: false,
   },
   {
-    name: 'Startup',
-    id: 'tier-startup',
-    href: '#',
-    priceMonthly: '$32',
-    description: 'A plan that scales with your rapidly growing business.',
+    name: "Startup",
+    id: "tier-startup",
+    href: "#",
+    priceMonthly: "$32",
+    description: "A plan that scales with your rapidly growing business.",
     features: [
-      '25 products',
-      'Up to 10,000 subscribers',
-      'Advanced analytics',
-      '24-hour support response time',
-      'Marketing automations',
+      "25 products",
+      "Up to 10,000 subscribers",
+      "Advanced analytics",
+      "24-hour support response time",
+      "Marketing automations",
     ],
     mostPopular: true,
   },
   {
-    name: 'Enterprise',
-    id: 'tier-enterprise',
-    href: '#',
-    priceMonthly: '$48',
-    description: 'Dedicated support and infrastructure for your company.',
+    name: "Enterprise",
+    id: "tier-enterprise",
+    href: "#",
+    priceMonthly: "$48",
+    description: "Dedicated support and infrastructure for your company.",
     features: [
-      'Unlimited products',
-      'Unlimited subscribers',
-      'Advanced analytics',
-      '1-hour, dedicated support response time',
-      'Marketing automations',
+      "Unlimited products",
+      "Unlimited subscribers",
+      "Advanced analytics",
+      "1-hour, dedicated support response time",
+      "Marketing automations",
     ],
     mostPopular: false,
   },
-]
+];
 
 const faqs = [
   {
     id: 1,
     question: "What is ContentCub?",
-    answer: "ContentCub is a leading content collection tool designed to streamline the process of gathering and organizing website content from clients for web designers. It serves as an efficient website content template for clients, making the content submission process straightforward and effective."
+    answer:
+      "ContentCub is a leading content collection tool designed to streamline the process of gathering and organizing website content from clients for web designers. It serves as an efficient website content template for clients, making the content submission process straightforward and effective.",
   },
   {
     id: 2,
     question: "How does ContentCub improve the content collection process?",
-    answer: "ContentCub simplifies the content collection process by providing web designers with an easy-to-use platform to create website checklists for clients. This helps in efficiently gathering web content from clients, reducing the need for multiple email exchanges."
+    answer:
+      "ContentCub simplifies the content collection process by providing web designers with an easy-to-use platform to create website checklists for clients. This helps in efficiently gathering web content from clients, reducing the need for multiple email exchanges.",
   },
   {
     id: 3,
     question: "Can clients easily interact with ContentCub?",
-    answer: "Absolutely. ContentCub is designed as an intuitive tool that requires no technical expertise, making it a perfect solution for onboarding web design clients. Its user-friendly interface allows clients to effortlessly provide the content needed for their websites."
+    answer:
+      "Absolutely. ContentCub is designed as an intuitive tool that requires no technical expertise, making it a perfect solution for onboarding web design clients. Its user-friendly interface allows clients to effortlessly provide the content needed for their websites.",
   },
   {
     id: 4,
     question: "What unique features does ContentCub offer?",
-    answer: "ContentCub stands out among content collection tools with its innovative voice-to-text feature, which allows clients to verbally submit content ideas that are automatically transcribed. This feature is particularly helpful for clients who prefer speaking over writing, ensuring a smooth content collection experience."
+    answer:
+      "ContentCub stands out among content collection tools with its innovative voice-to-text feature, which allows clients to verbally submit content ideas that are automatically transcribed. This feature is particularly helpful for clients who prefer speaking over writing, ensuring a smooth content collection experience.",
   },
   {
     id: 5,
     question: "Is ContentCub suitable for various web design projects?",
-    answer: "Yes, ContentCub's versatile design makes it suitable for all types of web design projects. Whether it's collecting detailed content for a large corporate site or a simple website content checklist for a small blog, ContentCub can handle it all."
+    answer:
+      "Yes, ContentCub's versatile design makes it suitable for all types of web design projects. Whether it's collecting detailed content for a large corporate site or a simple website content checklist for a small blog, ContentCub can handle it all.",
   },
   {
     id: 6,
     question: "What is the cost of using ContentCub?",
-    answer: "ContentCub is currently offered at a special Beta price of $2 per month, an 80% discount from the regular price of $10 per month. This makes it one of the most cost-effective content collection tools available on the market."
+    answer:
+      "ContentCub is currently offered at a special Beta price of $2 per month, an 80% discount from the regular price of $10 per month. This makes it one of the most cost-effective content collection tools available on the market.",
   },
   {
     id: 7,
     question: "How secure is ContentCub for storing client data?",
-    answer: "ContentCub prioritizes data security and confidentiality. All content submitted through our platform is protected with robust security measures, ensuring the safe collection and storage of web content from clients."
+    answer:
+      "ContentCub prioritizes data security and confidentiality. All content submitted through our platform is protected with robust security measures, ensuring the safe collection and storage of web content from clients.",
   },
   {
     id: 8,
     question: "Can I tailor the content request forms in ContentCub?",
-    answer: "Yes, ContentCub provides customizable content request forms, enabling you to create tailored website checklists for clients. This flexibility ensures that you can gather all necessary information specific to each project."
+    answer:
+      "Yes, ContentCub provides customizable content request forms, enabling you to create tailored website checklists for clients. This flexibility ensures that you can gather all necessary information specific to each project.",
   },
   {
     id: 9,
     question: "Are there any limits on content submission in ContentCub?",
-    answer: "ContentCub does not impose any content submission limits. Our platform is designed to accommodate content collection for projects of any size, making it an ideal choice for web designers managing diverse client needs."
+    answer:
+      "ContentCub does not impose any content submission limits. Our platform is designed to accommodate content collection for projects of any size, making it an ideal choice for web designers managing diverse client needs.",
   },
   {
     id: 10,
     question: "Is customer support available for ContentCub users?",
-    answer: "Yes, comprehensive customer support is a cornerstone of our service at ContentCub. We are dedicated to assisting our users with any questions or challenges they might face while using our platform for content collection."
-  }
+    answer:
+      "Yes, comprehensive customer support is a cornerstone of our service at ContentCub. We are dedicated to assisting our users with any questions or challenges they might face while using our platform for content collection.",
+  },
 ];
 
 
 
 const footerNavigation = {
   solutions: [
-    { name: 'Pricing', href: '#' },
-    { name: 'Sign In', href: '/sign-in' },
-    { name: 'Sign Up', href: '#' },
+    { name: "Pricing", href: "#" },
+    { name: "Sign In", href: "/sign-in" },
+    { name: "Sign Up", href: "#" },
+    
   ],
   support: [
-    { name: 'Contact Support', href: '#' },
+    { name: "Contact Support", href: "#" },
     // { name: 'Documentation', href: '#' },
     // { name: 'Guides', href: '#' },
     // { name: 'API Reference', href: '#' },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Contact', href: '#' },
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy Policy', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Contact", href: "#" },
+    { name: "Terms of service", href: "#" },
+    { name: "Privacy Policy", href: "#" },
   ],
   legal: [
     // { name: 'Claim', href: '#' },
     // { name: 'Privacy', href: '#' },
     // { name: 'Terms', href: '#' },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Page() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const {isSignedIn} = useUser();
+  const { isSignedIn } = useUser();
 
   return (
     <div className="bg-white">
       {/* Header */}
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <nav
+          className="flex items-center justify-between p-6 lg:px-8"
+          aria-label="Global"
+        >
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5 flex items-center text-gray-900">
+            <a
+              href="#"
+              className="-m-1.5 flex items-center p-1.5 text-gray-900"
+            >
               <span className="sr-only">ContentCub</span>
               <img
                 className="h-16 w-auto"
@@ -192,24 +221,44 @@ export default function Page() {
               onClick={() => setMobileMenuOpen(true)}
             >
               <span className="sr-only">Open main menu</span>
-              <HiBars3 className="h-6 w-6" aria-hidden="true" />
+              <HiBars3 className={`h-6 w-6 ${mobileMenuOpen && "hidden" }`} aria-hidden="true" />
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
                 {item.name}
               </a>
             ))}
+            {isSignedIn && (
+                  
+                    <Link className="text-sm font-semibold leading-6 text-gray-900" href={"/requests"}>Go to App</Link>
+              
+                )}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {isSignedIn? <UserButton /> :
-            <a href="/sign-in" className="text-sm font-semibold leading-6 text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>}
+            {isSignedIn ? (
+              <UserButton />
+            ) : (
+              <a
+                href="/sign-in"
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log in <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </nav>
-        <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+        <Dialog
+          as="div"
+          className="lg:hidden"
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+        >
           <div className="fixed inset-0 z-50" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
@@ -242,14 +291,29 @@ export default function Page() {
                       {item.name}
                     </a>
                   ))}
+                  {isSignedIn && (
+                    <Link
+                       href={"/requests"}
+                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      Go to App
+                    </Link>
+                )}
                 </div>
                 <div className="py-6">
-                  <a
-                    href="/sign-in"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Log in
-                  </a>
+                  {isSignedIn ? (
+                    <>
+                      <UserButton showName={true} />
+                      
+                    </>
+                  ) : (
+                    <a
+                      href="/sign-in"
+                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      Log in
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -268,7 +332,7 @@ export default function Page() {
               className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ddab56] to-[#e8deca] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
               style={{
                 clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
               }}
             />
           </div>
@@ -276,10 +340,12 @@ export default function Page() {
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl text-center">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                The easiest way to collect content from clients
+                  The easiest way to collect content from clients
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                Say goodbye to the endless email back-and-forth. ContentCub simplifies content collection from clients, making your web design process faster and more efficient.
+                  Say goodbye to the endless email back-and-forth. ContentCub
+                  simplifies content collection from clients, making your web
+                  design process faster and more efficient.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <a
@@ -314,7 +380,7 @@ export default function Page() {
               className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr  from-[#ddab56] to-[#e8deca] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
               style={{
                 clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
               }}
             />
           </div>
@@ -375,13 +441,17 @@ export default function Page() {
         {/* Feature section */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-gray-600">Get content faster</h2>
+            <h2 className="text-base font-semibold leading-7 text-gray-600">
+              Get content faster
+            </h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Get website content from your design clients faster than ever before
+              Get website content from your design clients faster than ever
+              before
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              ContentCub makes it easy for your clients to submit website content. No more endless email back-and-forth.
-              No more waiting for content. Just a simple, streamlined process.
+              ContentCub makes it easy for your clients to submit website
+              content. No more endless email back-and-forth. No more waiting for
+              content. Just a simple, streamlined process.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
@@ -390,11 +460,16 @@ export default function Page() {
                 <div key={feature.name} className="relative pl-16">
                   <dt className="text-base font-semibold leading-7 text-gray-900">
                     <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800">
-                      <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                      <feature.icon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
                     </div>
                     {feature.name}
                   </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">{feature.description}</dd>
+                  <dd className="mt-2 text-base leading-7 text-gray-600">
+                    {feature.description}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -525,13 +600,22 @@ export default function Page() {
 
         {/* FAQs */}
         <div className="mx-auto max-w-2xl divide-y divide-gray-900/10 px-6 pb-8 sm:pb-24 sm:pt-12 lg:max-w-7xl lg:px-8 lg:pb-32">
-          <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
+          <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+            Frequently asked questions
+          </h2>
           <dl className="mt-10 space-y-8 divide-y divide-gray-900/10">
             {faqs.map((faq) => (
-              <div key={faq.id} className="pt-8 lg:grid lg:grid-cols-12 lg:gap-8">
-                <dt className="text-base font-semibold leading-7 text-gray-900 lg:col-span-5">{faq.question}</dt>
+              <div
+                key={faq.id}
+                className="pt-8 lg:grid lg:grid-cols-12 lg:gap-8"
+              >
+                <dt className="text-base font-semibold leading-7 text-gray-900 lg:col-span-5">
+                  {faq.question}
+                </dt>
                 <dd className="mt-4 lg:col-span-7 lg:mt-0">
-                  <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
+                  <p className="text-base leading-7 text-gray-600">
+                    {faq.answer}
+                  </p>
                 </dd>
               </div>
             ))}
@@ -548,16 +632,17 @@ export default function Page() {
               className="aspect-[1108/632] w-[69.25rem] flex-none bg-gradient-to-r  from-[#ddab56] to-[#e8deca] opacity-25"
               style={{
                 clipPath:
-                  'polygon(73.6% 48.6%, 91.7% 88.5%, 100% 53.9%, 97.4% 18.1%, 92.5% 15.4%, 75.7% 36.3%, 55.3% 52.8%, 46.5% 50.9%, 45% 37.4%, 50.3% 13.1%, 21.3% 36.2%, 0.1% 0.1%, 5.4% 49.1%, 21.4% 36.4%, 58.9% 100%, 73.6% 48.6%)',
+                  "polygon(73.6% 48.6%, 91.7% 88.5%, 100% 53.9%, 97.4% 18.1%, 92.5% 15.4%, 75.7% 36.3%, 55.3% 52.8%, 46.5% 50.9%, 45% 37.4%, 50.3% 13.1%, 21.3% 36.2%, 0.1% 0.1%, 5.4% 49.1%, 21.4% 36.4%, 58.9% 100%, 73.6% 48.6%)",
               }}
             />
           </div>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Ready to Elevate Your Web Design Process?             
+              Ready to Elevate Your Web Design Process?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-            Join the ContentCub community today and transform the way you collect and manage content.
+              Join the ContentCub community today and transform the way you
+              collect and manage content.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
@@ -566,7 +651,10 @@ export default function Page() {
               >
                 Start with ContentCub Today
               </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+              <a
+                href="#"
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
                 Learn more <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -579,7 +667,7 @@ export default function Page() {
               className="aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr  from-[#ddab56] to-[#e8deca] opacity-30"
               style={{
                 clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
               }}
             />
           </div>
@@ -604,11 +692,16 @@ export default function Page() {
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Solutions</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                    Solutions
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.solutions.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -616,11 +709,16 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Support</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                    Support
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.support.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -630,11 +728,16 @@ export default function Page() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Company</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                    Company
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -642,11 +745,16 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Legal</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900">
+                    Legal
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.legal.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -659,5 +767,5 @@ export default function Page() {
         </footer>
       </div>
     </div>
-  )
+  );
 }

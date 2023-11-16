@@ -31,12 +31,19 @@ export default function Request() {
     <div>
       <NavBar />
       <div className=" mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:px-8">
-        <Button handleClick={() => setAddRequestModalOpen(true)}>
-          <HiPlus className="mb-1 mr-2 inline-block" />
-          Add Request
-        </Button>
-
-        <h1 className="text-2xl font-semibold">Requests</h1>
+        <div className="md:flex md:items-center md:justify-between pt-6">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+              Requests
+            </h2>
+          </div>
+          <div className="mt-4 flex md:ml-4 md:mt-0">
+          <Button handleClick={() => setAddRequestModalOpen(true)}>
+            <HiPlus className=" mr-2 inline-block" />
+            Add Request
+          </Button>
+          </div>
+        </div>
         <ul role="list" className="divide-y divide-gray-100">
           <Suspense fallback={<div>Loading...</div>}>
             {requests.map((request) => {
