@@ -4,6 +4,7 @@ import Button from "./Button"
 import ShortAnswerField from "./ShortAnswerField"
 import { useState } from "react"
 import sendRequest from "../actions/sendRequest.ts"
+import { toast } from "react-hot-toast";
 
 export default function SendRequestModal({handleModalClose, requestId, }) {
     const [clientEmail, setClientEmail] = useState("");
@@ -15,7 +16,15 @@ export default function SendRequestModal({handleModalClose, requestId, }) {
         if (clientEmail === "") {
             setFieldHasError(true);
         } else {
-            sendRequest(requestId, clientEmail);
+            sendRequest(requestId, clientEmail)
+            .then((data) => {
+                toast.success("Request sent!");
+            }
+            )
+            .catch((error) => {
+                toast.error("Something went wrong!");
+            });
+
             handleModalClose((prev) => !prev);
         }
     }

@@ -1,15 +1,18 @@
 "use server";
 import prisma from "../libs/prismadb";
 import { auth } from "@clerk/nextjs";
+import { sendEmail } from "./sendEmail";
+import { InviteEmailTemplate } from "../components/emailTemplates";
 
 export default async function sendRequest(
   requestId: string,
   clientEmail: string,
 ) {
+  try{
   const { userId } = auth();
 
   if (!userId) {
-    return new Response("Unauthorized", { status: 401 });
+    throw new Error("User not authenticated");
   }
 
   // find user
@@ -74,7 +77,11 @@ export default async function sendRequest(
       },
     });
     
-
+    //check if client is already in the request
+    const clientIds = request.clientIds;
+    if (clientIds.includes(client.id)) {
+      throw new Error(`Client ${client.id} of email ${client.email} is already in the request ${requestId}`);
+    } else {
     // Update request by adding this client to its client list
     await prisma.request.update({
       where: {
@@ -86,6 +93,7 @@ export default async function sendRequest(
         },
       },
     });
+    }
 
     // Optionally, update client to link back to this request
     await prisma.client.update({
@@ -102,5 +110,24 @@ export default async function sendRequest(
 
   });
 
-  // TODO: send email to client
+  // Send email to client
+  await sendEmail(
+    clientEmail,
+    "ContentCub <hi@contentcub.co>",
+    "You've been invited to ContentCub",
+    InviteEmailTemplate,
+    {
+      userFirstName: user.firstName,
+      requestTitle: request.title,
+      inviteLink: `https://contentcub.co/requests/${requestId}`,
+    }
+  );
+
+  return "OK";
+
+  } catch (error) {
+    console.error("Failed to send request:", error);
+    throw error;
+  }
+  
 }

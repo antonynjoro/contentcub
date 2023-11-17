@@ -34,13 +34,13 @@ export default function Request() {
         <div className="md:flex md:items-center md:justify-between pt-6">
           <div className="min-w-0 flex-1">
             <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-              Requests
+              Checklists
             </h2>
           </div>
           <div className="mt-4 flex md:ml-4 md:mt-0">
           <Button handleClick={() => setAddRequestModalOpen(true)}>
-            <HiPlus className=" mr-2 inline-block" />
-            Add Request
+            <HiPlus className=" mr-1 inline-block" />
+            Create Checklist
           </Button>
           </div>
         </div>

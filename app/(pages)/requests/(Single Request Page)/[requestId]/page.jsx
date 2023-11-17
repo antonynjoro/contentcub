@@ -232,7 +232,7 @@ export default function Page({ params }) {
         {/* first column */}
         <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white ">
           <div className="flex items-center  border-b p-4 pt-5">
-            <h2 className="flex-grow align-middle  text-base  ">Questions</h2>
+            <h2 className="flex-grow align-middle  text-base  ">Checklist</h2>
             <IconButton
               size="sm"
               tooltipText={"Create a new Question"}
