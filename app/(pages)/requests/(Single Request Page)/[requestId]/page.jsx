@@ -17,6 +17,7 @@ import deleteQuestion from"../../../../actions/deleteQuestion"
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation.js";
 
+
 // const questions = [
 //   {
 //     id: "Wcvoew2330sc20c",
@@ -117,6 +118,7 @@ import { useRouter } from "next/navigation.js";
 //     description: "Please enter your company's mission statement below",
 //   },
 // ];
+
 
 export default function Page({ params }) {
   const router = useRouter();
@@ -272,7 +274,7 @@ export default function Page({ params }) {
               handleClick={() => setAddQuestionModalOpen(true)}
 
             >
-              Add Question
+              Add Item
             </Button>
             </div>
         </div>
@@ -300,10 +302,11 @@ export default function Page({ params }) {
                 className="m-4 flex flex-grow flex-col justify-stretch rounded-md border bg-white p-6 sm:p-12 shadow-sm"
               >
                 <Question
-                  id={currentQuestion.id}
+                  questionId={currentQuestion.id}
                   type={currentQuestion.type}
                   title={currentQuestion.title}
                   description={currentQuestion.description}
+                  requestId={requestId}
                 />
                 <div className="bg-blue flex justify-end gap-3">
                   <Button

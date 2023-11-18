@@ -39,12 +39,12 @@ import { HiOutlineUpload } from "react-icons/hi";
 // Curated set of question types relevant for website content requests with assigned colors
 const questionTypes = {
   textShort: {
-    description: "Short Text Answer",
+    description: "Short Text",
     icon: MdShortText,
     colorClass: "bg-teal-200",
   },
   textLong: {
-    description: "Long Text Answer",
+    description: "Long Text",
     icon: BsTextParagraph,
     colorClass: "bg-lime-200",
   },

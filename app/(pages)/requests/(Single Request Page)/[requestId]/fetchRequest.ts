@@ -36,7 +36,8 @@ export default async function fetchRequest(
             id: true,
             externalId: true,
           },
-        }
+        }, 
+        questions: true
       },
     });
 

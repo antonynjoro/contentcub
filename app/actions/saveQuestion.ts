@@ -13,28 +13,22 @@ export default async function saveQuestion(requestId: string, question: Question
 
     
     try {
-        const savedQuestions = await prisma.request.update({
-            where: {
-                id: requestId,
-            },
-            
+        // Create the question
+        const newQuestion = await prisma.question.create({
             data: {
-                questions: {
-                    push: {
-                        type: question.type,
-                        title: question.title,
-                        description: question.description,
-
-
-                    },
+                type: question.type,
+                title: question.title,
+                description: question.description,
+                request: {
+                    connect: { id: requestId },
                 },
             },
         });
 
-        return savedQuestions;
-    }
-    catch (error) {
-        console.error(error);
+        console.log("Question created:", newQuestion);
+        return newQuestion;
+    } catch (error) {
+        console.error("Error saving question:", error.message);
         return null;
     }
 }

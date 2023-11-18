@@ -13,12 +13,12 @@ import saveQuestion from "../actions/saveQuestion";
 
 const questionTypes = {
   textShort: {
-    description: "Short Text Answer",
+    description: "Short Text",
     icon: MdShortText,
     colorClass: "bg-teal-200",
   },
   textLong: {
-    description: "Long Text Answer",
+    description: "Long Text",
     icon: BsTextParagraph,
     colorClass: "bg-lime-200",
   },
@@ -45,7 +45,6 @@ export default function AddQuestionModal({ handleModalClose, setQuestions, reque
   const [questionTitlehasError, setQuestionTitlehasError] = useState(false);
 
   const [question, setQuestion] = useState({
-    id: Math.random().toString(36).substring(7),
     type: "textShort",
     title: "",
     description: "",
@@ -67,8 +66,17 @@ export default function AddQuestionModal({ handleModalClose, setQuestions, reque
       toast.error("Please provide a Question");
       return;
     } else {
-      setQuestions((prevState) => [...prevState, question]);
-      saveQuestion(requestId, question);
+      saveQuestion(requestId, question)
+      .then((res) => {
+        console.log(res);
+        setQuestions((prevState) => [...prevState, res]);
+      }
+      ).catch((err) => {
+        console.log(err);
+        // in case of error, add the question to the list anyway
+        setQuestions((prevState) => [...prevState, question]);
+      }
+      );
       handleModalClose();
     }
   }

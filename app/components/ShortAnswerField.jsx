@@ -9,6 +9,7 @@ export default function ShortAnswerField({
   handleChange,
   hasError,
   autoFocus = false,
+  value = "",
 }) {
   return (
     <div className="w-full">
@@ -24,7 +25,7 @@ export default function ShortAnswerField({
           name={label}
           id={label}
           className="
-            block w-full rounded-lg border-0 py-3 text-gray-900 shadow-sm
+            block sm:w-2/3 w-full rounded-lg border-0 py-3 text-gray-900 shadow-sm
             ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
             focus:ring-2 focus:ring-inset focus:ring-gray-900
             sm:text-sm sm:leading-6
@@ -32,6 +33,7 @@ export default function ShortAnswerField({
           placeholder={placeholder}
           onChange={(e) => handleChange(e.target.value)}
           autoFocus={autoFocus}
+          value={value}
         />
       </div>
       {(helpText || hasError) && (
