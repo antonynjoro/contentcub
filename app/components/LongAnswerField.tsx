@@ -8,7 +8,7 @@ export default function LongAnswerField() {
 
   return (
   
-  <BlockNoteView editor={editor} className="w-full -ml-[54px]" />
+  <BlockNoteView editor={editor} theme={"light"} className="w-full -ml-[54px]" />
 
   );
 }

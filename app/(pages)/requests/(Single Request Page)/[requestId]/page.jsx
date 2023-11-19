@@ -13,10 +13,10 @@ import Button from "../../../../components/Button";
 import fetchRequest from "./fetchRequest";
 import RequestHeader from "../../../../components/RequestHeader.jsx";
 import Chip from "../../../../components/Chip";
-import deleteQuestion from"../../../../actions/deleteQuestion"
+import deleteQuestion from "../../../../actions/deleteQuestion";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation.js";
-
+import { toast } from "react-hot-toast";
 
 // const questions = [
 //   {
@@ -119,7 +119,6 @@ import { useRouter } from "next/navigation.js";
 //   },
 // ];
 
-
 export default function Page({ params }) {
   const router = useRouter();
   const [requestId] = useState(params.requestId);
@@ -156,6 +155,7 @@ export default function Page({ params }) {
     fetchQuestions();
   }, [isLoaded, isSignedIn, user, requestId]);
 
+  // set current question to first question
   useEffect(() => {
     if (!isLoading) {
       if (questions.length === 0) {
@@ -168,7 +168,6 @@ export default function Page({ params }) {
       }
     }
   }, [questions, isLoading]);
-
 
   function handleNavItemClick(id) {
     setCurrentQuestion(questions.find((question) => question.id === id));
@@ -196,16 +195,14 @@ export default function Page({ params }) {
     }
   }
 
-  function handleDeleteQuestion() {
-    const currentQuestionIndex = questions.findIndex(
-      (question) => question.id === currentQuestion.id,
-    );
+  async function handleDeleteQuestion() {
 
     const newQuestions = questions.filter(
       (question) => question.id !== currentQuestion.id,
     );
 
     setQuestions(newQuestions);
+    
 
     if (questions.length <= 1) {
       setCurrentQuestion(undefined);
@@ -213,6 +210,16 @@ export default function Page({ params }) {
 
     // delete question from server
     deleteQuestion(requestId, currentQuestion.id);
+
+    toast.success("Question deleted");
+
+    const request = await fetchRequest(requestId, user.id);
+    if (!request) {
+      router.push("/404");
+      return;
+    }
+    console.log("request", request);
+    setQuestions(request.questions);
   }
 
   const variants = {
@@ -254,89 +261,88 @@ export default function Page({ params }) {
           </div>
           {/* Content Nav */}
           <Suspense fallback={<div>Loading...</div>}>
-          <div className="flex h-full flex-grow flex-col items-stretch gap-2 overflow-y-auto border-b py-2">
-            {questions.map((question) => (
-              <div className="flex gap-1" key={question.id}>
-                <QuestionNavItem
-                  type={question.type}
-                  label={question.title}
-                  id={question.id}
-                  handleClick={handleNavItemClick}
-                  isCurrentQuestion={question.id === currentQuestion?.id}
-                />
-              </div>
-            ))}
-            
-          </div>
+            <div className="flex h-full flex-grow flex-col items-stretch gap-2 overflow-y-auto border-b py-2">
+              {questions.map((question) => (
+                <div className="flex gap-1" key={question.id}>
+                  <QuestionNavItem
+                    type={question.type}
+                    label={question.title}
+                    id={question.id}
+                    handleClick={handleNavItemClick}
+                    isCurrentQuestion={question.id === currentQuestion?.id}
+                  />
+                </div>
+              ))}
+            </div>
           </Suspense>
-          <div className="px-3 py-2 flex-col flex flex-grow ">
-            <Button 
-              handleClick={() => setAddQuestionModalOpen(true)}
-
-            >
+          <div className="flex flex-grow flex-col px-3 py-2 ">
+            <Button handleClick={() => setAddQuestionModalOpen(true)}>
               Add Item
             </Button>
-            </div>
+          </div>
         </div>
         {/* Second Column */}
         <div className="col-span-8  flex flex-col border-x bg-gray-100 ">
           {isLoading ? (
-            <div className="m-4 flex flex-grow justify-center items-center rounded-md border bg-white p-12 shadow-sm">
+            <div className="m-4 flex flex-grow items-center justify-center rounded-md border bg-white p-12 shadow-sm">
               Loading...
             </div>
           ) : (
-          <AnimatePresence mode="wait">
-
-            {currentQuestion === undefined ? (
-              <div className="m-4 flex flex-grow rounded-md border bg-white p-12 shadow-sm">
-                No questions yet
-              </div>
-            ) : (
-              <motion.div
-                key={currentQuestion.id}
-                variants={variants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                transition={{ duration: 0.3, type: "tween" }} // You can adjust the type of transition if you want to
-                className="m-4 flex flex-grow flex-col justify-stretch rounded-md border bg-white p-6 sm:p-12 shadow-sm"
-              >
-                <Question
-                  questionId={currentQuestion.id}
-                  type={currentQuestion.type}
-                  title={currentQuestion.title}
-                  description={currentQuestion.description}
-                  requestId={requestId}
-                />
-                <div className="bg-blue flex justify-end gap-3">
-                  <Button
-                    handleClick={handleDeleteQuestion}
-                    isDestructive={true}
-                  >
-                    <HiTrash className="h-5 w-5 text-red-500 " />
-                    Delete Question
-                  </Button>
-                  <QuestionNavigationButtons
-                    handleNextButtonClick={handleNextButtonClick}
-                    handlePreviousButtonClick={handlePreviousButtonClick}
-                  />
+            <AnimatePresence mode="wait">
+              {currentQuestion === undefined ? (
+                <div className="m-4 flex flex-grow rounded-md border bg-white p-12 shadow-sm">
+                  No questions yet
                 </div>
-              </motion.div>
-            )}
-
-          </AnimatePresence>
+              ) : (
+                <motion.div
+                  key={currentQuestion.id}
+                  variants={variants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.3, type: "tween" }} // You can adjust the type of transition if you want to
+                  className="m-4 flex flex-grow flex-col justify-stretch rounded-md border bg-white p-6 shadow-sm sm:p-12"
+                >
+                  <Question
+                    questionId={currentQuestion.id}
+                    type={currentQuestion.type}
+                    title={currentQuestion.title}
+                    description={currentQuestion.description}
+                    requestId={requestId}
+                  />
+                  <div className="bg-blue flex justify-end gap-3">
+                    <Button
+                      handleClick={handleDeleteQuestion}
+                      isDestructive={true}
+                    >
+                      <HiTrash className="h-5 w-5 text-red-500 " />
+                      Delete Question
+                    </Button>
+                    <QuestionNavigationButtons
+                      handleNextButtonClick={handleNextButtonClick}
+                      handlePreviousButtonClick={handlePreviousButtonClick}
+                    />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           )}
         </div>
         {/* Third Colun */}
         <div className="col-span-2 overflow-y-auto bg-white">
           {currentQuestion && (
-          <div className="flex p-3 gap-1 items-center">
-            <p className=" text-sm">Status: </p>
-            <Chip chipType={currentQuestion?.answers?.length>0 ? "success" : "warning"} >
-              {currentQuestion?.answers?.length > 0 ? "Answered" : "Unanswered"}
-            </Chip>
-         
-          </div>
+            <div className="flex items-center gap-1 p-3">
+              <p className=" text-sm">Status: </p>
+              <Chip
+                chipType={
+                  currentQuestion?.answers?.length > 0 ? "success" : "warning"
+                }
+              >
+                {currentQuestion?.answers?.length > 0
+                  ? "Answered"
+                  : "Unanswered"}
+              </Chip>
+            </div>
           )}
         </div>
       </div>

@@ -97,7 +97,7 @@ export default function Question({
           }}
           onUploadError={(error) => {
             // Do something with the error.
-            toast.error("Upload Failed, please try again.");
+            toast.error(`ERROR! ${error.message}`);
             console.log(error);
           }}
         />
@@ -108,6 +108,7 @@ export default function Question({
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             // Do something with the response
+            setAnswer(res[0].url);
             console.log("Files: ", res);
             toast.success("Upload Completed");
           }}

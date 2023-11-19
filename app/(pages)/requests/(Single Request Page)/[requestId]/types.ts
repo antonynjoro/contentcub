@@ -3,6 +3,7 @@ export type Question = {
     type: QuestionType;
     title: string;
     description?: string;
+    multiAnswer?: boolean;
     answers: string[];
     createdAt: Date;
 };
