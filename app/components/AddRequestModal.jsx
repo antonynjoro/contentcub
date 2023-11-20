@@ -25,6 +25,7 @@ export default function AddRequestModal({handleModalClose, handleAddRequestName}
                 helpText="This is the name of the request that will be displayed to the client."
                 handleChange={setRequestName}
                 hasError={fieldHasError}
+                value={requestName}
             />
             <div className="flex flex-row justify-end gap-4">
             <Button handleClick={handleModalClose} isSecondary={true} >Cancel</Button>

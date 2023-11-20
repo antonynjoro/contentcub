@@ -1,6 +1,6 @@
 export type Question = {
     id: string;
-    type: QuestionType;
+    type: PrismaQuestionType;
     title: string;
     description?: string;
     multiAnswer?: boolean;
@@ -8,7 +8,6 @@ export type Question = {
     createdAt: Date;
 };
 
-type QuestionType = keyof typeof PrismaQuestionType;
 
 
 enum PrismaQuestionType {
