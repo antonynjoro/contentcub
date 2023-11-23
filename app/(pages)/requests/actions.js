@@ -17,13 +17,42 @@ export async function fetchRequests() {
           clients: {  
             select: {
               id: true,
-              email: true,  
+              email: true,
+              firstName: true,
+              lastName: true,  
             },
           },
         },
       }
     },
   });
+
+  if (!userWithRequests) {
+    // find client by user id and get all requests
+    const client = await prisma.client.findUnique({
+      where: {
+        externalId: userId,
+      },
+      include: {
+        requests: {
+          include: {
+            clients: {
+              select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return client? client.requests : [];
+  }
+
+    
 
   return userWithRequests? userWithRequests.requests : [];
 }

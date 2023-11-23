@@ -47,7 +47,13 @@ export default function Request() {
         <ul role="list" className="divide-y divide-gray-100">
           <Suspense fallback={<div>Loading...</div>}>
             {requests.map((request) => {
-              return <RequestListItem request={request} key={request.id} />;
+              return (
+              <RequestListItem 
+                request={request} 
+                key={request.id}
+              
+              />
+              )
             })}
           </Suspense>
         </ul>

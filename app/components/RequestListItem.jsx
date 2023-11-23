@@ -13,10 +13,17 @@ export default function RequestListItem({ request }) {
   const longDate = formatLongDate(request.createdAt);
   const relativeDate = formatRelativeDate(request.createdAt);
   const singleRequestPage = `/requests/${request.id}`;
+  const firstName = request?.clients?.[0]?.firstName;
+  const lastName = request?.clients?.[0]?.lastName;
+  const fullName = (firstName || lastName) && (firstName + " " + lastName);
+  const clientName = fullName || request?.clients?.[0]?.email || "No Client Assigned";
+  const clientCount = request?.clients?.length;
+  const clientCountText = clientCount > 1 ? `+${clientCount - 1}` : "";
+  const otherClientEmails = request?.clients?.map((client) => client.email) || [];
   return (
     <li
       key={request.id}
-      className="flex items-center  gap-x-6   hover:bg-gray-100 odd:bg-gray-50 first:border-b-0 border-b border-gray-200 px-6"
+      className="flex items-center  gap-x-6   border-b border-gray-200 px-6 first:border-b-0 odd:bg-gray-50 hover:bg-gray-100"
     >
       <Link href={singleRequestPage} className=" flex-grow py-5">
         <div className="min-w-0">
@@ -43,8 +50,16 @@ export default function RequestListItem({ request }) {
             <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
               <circle cx={1} cy={1} r={1} />
             </svg>
-            <p className="truncate">
-              Client: {request.clientId || "No Client Assigned"}
+            <p
+              className="truncate"
+              title={
+                otherClientEmails.length > 0 && otherClientEmails.join(", ")
+              }
+            >
+              Client:{" "}
+              <span className="font-medium">
+                {clientName + " " + clientCountText}
+              </span>
             </p>
           </div>
         </div>

@@ -56,7 +56,7 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
           {buttonLabel}
         </Button>
       )}
-      <Link
+      {/* <Link
         href={`/chat/${requestId}`}
         className="group relative flex items-center gap-2"
       >
@@ -65,7 +65,7 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
           title="Questions from the client"
         />
         <div className="absolute left-0 top-1 h-2.5 w-2.5 rounded-full bg-pink-600 outline outline-2 outline-white group-hover:bg-pink-500 " />
-      </Link>
+      </Link> */}
       <UserButton afterSignOutAllUrl="/signin" />
     </div>
   );

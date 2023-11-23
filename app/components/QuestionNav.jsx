@@ -14,8 +14,9 @@ export default function QuestionNav({
   setCurrentQuestion,
   requestId,
   isLoading,
+  setAddQuestionModalOpen,
+  addQuestionModalOpen,
 }) {
-  const [addQuestionModalOpen, setAddQuestionModalOpen] = useState(false);
   const [questionEditable, setQuestionEditable] = useState(false);
   const pathname = usePathname();
   useEffect(() => {
