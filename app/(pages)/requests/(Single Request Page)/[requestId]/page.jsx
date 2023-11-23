@@ -128,6 +128,7 @@ export default function Page({ params }) {
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(undefined);
+  const [currentQuestionAnswered, setCurrentQuestionAnswered] = useState(false);
   const [addQuestionModalOpen, setAddQuestionModalOpen] = useState(false);
   const [requestStatus, setRequestStatus] = useState(""); // ["draft", "sent", "answered" "closed"]
   const [requestTitle, setRequestTitle] = useState("");
@@ -144,7 +145,8 @@ export default function Page({ params }) {
       if (!request) {
         router.push("/404");
         return;
-      }else if (user.id !== request.userId) {
+      }
+      if (user.id !== request.user.externalId) {
         router.push(`/requests/${requestId}/submit`);
         return;
       }
@@ -175,6 +177,14 @@ export default function Page({ params }) {
   }, [questions, isLoading]);
 
 
+  useEffect(() => {
+    if (currentQuestion?.answers?.length > 0) {
+      setCurrentQuestionAnswered(true);
+    } else {
+      setCurrentQuestionAnswered(false);
+    }
+  }
+  , [currentQuestion]);
   
 
   

@@ -35,6 +35,14 @@ export default function Page({ params }) {
         router.push("/404");
         return;
       } 
+      // if user is not the owner of the request and not a client of the request
+      if (
+        request.user.externalId !== user.id &&
+        request.clients.every((client) => client.externalId !== user.id)
+      ) {
+        router.push("/404");
+       }
+
       console.log("request", request);
       setQuestions(request.questions);
       console.log("questions", questions);
