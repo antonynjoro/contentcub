@@ -11,7 +11,7 @@ import { toast } from "react-hot-toast";
 import RequestHeader from "../../../../../components/RequestHeader";
 import QuestionNav from "../../../../../components/QuestionNav";
 
-export default function page({ params }) {
+export default function Page({ params }) {
   const router = useRouter();
   const [requestId] = useState(params.requestId);
   const { isLoaded, isSignedIn, user } = useUser();
