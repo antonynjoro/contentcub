@@ -165,7 +165,7 @@ export default function Page({ params }) {
   // set current question to first question
   useEffect(() => {
     if (!isLoading) {
-      if (questions.length === 0) {
+      if (questions.length < 1) {
         setAddQuestionModalOpen(true);
       } else {
         setAddQuestionModalOpen(false);
@@ -183,6 +183,9 @@ export default function Page({ params }) {
     } else {
       setCurrentQuestionAnswered(false);
     }
+
+    console.log("currentQuestionAnswered", currentQuestionAnswered);
+    console.log("currentQuestion", currentQuestion);
   }
   , [currentQuestion]);
   
@@ -238,6 +241,8 @@ export default function Page({ params }) {
           setCurrentQuestion={setCurrentQuestion}
           requestId={requestId}
           isLoading={isLoading}
+          setAddQuestionModalOpen={setAddQuestionModalOpen}
+          addQuestionModalOpen={addQuestionModalOpen}
         />
         </div>
         {/* Second Column */}
