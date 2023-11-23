@@ -9,7 +9,7 @@ import Chip from "../components/Chip.tsx";
 import SendRequestModal from "./SendRequestModal.jsx";
 import { usePathname } from "next/navigation";
 
-export default function RequestHeader({ title, status, requestId }) {
+export default function RequestHeader({ title, status, requestId, isLoading }) {
   const [showActionButton, setShowActionButton] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Send to Client");
   const [showSendRequestModal, setShowSendRequestModal] = useState(false);
@@ -44,14 +44,14 @@ export default function RequestHeader({ title, status, requestId }) {
           <Chip chipType="primary">{status}</Chip>
         </div>
       </div>
-      {showActionButton && showSendRequestModal && (
+      {!isLoading && showActionButton && showSendRequestModal && (
         <SendRequestModal
           requestId={requestId}
           handleModalClose={setShowSendRequestModal}
         />
       )}
 
-      {showActionButton && (
+      {!isLoading && showActionButton && (
         <Button isSecondary handleClick={() => setShowSendRequestModal(true)}>
           {buttonLabel}
         </Button>

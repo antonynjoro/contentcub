@@ -44,7 +44,8 @@ export default async function fetchRequest(
     console.log("Request:", JSON.stringify(request));
 
     // Check if the request exists and if the accessing user is the associated user or client
-    if (!request || (request.user.externalId !== userID && request.client?.externalId !== userID)) {
+    if (!request || (request.user.externalId !== userID && 
+      request.clients.every((client) => client.externalId !== userID))) {
       return null;
     }
 

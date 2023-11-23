@@ -34,7 +34,7 @@ export default function Page({ params }) {
       if (!request) {
         router.push("/404");
         return;
-      }
+      } 
       console.log("request", request);
       setQuestions(request.questions);
       console.log("questions", questions);

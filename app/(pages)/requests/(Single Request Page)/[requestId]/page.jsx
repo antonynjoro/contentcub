@@ -144,6 +144,9 @@ export default function Page({ params }) {
       if (!request) {
         router.push("/404");
         return;
+      }else if (user.id !== request.userId) {
+        router.push(`/requests/${requestId}/submit`);
+        return;
       }
       console.log("request", request);
       setQuestions(request.questions);
@@ -212,6 +215,7 @@ export default function Page({ params }) {
           title={requestTitle}
           status={requestStatus}
           requestId={requestId}
+          isLoading={isLoading}
         />
       </div>
       <div className=" flex flex-grow overflow-hidden    sm:grid sm:grid-cols-12">
@@ -223,6 +227,7 @@ export default function Page({ params }) {
           currentQuestion={currentQuestion}
           setCurrentQuestion={setCurrentQuestion}
           requestId={requestId}
+          isLoading={isLoading}
         />
         </div>
         {/* Second Column */}

@@ -13,6 +13,7 @@ export default function QuestionNav({
   currentQuestion,
   setCurrentQuestion,
   requestId,
+  isLoading,
 }) {
   const [addQuestionModalOpen, setAddQuestionModalOpen] = useState(false);
   const [questionEditable, setQuestionEditable] = useState(false);
@@ -42,7 +43,7 @@ export default function QuestionNav({
     <>
       <div className="flex items-center  border-b p-4 pt-5">
         <h2 className="flex-grow align-middle  text-base  ">Checklist</h2>
-        {questionEditable && (
+        {!isLoading && questionEditable && (
           <>
             <IconButton
               size="sm"
@@ -80,7 +81,7 @@ export default function QuestionNav({
         </div>
       </Suspense>
 
-      { questionEditable && 
+      {!isLoading && questionEditable && 
         <div className="flex flex-grow flex-col px-3 py-2 ">
         <Button handleClick={() => setAddQuestionModalOpen(true)}>
           Add Item
