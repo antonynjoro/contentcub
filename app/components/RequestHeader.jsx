@@ -7,10 +7,26 @@ import { useEffect, useState } from "react";
 import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 import Chip from "../components/Chip.tsx";
 import SendRequestModal from "./SendRequestModal.jsx";
+import { usePathname } from "next/navigation";
 
 export default function RequestHeader({ title, status, requestId }) {
+  const [showActionButton, setShowActionButton] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Send to Client");
   const [showSendRequestModal, setShowSendRequestModal] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname) {
+      const pathSegments = pathname.split("/");
+      if (
+        pathSegments.length === 3 &&
+        pathSegments[1] === "requests" &&
+        pathSegments[2] === requestId
+      ) {
+        setShowActionButton(true);
+      }
+    }
+  }, [pathname, requestId]);
 
   return (
     <div className="flex gap-4 border-b border-b-gray-200 px-4 py-2">
@@ -28,15 +44,18 @@ export default function RequestHeader({ title, status, requestId }) {
           <Chip chipType="primary">{status}</Chip>
         </div>
       </div>
-      {showSendRequestModal && (
+      {showActionButton && showSendRequestModal && (
         <SendRequestModal
           requestId={requestId}
           handleModalClose={setShowSendRequestModal}
         />
       )}
-      <Button isSecondary handleClick={() => setShowSendRequestModal(true)}>
-        {buttonLabel}
-      </Button>
+
+      {showActionButton && (
+        <Button isSecondary handleClick={() => setShowSendRequestModal(true)}>
+          {buttonLabel}
+        </Button>
+      )}
       <Link
         href={`/chat/${requestId}`}
         className="group relative flex items-center gap-2"

@@ -17,6 +17,8 @@ import deleteQuestion from "../../../../actions/deleteQuestion";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation.js";
 import { toast } from "react-hot-toast";
+import QuestionsWrapper from "../../../../components/QuestionsWrapper.jsx";
+import QuestionNav from "../../../../components/QuestionNav.jsx";
 
 // const questions = [
 //   {
@@ -169,31 +171,10 @@ export default function Page({ params }) {
     }
   }, [questions, isLoading]);
 
-  function handleNavItemClick(id) {
-    setCurrentQuestion(questions.find((question) => question.id === id));
-  }
 
-  function handleNextButtonClick() {
-    const currentQuestionIndex = questions.findIndex(
-      (question) => question.id === currentQuestion.id,
-    );
-    if (currentQuestionIndex === questions.length - 1) {
-      setCurrentQuestion(questions[0]);
-    } else {
-      setCurrentQuestion(questions[currentQuestionIndex + 1]);
-    }
-  }
+  
 
-  function handlePreviousButtonClick() {
-    const currentQuestionIndex = questions.findIndex(
-      (question) => question.id === currentQuestion.id,
-    );
-    if (currentQuestionIndex === 0) {
-      setCurrentQuestion(questions[questions.length - 1]);
-    } else {
-      setCurrentQuestion(questions[currentQuestionIndex - 1]);
-    }
-  }
+  
 
   async function handleDeleteQuestion() {
 
@@ -222,11 +203,7 @@ export default function Page({ params }) {
     setQuestions(request.questions);
   }
 
-  const variants = {
-    initial: { opacity: 0, y: 50 }, // Start a bit down from the final position
-    animate: { opacity: 1, y: 0 }, // Move to the final position and become fully opaque
-    exit: { opacity: 0, y: -50 }, // Move up a bit and fade out
-  };
+  
 
   return (
     <div className="flex h-screen flex-col  ">
@@ -240,93 +217,24 @@ export default function Page({ params }) {
       <div className=" flex flex-grow overflow-hidden    sm:grid sm:grid-cols-12">
         {/* first column */}
         <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white ">
-          <div className="flex items-center  border-b p-4 pt-5">
-            <h2 className="flex-grow align-middle  text-base  ">Checklist</h2>
-            <IconButton
-              size="sm"
-              tooltipText={"Create a new Question"}
-              handleClick={() =>
-                setAddQuestionModalOpen((prevState) => !prevState)
-              }
-            />
-            {addQuestionModalOpen && (
-              <AddQuestionModal
-                handleModalClose={() =>
-                  setAddQuestionModalOpen((prevState) => !prevState)
-                }
-                setQuestions={setQuestions}
-                requestId={requestId}
-              />
-            )}
-          </div>
-          {/* Content Nav */}
-          <Suspense fallback={<div>Loading...</div>}>
-            <div className="flex h-full flex-grow flex-col items-stretch gap-2 overflow-y-auto border-b py-2">
-              {questions.map((question) => (
-                <div className="flex gap-1" key={question.id}>
-                  <QuestionNavItem
-                    type={question.type}
-                    label={question.title}
-                    id={question.id}
-                    handleClick={handleNavItemClick}
-                    isCurrentQuestion={question.id === currentQuestion?.id}
-                  />
-                </div>
-              ))}
-            </div>
-          </Suspense>
-          <div className="flex flex-grow flex-col px-3 py-2 ">
-            <Button handleClick={() => setAddQuestionModalOpen(true)}>
-              Add Item
-            </Button>
-          </div>
+        <QuestionNav
+          questions={questions}
+          setQuestions={setQuestions}
+          currentQuestion={currentQuestion}
+          setCurrentQuestion={setCurrentQuestion}
+          requestId={requestId}
+        />
         </div>
         {/* Second Column */}
-        <div className="col-span-8  flex flex-col border-x bg-gray-100 ">
-          {isLoading ? (
-            <div className="m-4 flex flex-grow items-center justify-center rounded-md border bg-white p-12 shadow-sm">
-              Loading...
-            </div>
-          ) : (
-            <AnimatePresence mode="wait">
-              {currentQuestion === undefined ? (
-                <div className="m-4 flex flex-grow rounded-md border bg-white p-12 shadow-sm">
-                  No questions yet
-                </div>
-              ) : (
-                <motion.div
-                  key={currentQuestion.id}
-                  variants={variants}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  transition={{ duration: 0.3, type: "tween" }} // You can adjust the type of transition if you want to
-                  className="m-4 flex flex-grow flex-col justify-stretch rounded-md border bg-white p-6 shadow-sm sm:p-12"
-                >
-                  <Question
-                    questionId={currentQuestion.id}
-                    type={currentQuestion.type}
-                    title={currentQuestion.title}
-                    description={currentQuestion.description}
-                    requestId={requestId}
-                  />
-                  <div className="bg-blue flex justify-end gap-3">
-                    <Button
-                      handleClick={handleDeleteQuestion}
-                      isDestructive={true}
-                    >
-                      <HiTrash className="h-5 w-5 text-red-500 " />
-                      Delete Question
-                    </Button>
-                    <QuestionNavigationButtons
-                      handleNextButtonClick={handleNextButtonClick}
-                      handlePreviousButtonClick={handlePreviousButtonClick}
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          )}
+        <div className="col-span-8 flex flex-col border-x bg-gray-100 overflow-hidden h-full  ">
+        <QuestionsWrapper
+          isLoading={isLoading}
+          currentQuestion={currentQuestion}
+          handleDeleteQuestion={handleDeleteQuestion}
+          setCurrentQuestion={setCurrentQuestion}
+          requestId={requestId}
+          questions={questions}
+        />
         </div>
         {/* Third Colun */}
         <div className="col-span-2 overflow-y-auto bg-white">

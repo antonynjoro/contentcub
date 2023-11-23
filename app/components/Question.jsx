@@ -40,42 +40,46 @@ export default function Question({
     [],
   );
 
- // Separate useEffect for initial data fetch
- useEffect(() => {
-  if (!dataFetched) {
-    fetchAnswer(requestId, questionId)
-      .then((res) => {
-        if (res.answers.length > 0) {
-          const fetchedAnswers = res.answers.map((answer) => answer.value);
-          setAnswers(fetchedAnswers);
-          setInitiallyFetchedAnswers(fetchedAnswers);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setDataFetched(true); // Ensure this is set to true after fetching
-      });
-  }
-}, [requestId, questionId, dataFetched]); // Include dataFetched in the dependency array
+  useEffect(() => {
+    console.log("answers: ", answers[0]);
+  }, [answers]);
 
-// Helper function to compare two arrays
-function arraysAreEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false;
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) return false;
-  }
-  return true;
-}
+  // Separate useEffect for initial data fetch
+  useEffect(() => {
+    if (!dataFetched) {
+      fetchAnswer(requestId, questionId)
+        .then((res) => {
+          if (res.answers.length > 0) {
+            const fetchedAnswers = res.answers.map((answer) => answer.value);
+            setAnswers(fetchedAnswers);
+            setInitiallyFetchedAnswers(fetchedAnswers);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setDataFetched(true); // Ensure this is set to true after fetching
+        });
+    }
+  }, [requestId, questionId, dataFetched]); // Include dataFetched in the dependency array
 
-// Separate useEffect for handling answer submission
-useEffect(() => {
-  const hasAnswersChanged = !arraysAreEqual(answers, initiallyFetchedAnswers);
-  if (dataFetched && hasAnswersChanged) {
-    debouncedSubmitAnswer(requestId, questionId, answers);
+  // Helper function to compare two arrays
+  function arraysAreEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
   }
-}, [answers, debouncedSubmitAnswer, questionId, requestId, dataFetched]);
+
+  // Separate useEffect for handling answer submission
+  useEffect(() => {
+    const hasAnswersChanged = !arraysAreEqual(answers, initiallyFetchedAnswers);
+    if (dataFetched && hasAnswersChanged) {
+      debouncedSubmitAnswer(requestId, questionId, answers);
+    }
+  }, [answers, debouncedSubmitAnswer, questionId, requestId, dataFetched]);
 
   function handleType(type) {
     if (type === "textShort") {
@@ -91,7 +95,14 @@ useEffect(() => {
         </div>
       );
     } else if (type === "textLong") {
-      return <LongAnswerField />;
+      return (
+        <LongAnswerField
+          onEditorChange={(value) =>
+            setAnswers((prevAnswers) => [...prevAnswers.slice(0, -1), value])
+          }
+          value={answers[answers.length - 1] || null}
+        />
+      );
     } else if (type === "fileUpload") {
       return (
         <UploadButton
@@ -132,6 +143,7 @@ useEffect(() => {
             toast.error(`ERROR! ${error.message}`);
             console.log(error);
           }}
+          className=" flex-grow-0"
         />
       );
     } else if (type === "imageUploadMultiple") {
@@ -149,7 +161,7 @@ useEffect(() => {
             // Do something with the error.
             toast.error(`ERROR! ${error.message}`);
           }}
-          className="h-full w-full ut-label:text-gray-900 ut-upload-icon:text-yellow-400"
+          className=" w-full  ut-button:bg-gray-950 ut-button:hover:bg-gray-800   ut-label:text-gray-900 ut-upload-icon:text-yellow-400"
         />
       );
     } else {
@@ -158,25 +170,24 @@ useEffect(() => {
   }
 
   const renderImages = (
-    <div className="grid grid-cols-6 gap-2.5 pt-6">
+    <div className="grid h-full auto-rows-min grid-cols-6 gap-2.5 pl-1 pt-6	">
       {answers.map((url, index) => (
         <Link key={index} className="relative" href={url}>
           <Image
             src={url}
             width={100}
-            height={100}
-            className="rounded-md"
+            height={50}
+            className="h-auto w-full rounded-md"
           />
           <button
-            className="absolute -top-1 -right-1 p-0.5 rounded-full bg-red-500"
-            onClick={() => {
+            className="absolute -right-1 -top-1 rounded-full bg-red-500 p-0.5"
+            onClick={(e) => {
+              e.preventDefault();
               setAnswers((prevAnswers) => [
                 ...prevAnswers.slice(0, index),
-                ...prevAnswers.slice(index + 1
-                ),
+                ...prevAnswers.slice(index + 1),
               ]);
-            }
-            }
+            }}
           >
             <HiX className="text-white" />
           </button>
@@ -187,14 +198,16 @@ useEffect(() => {
 
   return (
     <div
-      className={`flex w-full max-w-full flex-grow flex-col items-stretch justify-center p-6 sm:p-20 ${
+      className={`flex w-full max-w-full flex-grow flex-col flex-nowrap items-stretch justify-center  overflow-hidden p-6 sm:p-20 ${
         type === "textLong" && "sm:p-4 sm:pb-6"
       }`}
     >
-      <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+      <h2 className="pl-1 text-2xl font-bold text-gray-900">{title}</h2>
       <p className="text-base text-gray-600">{description}</p>
       <div
-        className={`flex max-w-full pt-4 ${type === "textLong" && "h-full"}`}
+        className={`flex max-w-full overflow-hidden pl-1 pt-4 ${
+          type === "textLong" && " h-full flex-grow"
+        } ${type === "imageUploadMultiple" && " h-full flex-grow"}`}
       >
         {handleType(type)}
       </div>
@@ -204,7 +217,7 @@ useEffect(() => {
           src={answers[answers.length - 1]}
           width={100}
           height={100}
-          className="pt-6"
+          className="flex-grow-0 pl-1 pt-6"
         />
       )}
     </div>

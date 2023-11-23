@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/components/AddQuestionModal.jsx"  ],
+, "app/components/AddQuestionModal.jsx", "app/components/LongAnswerField.jsx"  ],
   "exclude": [
     "node_modules"
   ]
