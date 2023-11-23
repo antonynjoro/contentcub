@@ -119,7 +119,7 @@ export default async function sendRequest(
     {
       userFirstName: user.firstName,
       requestTitle: request.title,
-      inviteLink: `https://contentcub.co/requests/${requestId}`,
+      inviteLink: `https://contentcub.co/requests/${requestId}/submit`,
     }
   );
 
