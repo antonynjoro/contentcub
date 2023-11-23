@@ -36,7 +36,7 @@ export default function Question({
         .catch((err) => {
           console.log(err);
         });
-    }, 2000),
+    }, 1000),
     [],
   );
 
@@ -79,8 +79,11 @@ export default function Question({
     if (dataFetched && hasAnswersChanged) {
       debouncedSubmitAnswer(requestId, questionId, answers);
     }
+
   }, [answers, debouncedSubmitAnswer, questionId, requestId, dataFetched]);
 
+
+  // Helper function to handle the type of question
   function handleType(type) {
     if (type === "textShort") {
       return (
@@ -169,29 +172,35 @@ export default function Question({
     }
   }
 
+  function ImagePreview({ url, index=0 }) {
+    return (
+      <Link className="relative max-w-[200px]" href={url}>
+        <Image
+          src={url}
+          width={100}
+          height={50}
+          className="h-auto w-full rounded-md"
+        />
+        <button
+          className="absolute -right-1 -top-1 rounded-full bg-red-500 p-0.5"
+          onClick={(e) => {
+            e.preventDefault();
+            setAnswers((prevAnswers) => [
+              ...prevAnswers.slice(0, index),
+              ...prevAnswers.slice(index + 1),
+            ]);
+          }}
+        >
+          <HiX className="text-white" />
+        </button>
+      </Link>
+    );
+  }
+
   const renderImages = (
     <div className="grid h-full auto-rows-min grid-cols-6 gap-2.5 pl-1 pt-6	">
       {answers.map((url, index) => (
-        <Link key={index} className="relative" href={url}>
-          <Image
-            src={url}
-            width={100}
-            height={50}
-            className="h-auto w-full rounded-md"
-          />
-          <button
-            className="absolute -right-1 -top-1 rounded-full bg-red-500 p-0.5"
-            onClick={(e) => {
-              e.preventDefault();
-              setAnswers((prevAnswers) => [
-                ...prevAnswers.slice(0, index),
-                ...prevAnswers.slice(index + 1),
-              ]);
-            }}
-          >
-            <HiX className="text-white" />
-          </button>
-        </Link>
+        <ImagePreview key={index} index={index} url={url} />
       ))}
     </div>
   );
@@ -213,12 +222,7 @@ export default function Question({
       </div>
       {type === "imageUploadMultiple" && answers.length > 0 && renderImages}
       {type === "imageUpload" && answers.length > 0 && (
-        <Image
-          src={answers[answers.length - 1]}
-          width={100}
-          height={100}
-          className="flex-grow-0 pl-1 pt-6"
-        />
+        <ImagePreview url={answers[answers.length - 1]} />
       )}
     </div>
   );

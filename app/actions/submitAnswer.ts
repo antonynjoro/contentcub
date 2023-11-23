@@ -16,7 +16,7 @@ export default async function submitAnswer(
 
     if (question.multiAnswer) {
       // Construct an array of answer objects
-      const answerObjects = answers.map((answer) => ({ value: answer }));
+      const answerObjects = answers.length === 0 ? [] : answers.map((answer) => ({ value: answer }));
       console.log ("answerObjects", answerObjects);
       const savedAnswer = await prisma.question.update({
         where: {
@@ -34,6 +34,15 @@ export default async function submitAnswer(
 
       return savedAnswer;
     } else {
+
+      // if the answer is empty, set the answers array to empty
+      if (answers[0] === "") {
+        answers = [];
+      } else if (answers[0] === '{"type":"doc","content":[{"type":"paragraph"}]}') {
+        // if the answer is empty, set the answers array to empty
+        answers = [];
+      }
+
       // Update the single answer (set the first answer in the array)
       const savedAnswer = await prisma.question.update({
         where: {
@@ -41,7 +50,7 @@ export default async function submitAnswer(
         },
         data: {
           answers: {
-            set: [{ value: answers[answers.length - 1] }], // Set the last answer in the array
+            set: answers.length === 0 ? [] : [{ value: answers[0] }],
           },
         },
       });
