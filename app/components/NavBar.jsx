@@ -9,7 +9,7 @@ import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
+  { name: "Checklists", href: "#", current: true },
   { name: "Team", href: "#", current: false },
   { name: "Projects", href: "#", current: false },
   { name: "Calendar", href: "#", current: false },
