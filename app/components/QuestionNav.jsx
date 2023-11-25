@@ -25,7 +25,7 @@ export default function QuestionNav({
       const pathSegments = pathname.split("/");
       if (
         pathSegments.length === 3 &&
-        pathSegments[1] === "requests" &&
+        pathSegments[1] === "checklists" &&
         pathSegments[2] === requestId
       ) {
         setQuestionEditable(true);

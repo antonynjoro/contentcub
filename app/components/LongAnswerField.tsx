@@ -90,8 +90,8 @@ export default function LongAnswerField({ onEditorChange, value }) {
 
       <EditorContent
         editor={editor}
-        className=" min-h-[6em] h-min overflow-y-auto overflow-hidden px-4 py-2"
-      />
+        className="tiptap-editor min-h-[6em] h-min overflow-y-auto overflow-hidden px-4 py-2"
+        />
     </div>
   );
 }

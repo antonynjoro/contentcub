@@ -147,7 +147,7 @@ export default function Page({ params }) {
         return;
       }
       if (user.id !== request.user.externalId) {
-        router.push(`/requests/${requestId}/submit`);
+        router.push(`/checklists/${requestId}/submit`);
         return;
       }
       console.log("request", request);

@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 
 export default function RequestHeader({ title, status, requestId, isLoading }) {
   const [showActionButton, setShowActionButton] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState("Send to Client");
+  const [buttonLabel, setButtonLabel] = useState("Share with Client");
   const [showSendRequestModal, setShowSendRequestModal] = useState(false);
   const pathname = usePathname();
 
@@ -20,7 +20,7 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
       const pathSegments = pathname.split("/");
       if (
         pathSegments.length === 3 &&
-        pathSegments[1] === "requests" &&
+        pathSegments[1] === "checklists" &&
         pathSegments[2] === requestId
       ) {
         setShowActionButton(true);
@@ -33,8 +33,8 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
       <div className="flex flex-grow items-center gap-2">
         <Link
           className="flex items-center text-gray-600 hover:text-gray-900"
-          href="/requests"
-          title="Back to Requests"
+          href="/checklists"
+          title="Back to Checklists"
         >
           <HiOutlineArrowSmLeft className="text-2xl" />
           {/* <p className="text-sm ">Back to Requests</p> */}

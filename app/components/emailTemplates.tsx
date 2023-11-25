@@ -25,7 +25,7 @@ export const InviteEmailTemplate: React.FC<
   Readonly<InviteEmailTemplateProps>
 > = ({ userFirstName, requestTitle, inviteLink }) => (
   <div>
-    <h1>Hello!</h1>
+    <p>Hello {userFirstName ? userFirstName: "there"}!</p>
     <p>
       {userFirstName} has just invited you to provide content for {requestTitle}
     </p>
@@ -39,6 +39,7 @@ export const InviteEmailTemplate: React.FC<
         marginTop: "20px",
         borderRadius: "5px",
         textDecoration: "none",
+        marginBottom: "20px"
       }}
     >
       Submit Content Now

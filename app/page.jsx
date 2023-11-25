@@ -209,7 +209,7 @@ export default function Page() {
               <img
                 className="h-16 w-auto"
                 src="/logo.svg"
-                alt="ContentCub Logo"
+                alt="ContentCub"
               />
               <span className=" text-lg font-bold">ContentCub</span>
             </a>
@@ -236,7 +236,7 @@ export default function Page() {
             ))}
             {isSignedIn && (
                   
-                    <Link className="text-sm font-semibold leading-6 text-gray-900" href={"/requests"}>Go to App</Link>
+                    <Link className="text-sm font-semibold leading-6 text-gray-900" href={"/checklists"}>Go to App</Link>
               
                 )}
           </div>
@@ -293,7 +293,7 @@ export default function Page() {
                   ))}
                   {isSignedIn && (
                     <Link
-                       href={"/requests"}
+                       href={"/checklists"}
                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
                       Go to App
@@ -686,8 +686,8 @@ export default function Page() {
           <div className="xl:grid xl:grid-cols-3 xl:gap-8">
             <img
               className="h-7"
-              src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=600"
-              alt="Company name"
+              src="/logo.svg"
+              alt="ContentCub"
             />
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
