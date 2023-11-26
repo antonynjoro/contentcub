@@ -28,7 +28,6 @@ export default function Question({
     debounce((requestId, questionId, answerList) => {
       submitAnswer(requestId, questionId, answerList)
         .then((res) => {
-          console.log(res);
           const updatedAnswers = res.answers.map((answer) => answer.value);
           setAnswers(updatedAnswers);
           setInitiallyFetchedAnswers(updatedAnswers);
@@ -40,9 +39,7 @@ export default function Question({
     [requestId, questionId],
   );
 
-  useEffect(() => {
-    console.log("answers: ", answers[0]);
-  }, [answers]);
+
 
   // Separate useEffect for initial data fetch
   useEffect(() => {
