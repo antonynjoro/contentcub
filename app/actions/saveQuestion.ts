@@ -2,10 +2,17 @@
 
 import { Question } from '../(pages)/checklists/(Single Request Page)/[requestId]/types';
 import prisma from "../libs/prismadb.jsx";
+import { auth } from "@clerk/nextjs";
 
 
 
 export default async function saveQuestion(requestId: string, question: Question) {
+    const { userId } = auth();
+
+    if (!userId) {
+        throw new Error("User not authenticated");
+    }
+    
     console.log("Saving questions for request");
     console.log("Request ID: " + requestId);
     console.log("Question: " + JSON.stringify(question));

@@ -1,5 +1,6 @@
 "use server";
 import prisma from "../libs/prismadb";
+import { auth } from "@clerk/nextjs";
 
 export default async function submitAnswer(
   requestId: string,
@@ -8,6 +9,13 @@ export default async function submitAnswer(
 ) {
   console.log("submitAnswer", requestId, questionId, answers);
   try {
+    const { userId } = auth();
+
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    
     const question = await prisma.question.findUnique({
       where: {
         id: questionId,

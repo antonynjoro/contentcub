@@ -1,5 +1,6 @@
 "use server";
 import { Resend } from "resend";
+import { auth } from "@clerk/nextjs";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -14,6 +15,12 @@ export async function sendEmail(
     templateData: any, 
     ): Promise<any> { // Define the return type of the function if known
   try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    console.log("Sending email to:", email);
     const emailContent = template(templateData);
     const data = resend.emails.send({
       from: fromEmail,

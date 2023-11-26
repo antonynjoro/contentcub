@@ -36,10 +36,10 @@ export const InviteEmailTemplate: React.FC<
         backgroundColor: "#222222",
         color: "#fff",
         padding: "10px 20px",
-        marginTop: "20px",
+        marginTop: "40px",
         borderRadius: "5px",
         textDecoration: "none",
-        marginBottom: "20px"
+        marginBottom: "20px",
       }}
     >
       Submit Content Now
