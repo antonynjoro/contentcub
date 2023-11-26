@@ -12,7 +12,7 @@ import { HiX } from "react-icons/hi";
 import fetchClientsOnRequest from "../actions/fetchClientsOnRequest";
 import removeClientFromRequest from "../actions/removeClientFromRequest";
 
-export default function SendRequestModal({ handleModalClose, requestId }) {
+export default function SendRequestModal({ handleModalClose, requestId, setIsRequestSent }) {
   const [clientEmail, setClientEmail] = useState("");
   const [fieldHasError, setFieldHasError] = useState(false);
   const [clientsOnRequest, setClientsOnRequest] = useState([]);
@@ -33,17 +33,30 @@ export default function SendRequestModal({ handleModalClose, requestId }) {
     if (clientEmail === "") {
       setFieldHasError(true);
     } else {
-      sendRequest(requestId, clientEmail)
-        .then((data) => {
-          toast.success("Request sent!");
-        })
-        .catch((error) => {
-          toast.error("Something went wrong!");
-        });
-
+      // Using toast.promise to handle the loading, success, and error states
+      toast.promise(
+        sendRequest(requestId, clientEmail), // Promise
+        {
+          loading: 'Sending the Checklist...',
+          success: 'Checklist sent!',
+          error: 'Something went wrong!'
+        },
+        {
+          // Optional: Additional toast options like styling
+          style: {
+            minWidth: '250px',
+          },
+          success: {
+            duration: 5000,
+          },
+        }
+      );
+  
       handleModalClose((prev) => !prev);
     }
   }
+  
+  
 
   function handleRemoveClientButtonClicked(clientId) {
     removeClientFromRequest(requestId, clientId)
@@ -65,11 +78,11 @@ export default function SendRequestModal({ handleModalClose, requestId }) {
     <ModalContainer
         handleModalClose={handleModalClose}
     >
-      <h2 className="text-2xl font-bold">Send Request</h2>
+      <h2 className="text-2xl font-bold">Send Checkist</h2>
       <ShortAnswerField
         type="email"
         label="Email address"
-        helpText={"They will receive an email with a link to the request."}
+        helpText={"They will receive an email with a link to the checklist."}
         handleChange={setClientEmail}
         hasError={fieldHasError}
         value={clientEmail}
@@ -109,7 +122,7 @@ export default function SendRequestModal({ handleModalClose, requestId }) {
             
         <IconButton
           size="md"
-          tooltipText={"Copy link"}
+          tooltipText={"Copy the link to the checklist"}
           handleClick={() => {
             navigator.clipboard.writeText(
               `${window.location.origin}/checklists/${requestId}/submit`,
@@ -126,7 +139,7 @@ export default function SendRequestModal({ handleModalClose, requestId }) {
             Cancel
           </Button>
           <Button handleClick={handleSendRequestButtonClicked}>
-            Send Request
+            Send Checklist
           </Button>
         </div>
       </div>

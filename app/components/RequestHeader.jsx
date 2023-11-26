@@ -8,12 +8,31 @@ import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 import Chip from "../components/Chip.tsx";
 import SendRequestModal from "./SendRequestModal.jsx";
 import { usePathname } from "next/navigation";
+import fetchRequestStatus from "../actions/fetchRequestStatus";
+import statusStyles from "../configs/statusStyles";
 
 export default function RequestHeader({ title, status, requestId, isLoading }) {
   const [showActionButton, setShowActionButton] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Share with Client");
   const [showSendRequestModal, setShowSendRequestModal] = useState(false);
   const pathname = usePathname();
+  const [ currentStatus, setCurrentStatus ] = useState("");
+  const [ chipType, setChipType ] = useState("primary");
+  
+
+  useEffect(() => {
+    fetchRequestStatus(requestId)
+      .then((status) => {
+        setCurrentStatus(status);
+        console.log("currentStatus ", status);
+        if (status === "sent") {
+          setChipType("warning");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [requestId, currentStatus, showSendRequestModal]);
 
   useEffect(() => {
     if (pathname) {
@@ -29,7 +48,7 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
   }, [pathname, requestId]);
 
   return (
-    <div className="flex gap-4 border-b border-b-gray-200 px-4 py-2">
+    <div className="flex gap-4 border-b border-b-gray-200 px-4 py-2 items-center">
       <div className="flex flex-grow items-center gap-2">
         <Link
           className="flex items-center text-gray-600 hover:text-gray-900"
@@ -41,7 +60,7 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
         </Link>
         <div className="flex items-center justify-center gap-2">
           <h1 className=" text-lg  text-gray-900">{title}</h1>
-          <Chip chipType="primary">{status}</Chip>
+          <Chip chipType={chipType}>{status}</Chip>
         </div>
       </div>
       {!isLoading && showActionButton && showSendRequestModal && (
@@ -52,7 +71,7 @@ export default function RequestHeader({ title, status, requestId, isLoading }) {
       )}
 
       {!isLoading && showActionButton && (
-        <Button isSecondary handleClick={() => setShowSendRequestModal(true)}>
+        <Button isOutlined handleClick={() => setShowSendRequestModal(true)}>
           {buttonLabel}
         </Button>
       )}

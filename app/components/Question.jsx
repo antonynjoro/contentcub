@@ -36,8 +36,8 @@ export default function Question({
         .catch((err) => {
           console.log(err);
         });
-    }, 1000),
-    [],
+    }, 5000),
+    [requestId, questionId],
   );
 
   useEffect(() => {

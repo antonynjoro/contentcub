@@ -91,6 +91,9 @@ export default async function sendRequest(
         clientIds: {
           push: client.id,
         },
+        status: {
+          set: "sent",
+        },
       },
     });
     }
