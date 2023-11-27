@@ -75,9 +75,7 @@ export default function SendRequestModal({ handleModalClose, requestId, setIsReq
 
   
   return (
-    <ModalContainer
-        handleModalClose={handleModalClose}
-    >
+    <ModalContainer handleModalClose={handleModalClose}>
       <h2 className="text-2xl font-bold">Send Checkist</h2>
       <ShortAnswerField
         type="email"
@@ -96,12 +94,21 @@ export default function SendRequestModal({ handleModalClose, requestId, setIsReq
             <p className=" text-sm text-gray-500">No clients added yet.</p>
           ) : (
             clientsOnRequest.map((client) => (
-              <div className="flex flex-row justify-between items-center" key={client.id}>
+              <div
+                className="flex flex-row items-center justify-between"
+                key={client.id}
+              >
                 <div className="flex items-center gap-x-3">
-                {client.firstName?.length > 0 ? <p>{client.firstName} {client?.lastName}</p>
-                    : <p>{client.email}</p>
-                }
-                {client.email === clientsOnRequest[0].email && <p className="text-xs text-gray-500">Main Contact</p>}
+                  {client.firstName?.length > 0 ? (
+                    <p>
+                      {client.firstName} {client?.lastName}
+                    </p>
+                  ) : (
+                    <p>{client.email}</p>
+                  )}
+                  {client.email === clientsOnRequest[0].email && (
+                    <p className="text-xs text-gray-500">Main Contact</p>
+                  )}
                 </div>
                 <IconButton
                   size="sm"
@@ -119,23 +126,28 @@ export default function SendRequestModal({ handleModalClose, requestId, setIsReq
 
       <div className="flex gap-4 pt-6">
         {clientsOnRequest.length > 0 && (
-            
-        <IconButton
-          size="md"
-          tooltipText={"Copy the link to the checklist"}
-          handleClick={() => {
-            navigator.clipboard.writeText(
-              `${window.location.origin}/checklists/${requestId}/submit`,
-            );
-            toast.success("Link copied to clipboard!");
-          }}
-          IconComponent={MdOutlineInsertLink}
-        />
+          <Button
+            size="md"
+            tooltipText={"Copy the link to the checklist"}
+            handleClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.origin}/checklists/${requestId}/submit`,
+              );
+              toast.success("Link copied to clipboard!");
+            }}
+            isOutlined
+          >
+            <div className="flex items-center gap-x-3">
+              <MdOutlineInsertLink />
+              Copy Link
+            </div>
+          </Button>
         )}
         <div className="flex flex-grow flex-row justify-end gap-4">
-          <Button handleClick={
-            () => handleModalClose((prev) => !prev)
-          } isSecondary={true}>
+          <Button
+            handleClick={() => handleModalClose((prev) => !prev)}
+            isSecondary={true}
+          >
             Cancel
           </Button>
           <Button handleClick={handleSendRequestButtonClicked}>

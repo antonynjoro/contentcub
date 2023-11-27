@@ -4,6 +4,7 @@ export default function Button({
   isSecondary = false,
   isOutlined = false,
   isDestructive = false,
+  tooltipText = "null",
 }) {
   let buttonClass = 'flex justify-center items-center gap-1 rounded-md px-4 py-2 ';
 
@@ -22,6 +23,7 @@ export default function Button({
       className={buttonClass}
       onClick={handleClick}
       aria-label={children}
+      title={tooltipText}
     >
       {children}
     </button>
