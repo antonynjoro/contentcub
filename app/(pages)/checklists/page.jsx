@@ -5,7 +5,7 @@ import { fetchRequests, createRequest } from "./actions";
 import Button from "../../components/Button";
 import { HiPlus } from "react-icons/hi";
 import AddRequestModal from "../../components/AddRequestModal";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs"; 
 import RequestListItem from "../../components/RequestListItem.jsx";
 import deleteRequest from "../../actions/deleteRequest";
 import { toast } from "react-hot-toast";
@@ -70,7 +70,7 @@ export default function Request() {
         {requests.length === 0 && !isLoadingRequest && (
           <div className="flex flex-col items-center justify-center">
             <p className="text-gray-500 text-sm">
-              You don't have any checklists yet.
+              You do not have any checklists yet.
             </p>
             <Button
               handleClick={() => setAddRequestModalOpen(true)}
