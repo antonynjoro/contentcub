@@ -4,6 +4,12 @@ import { ClerkProvider } from "@clerk/nextjs";
 import ToasterContext from "./context/ToasterContext.jsx";
 import NavBar from "./components/NavBar.jsx";
 import Head from "next/head";
+import Hotjar from '@hotjar/browser';
+
+const siteId = 3759149;
+const hotjarVersion = 6;
+
+Hotjar.init(siteId, hotjarVersion);
 
 const fira_sans = Fira_Sans({
   subsets: ["latin"],
