@@ -4,12 +4,14 @@ import { HiEllipsisVertical } from "react-icons/hi2";
 import statusStyles from "../configs/statusStyles";
 import { formatLongDate, formatRelativeDate } from "../utils/dateUtils";
 import Link from "next/link";
+import DeleteRequestModal from "./DeleteRequestModal";
+import { useState } from "react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function RequestListItem({ request }) {
+export default function RequestListItem({ request, handleDeleteRequest }) {
   const longDate = formatLongDate(request.createdAt);
   const relativeDate = formatRelativeDate(request.createdAt);
   const singleRequestPage = `/checklists/${request.id}`;
@@ -20,7 +22,11 @@ export default function RequestListItem({ request }) {
   const clientCount = request?.clients?.length;
   const clientCountText = clientCount > 1 ? `+${clientCount - 1}` : "";
   const otherClientEmails = request?.clients?.map((client) => client.email) || [];
+  const [showDeleteRequestModal, setShowDeleteRequestModal] = useState(false);
+
+
   return (
+    <>
     <li
       key={request.id}
       className="flex items-center  gap-x-6   border-b border-gray-200 px-6 first:border-b-0 odd:bg-gray-50 hover:bg-gray-100"
@@ -114,15 +120,15 @@ export default function RequestListItem({ request }) {
               </Menu.Item>
               <Menu.Item>
                 {({ active }) => (
-                  <a
-                    href="#"
+                  <button
                     className={classNames(
                       active ? "bg-gray-50" : "",
-                      "block px-3 py-1 text-sm leading-6 text-gray-900",
+                      "block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left",
                     )}
+                    onClick={() => setShowDeleteRequestModal(true)}
                   >
                     Delete<span className="sr-only">, {request.name}</span>
-                  </a>
+                  </button>
                 )}
               </Menu.Item>
             </Menu.Items>
@@ -130,5 +136,13 @@ export default function RequestListItem({ request }) {
         </Menu>
       </div>
     </li>
+    {showDeleteRequestModal && (
+    <DeleteRequestModal
+      requestId={request.id}
+      handleModalClose={setShowDeleteRequestModal}
+      handleDeleteRequest={handleDeleteRequest}
+    />
+    )}
+    </>
   );
 }

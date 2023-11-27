@@ -7,16 +7,24 @@ import { HiPlus } from "react-icons/hi";
 import AddRequestModal from "../../components/AddRequestModal";
 import { useUser } from "@clerk/nextjs";
 import RequestListItem from "../../components/RequestListItem.jsx";
+import deleteRequest from "../../actions/deleteRequest";
+import { toast } from "react-hot-toast";
 
 export default function Request() {
   const [requests, setRequests] = useState([]);
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
+  const [isLoadingRequest, setIsLoadingRequest] = useState(true);
 
   useEffect(() => {
-    fetchRequests().then((data) => {
-      setRequests(data);
-    });
+    setIsLoadingRequest(true);
+    fetchRequests()
+      .then((data) => {
+        setRequests(data);
+      })
+      .then(() => {
+        setIsLoadingRequest(false);
+      });
   }, []);
 
   async function handleAddRequest(title) {
@@ -25,6 +33,21 @@ export default function Request() {
     createRequest(user.id, title).then((data) => {
       setRequests((prevstate) => [...prevstate, data]);
     });
+  }
+
+  async function handleDeleteRequest(requestId) {
+    deleteRequest(requestId)
+      .then(() => {
+      setRequests((prevstate) => prevstate.filter((request) => request.id !== requestId));
+    })
+    .then(() => {
+      toast.success("Checklist deleted!");
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error("Something went wrong!");
+    });
+
   }
 
   return (
@@ -44,6 +67,20 @@ export default function Request() {
           </Button>
           </div>
         </div>
+        {requests.length === 0 && !isLoadingRequest && (
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-gray-500 text-sm">
+              You don't have any checklists yet.
+            </p>
+            <Button
+              handleClick={() => setAddRequestModalOpen(true)}
+              isSecondary={true}
+            >
+              Create Checklist
+            </Button>
+          </div>
+        )
+        }
         <ul role="list" className="divide-y divide-gray-100">
           <Suspense fallback={<div>Loading...</div>}>
             {requests.map((request) => {
@@ -51,7 +88,7 @@ export default function Request() {
               <RequestListItem 
                 request={request} 
                 key={request.id}
-              
+                handleDeleteRequest={handleDeleteRequest}
               />
               )
             })}
