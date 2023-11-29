@@ -42,6 +42,7 @@
     "uploadthing": "^5.7.4"
   },
   "devDependencies": {
+    "@types/mixpanel-browser": "^2.47.5",
     "@types/react": "18.2.34",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
