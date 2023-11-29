@@ -5,6 +5,12 @@ import ToasterContext from "./context/ToasterContext.jsx";
 import NavBar from "./components/NavBar.jsx";
 import Head from "next/head";
 import HotjarContext from "./context/HotjarContext.jsx";
+import mixpanel from 'mixpanel-browser';
+
+
+const MIXPANEL_TOKEN = "287ac008d9bdbe167ca420295b0a4c09"; // Replace with your Mixpanel token
+const isDev = process.env.NODE_ENV !== 'production';
+mixpanel.init(MIXPANEL_TOKEN, { debug: isDev, track_pageview: true });
 
 
 const fira_sans = Fira_Sans({

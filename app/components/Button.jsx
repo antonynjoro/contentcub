@@ -1,3 +1,6 @@
+import mixpanel from '@mixpanel/browser';
+
+
 export default function Button({
   handleClick,
   children,
@@ -17,11 +20,25 @@ export default function Button({
   } else {
     buttonClass += 'bg-gray-900 text-white hover:bg-gray-800';
   }
+  
+  const trackClick = (e) => {
+    // Track the event with Mixpanel
+    mixpanel.track('Button Clicked', {
+      buttonText: children,
+      buttonType: isDestructive ? 'Destructive' : isOutlined ? 'Outlined' : isSecondary ? 'Secondary' : 'Primary',
+      // You can add more properties here
+    });
+
+    // Call the passed in handleClick function
+    if (handleClick) {
+      handleClick(e);
+    }
+  };
 
   return (
     <button
       className={buttonClass}
-      onClick={handleClick}
+      onClick={trackClick}
       aria-label={children}
       title={tooltipText}
     >
