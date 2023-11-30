@@ -7,7 +7,7 @@ export default function Button({
   isSecondary = false,
   isOutlined = false,
   isDestructive = false,
-  tooltipText = "null",
+  tooltipText = "",
 }) {
   let buttonClass = 'flex justify-center items-center gap-1 rounded-md px-4 py-2 ';
 
