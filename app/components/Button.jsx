@@ -12,7 +12,7 @@ export default function Button({
   isDestructive = false,
   tooltipText = "",
 }) {
-  const { user } = auth.useUser();
+  const { user } = useUser();
 
   let buttonClass = 'flex justify-center items-center gap-1 rounded-md px-4 py-2 ';
 

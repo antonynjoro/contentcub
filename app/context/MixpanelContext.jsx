@@ -23,13 +23,12 @@ const MixpanelContext = () => {
         $name: user.fullName,
         $created: user.createdAt,
         $last_login: user.lastSignInAt,
-        $phone: user.phoneNumbers[0].phoneNumber,
         $username: user.username,
       });
     }
     mixpanel.track("Page Viewed", {
       page: window.location.pathname,
-      user: user.id,
+      user: user?.id,
       pageTitle: document.title,
 
     });
