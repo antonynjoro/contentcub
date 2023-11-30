@@ -1,4 +1,7 @@
+"use client";
+
 import mixpanel from 'mixpanel-browser';
+import { useUser } from '@clerk/nextjs';
 
 
 export default function Button({
@@ -9,6 +12,8 @@ export default function Button({
   isDestructive = false,
   tooltipText = "",
 }) {
+  const { user } = auth.useUser();
+
   let buttonClass = 'flex justify-center items-center gap-1 rounded-md px-4 py-2 ';
 
   if (isDestructive) {
@@ -26,7 +31,7 @@ export default function Button({
     mixpanel.track('Button Clicked', {
       buttonText: children,
       buttonType: isDestructive ? 'Destructive' : isOutlined ? 'Outlined' : isSecondary ? 'Secondary' : 'Primary',
-      // You can add more properties here
+      user: user.id,
     });
 
     // Call the passed in handleClick function
