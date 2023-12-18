@@ -21,6 +21,7 @@ import QuestionsWrapper from "../../../../components/QuestionsWrapper.jsx";
 import QuestionNav from "../../../../components/QuestionNav.jsx";
 import Comments from "../../../../components/Comments";
 import fetchCurrentUser from "../../../../actions/fetchCurrentUser";
+import AnsweredQuestions from "../../../../components/AnsweredQuestions";
 
 // const questions = [
 //   {
@@ -180,6 +181,8 @@ export default function Page({ params }) {
     }
   }, [questions, isLoading]);
 
+
+  // fetch current user data for comments
   useEffect(() => {
     if (currentUserData && isLoaded) {
       fetchCurrentUser(user.id)
@@ -265,33 +268,16 @@ export default function Page({ params }) {
         </div>
         {/* Second Column */}
         <div className="col-span-8 flex h-full flex-col overflow-hidden border-x bg-gray-400 p-4  ">
-          <p className="text-white">Center content</p>
-          {currentQuestion && (
-            <>
-              <div className="flex items-center gap-1 p-3">
-                <p className=" text-sm">Status: </p>
-                <Chip
-                  chipType={
-                    currentQuestion?.answers?.length > 0 ? "success" : "warning"
-                  }
-                >
-                  {currentQuestion?.answers?.length > 0
-                    ? "Answered"
-                    : "Unanswered"}
-                </Chip>
-              </div>
-              
-            </>
-          )}
+          <AnsweredQuestions currentQuestion={currentQuestion} />
         </div>
 
         {/* Third Colun */}
         <div className="col-span-2 flex h-full flex-col overflow-hidden border-x bg-white  ">
-        <Comments
-          questionId={currentQuestion?.id}
-          senderType={currentUserData.type}
-          senderId={currentUserData.id}
-        />
+          <Comments
+            questionId={currentQuestion?.id}
+            senderType={currentUserData.type}
+            senderId={currentUserData.id}
+          />
         </div>
       </div>
     </div>

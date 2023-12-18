@@ -10,11 +10,15 @@ import deleteQuestion from "../../../../../actions/deleteQuestion";
 import { toast } from "react-hot-toast";
 import RequestHeader from "../../../../../components/RequestHeader";
 import QuestionNav from "../../../../../components/QuestionNav";
+import Comments from "../../../../../components/Comments";
+import fetchCurrentUser from "../../../../../actions/fetchCurrentUser";
 
 export default function Page({ params }) {
   const router = useRouter();
   const [requestId] = useState(params.requestId);
   const { isLoaded, isSignedIn, user } = useUser();
+
+  const [currentUserData, setCurrentUserData] = useState({}); 
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(undefined);
@@ -22,6 +26,20 @@ export default function Page({ params }) {
   const [requestStatus, setRequestStatus] = useState(""); // ["draft", "sent", "answered" "closed"]
   const [requestTitle, setRequestTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+
+  // fetch current user data for comments
+  useEffect(() => {
+    if (currentUserData && isLoaded) {
+      fetchCurrentUser(user.id)
+        .then((res) => {
+          setCurrentUserData(res)
+          console.log("currentUserType", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [user]);
 
   useEffect(() => {
     // TODO: Fetch questions from the server
@@ -129,7 +147,7 @@ export default function Page({ params }) {
           requestId={requestId}
         />
       </div>
-      <div className="grid flex-grow grid-cols-12 sm:flex-row">
+      <div className="grid flex-grow grid-cols-12 overflow-hidden sm:flex-row">
         {/* first column */}
         <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white border-r ">
           <QuestionNav
@@ -141,7 +159,7 @@ export default function Page({ params }) {
           />
         </div>
         {/* second column */}
-        <div className="col-span-10 flex h-full flex-col overflow-hidden bg-gray-50 ">
+        <div className="col-span-8 flex h-full flex-col overflow-hidden bg-gray-50 ">
           <QuestionsWrapper
             isLoading={isLoading}
             currentQuestion={currentQuestion}
@@ -152,6 +170,15 @@ export default function Page({ params }) {
             setCurrentQuestion={setCurrentQuestion}
           />
         </div>
+        {/* third column */}
+        <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white border-l ">
+          <Comments 
+            questionId={currentQuestion?.id}
+            senderType={currentUserData.type}
+            senderId={currentUserData.id}
+          />
+          </div>
+
       </div>
     </div>
   );
