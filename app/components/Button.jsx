@@ -14,7 +14,7 @@ export default function Button({
 }) {
   const { user } = useUser();
 
-  let buttonClass = 'flex justify-center items-center gap-1 rounded-md px-4 py-2 ';
+  let buttonClass = 'flex justify-center items-center gap-1 rounded-md px-4 py-2 font-medium'+" ";
 
   if (isDestructive) {
     buttonClass += 'border border-transparent bg-red-50 text-red-900 hover:border-red-300 hover:bg-red-100';

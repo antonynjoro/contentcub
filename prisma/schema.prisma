@@ -64,6 +64,7 @@ model Question {
   title     String
   description String?
   answers    Answer[]
+  comments   Comment[]
   createdAt DateTime @default(now())
 }
 
@@ -81,3 +82,20 @@ enum QuestionType {
 }
 
 
+
+model Comment {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  commentText String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  senderId    String    @db.ObjectId
+  senderType  SenderType
+  questionId  String    @map("questionId") @db.ObjectId
+  question    Question  @relation(fields: [questionId], references: [id])
+}
+
+
+enum SenderType {
+  user
+  client
+}

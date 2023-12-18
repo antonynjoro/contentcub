@@ -86,7 +86,35 @@ export default function AddQuestionModal({
     <ModalContainer handleModalClose={handleModalClose}>
       <h3 className="text-2xl font-bold">Add a new checklist item</h3>
       <div className="flex flex-col gap-5">
+        <ShortAnswerField
+          label={"Title"}
+          handleChange={(value) => {
+            setQuestion((prevState) => ({ ...prevState, title: value }));
+            setQuestionTitlehasError(false);
+          }}
+          hasError={questionTitlehasError}
+          autoFocus={true}
+          value={question.title}
+          helpText={"What kind of information are you asking for?"}
+        />
+        <ShortAnswerField
+          label={"Description"}
+          handleChange={(value) =>
+            setQuestion((prevState) => ({
+              ...prevState,
+              description: value,
+            }))
+          }
+          value={question.description}
+          helpText={
+            "Use this to describe in more detail what you are asking for."
+          }
+        />
         <div className="flex flex-col gap-1">
+          <p className="text font-medium">Question Type</p>
+          <p className="text-sm text-gray-500">
+            What format should the answer be in?
+          </p>
           <div
             className={`flex flex-wrap gap-2 pb-5
           ${questionTypehasError && "rounded-md border-2 border-red-500 p-2"}
@@ -121,30 +149,6 @@ export default function AddQuestionModal({
             </p>
           )}
         </div>
-        <ShortAnswerField
-          label={"Title"}
-          handleChange={(value) => {
-            setQuestion((prevState) => ({ ...prevState, title: value }));
-            setQuestionTitlehasError(false);
-          }}
-          hasError={questionTitlehasError}
-          autoFocus={true}
-          value={question.title}
-          helpText={"What kind of information are you asking for?"}
-        />
-        <ShortAnswerField
-          label={"Description"}
-          handleChange={(value) =>
-            setQuestion((prevState) => ({
-              ...prevState,
-              description: value,
-            }))
-          }
-          value={question.description}
-          helpText={
-            "Use this to describe in more detail what you are asking for."
-          }
-        />
         <div className="flex justify-end gap-2">
           <Button handleClick={() => handleModalClose()} isSecondary={true}>
             Cancel

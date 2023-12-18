@@ -14,11 +14,13 @@ import fetchRequest from "./fetchRequest";
 import RequestHeader from "../../../../components/RequestHeader.jsx";
 import Chip from "../../../../components/Chip";
 import deleteQuestion from "../../../../actions/deleteQuestion";
-import { useUser } from "@clerk/nextjs";
+import { currentUser, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation.js";
 import { toast } from "react-hot-toast";
 import QuestionsWrapper from "../../../../components/QuestionsWrapper.jsx";
 import QuestionNav from "../../../../components/QuestionNav.jsx";
+import Comments from "../../../../components/Comments";
+import fetchCurrentUser from "../../../../actions/fetchCurrentUser";
 
 // const questions = [
 //   {
@@ -126,6 +128,8 @@ export default function Page({ params }) {
   const [requestId] = useState(params.requestId);
   const { isLoaded, isSignedIn, user } = useUser();
 
+  const [currentUserData, setCurrentUserData] = useState({}); 
+
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(undefined);
   const [currentQuestionAnswered, setCurrentQuestionAnswered] = useState(false);
@@ -175,6 +179,20 @@ export default function Page({ params }) {
       }
     }
   }, [questions, isLoading]);
+
+  useEffect(() => {
+    if (currentUserData && isLoaded) {
+      fetchCurrentUser(user.id)
+        .then((res) => {
+          setCurrentUserData(res)
+          console.log("currentUserType", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [user]);
+
 
 
   useEffect(() => {
@@ -234,44 +252,46 @@ export default function Page({ params }) {
       <div className=" flex flex-grow overflow-hidden    sm:grid sm:grid-cols-12">
         {/* first column */}
         <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white ">
-        <QuestionNav
-          questions={questions}
-          setQuestions={setQuestions}
-          currentQuestion={currentQuestion}
-          setCurrentQuestion={setCurrentQuestion}
-          requestId={requestId}
-          isLoading={isLoading}
-          setAddQuestionModalOpen={setAddQuestionModalOpen}
-          addQuestionModalOpen={addQuestionModalOpen}
-        />
+          <QuestionNav
+            questions={questions}
+            setQuestions={setQuestions}
+            currentQuestion={currentQuestion}
+            setCurrentQuestion={setCurrentQuestion}
+            requestId={requestId}
+            isLoading={isLoading}
+            setAddQuestionModalOpen={setAddQuestionModalOpen}
+            addQuestionModalOpen={addQuestionModalOpen}
+          />
         </div>
         {/* Second Column */}
-        <div className="col-span-8 flex flex-col border-x bg-gray-100 overflow-hidden h-full  ">
-        <QuestionsWrapper
-          isLoading={isLoading}
-          currentQuestion={currentQuestion}
-          handleDeleteQuestion={handleDeleteQuestion}
-          setCurrentQuestion={setCurrentQuestion}
-          requestId={requestId}
-          questions={questions}
-        />
-        </div>
-        {/* Third Colun */}
-        <div className="col-span-2 overflow-y-auto bg-white">
+        <div className="col-span-8 flex h-full flex-col overflow-hidden border-x bg-gray-400 p-4  ">
+          <p className="text-white">Center content</p>
           {currentQuestion && (
-            <div className="flex items-center gap-1 p-3">
-              <p className=" text-sm">Status: </p>
-              <Chip
-                chipType={
-                  currentQuestion?.answers?.length > 0 ? "success" : "warning"
-                }
-              >
-                {currentQuestion?.answers?.length > 0
-                  ? "Answered"
-                  : "Unanswered"}
-              </Chip>
-            </div>
+            <>
+              <div className="flex items-center gap-1 p-3">
+                <p className=" text-sm">Status: </p>
+                <Chip
+                  chipType={
+                    currentQuestion?.answers?.length > 0 ? "success" : "warning"
+                  }
+                >
+                  {currentQuestion?.answers?.length > 0
+                    ? "Answered"
+                    : "Unanswered"}
+                </Chip>
+              </div>
+              
+            </>
           )}
+        </div>
+
+        {/* Third Colun */}
+        <div className="col-span-2 flex h-full flex-col overflow-hidden border-x bg-white  ">
+        <Comments
+          questionId={currentQuestion?.id}
+          senderType={currentUserData.type}
+          senderId={currentUserData.id}
+        />
         </div>
       </div>
     </div>
