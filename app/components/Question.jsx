@@ -23,10 +23,11 @@ export default function Question({
   const [answers, setAnswers] = useState([]);
   const [initiallyFetchedAnswers, setInitiallyFetchedAnswers] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
+  const [metadataObjects, setMetadataObjects] = useState([]);
 
   const debouncedSubmitAnswer = useCallback(
-    debounce((requestId, questionId, answerList) => {
-      submitAnswer(requestId, questionId, answerList)
+    debounce((requestId, questionId, answerList, metadataObjects) => {
+      submitAnswer(requestId, questionId, answerList, metadataObjects)
         .then((res) => {
           const updatedAnswers = res.answers.map((answer) => answer.value);
           setAnswers(updatedAnswers);
@@ -77,7 +78,7 @@ export default function Question({
   useEffect(() => {
     const hasAnswersChanged = !arraysAreEqual(answers, initiallyFetchedAnswers);
     if (dataFetched && hasAnswersChanged) {
-      debouncedSubmitAnswer(requestId, questionId, answers);
+      debouncedSubmitAnswer(requestId, questionId, answers, metadataObjects);
     }
 
   }, [answers, debouncedSubmitAnswer, questionId, requestId, dataFetched]);
@@ -90,8 +91,16 @@ export default function Question({
         <div className="w-full sm:w-2/3">
           <ShortAnswerField
             handleChange={(value) =>
-              setAnswers((prevAnswers) => [...prevAnswers.slice(0, -1), value])
-            }
+              {
+                setAnswers((prevAnswers) => [
+                  ...prevAnswers.slice(0, -1),
+                  value,
+                ]);
+                setMetadataObjects((prevMetadataObjects) => [
+                  ...prevMetadataObjects.slice(0, -1),
+                  {},
+                ]);
+              }}
             autoFocus={true}
             value={answers[answers.length - 1] || ""}
           />
@@ -100,9 +109,13 @@ export default function Question({
     } else if (type === "textLong") {
       return (
         <LongAnswerField
-          onEditorChange={(value) =>
-            setAnswers((prevAnswers) => [...prevAnswers.slice(0, -1), value])
-          }
+          onEditorChange={(value) => {
+            setAnswers((prevAnswers) => [...prevAnswers.slice(0, -1), value]);
+            setMetadataObjects((prevMetadataObjects) => [
+              ...prevMetadataObjects.slice(0, -1),
+              {},
+            ]);
+          }}
           value={answers[answers.length - 1] || null}
         />
       );
@@ -116,6 +129,10 @@ export default function Question({
             setAnswers((prevAnswers) => [
               ...prevAnswers.slice(0, -1),
               res[0].url,
+            ]);
+            setMetadataObjects((prevMetadataObjects) => [
+              ...prevMetadataObjects.slice(0, -1),
+              res[0],
             ]);
             toast.success("Upload Completed");
             console.log("Files: ", res);
@@ -138,6 +155,10 @@ export default function Question({
               ...prevAnswers.slice(0, -1),
               res[0].url,
             ]);
+            setMetadataObjects((prevMetadataObjects) => [
+              ...prevMetadataObjects.slice(0, -1),
+              res[0],
+            ]);
             console.log("Files: ", res);
             toast.success("Upload Completed");
           }}
@@ -157,6 +178,10 @@ export default function Question({
             // Append all uploaded image URLs to the answers array
             const newAnswers = res.map((file) => file.url);
             setAnswers([...answers, ...newAnswers]);
+            setMetadataObjects((prevMetadataObjects) => [
+              ...prevMetadataObjects,
+              ...res,
+            ]);
             console.log("Files: ", res);
             toast.success("Upload Completed");
           }}
@@ -164,7 +189,7 @@ export default function Question({
             // Do something with the error.
             toast.error(`ERROR! ${error.message}`);
           }}
-          className=" w-full  ut-button:bg-gray-950 ut-button:hover:bg-gray-800   ut-label:text-gray-900 ut-upload-icon:text-yellow-400"
+          className="  min-h-[100px] w-full ut-button:min-h-[40px]  ut-button:bg-gray-950 ut-button:hover:bg-gray-800   ut-label:text-gray-900 ut-upload-icon:text-yellow-400"
         />
       );
     } else {
@@ -211,12 +236,12 @@ export default function Question({
         type === "textLong" && "sm:p-4 sm:pb-6"
       }`}
     >
-      <h2 className="pl-1 text-2xl font-bold text-gray-900">{title}</h2>
+      <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
       <p className="text-base text-gray-600">{description}</p>
       <div
-        className={`flex max-w-full overflow-hidden pl-1 pt-4 ${
+        className={`flex max-w-full overflow-hidden  pt-4 ${
           type === "textLong" && " h-full flex-grow"
-        } ${type === "imageUploadMultiple" && " h-full flex-grow"}`}
+        } ${type === "imageUploadMultiple" && " h-full min-h-[200px] flex-grow"}`}
       >
         {handleType(type)}
       </div>

@@ -6,16 +6,16 @@ export default async function submitAnswer(
   requestId: string,
   questionId: string,
   answers: string[], // Array of answers
+  metadataObjects: JSON[]  // Array of metadata objects (one for each answer)
 ) {
-  console.log("submitAnswer", requestId, questionId, answers);
+  console.log("submitAnswer", requestId, questionId, answers, metadataObjects);
+
   try {
     const { userId } = auth();
-
     if (!userId) {
       throw new Error("User not authenticated");
     }
 
-    
     const question = await prisma.question.findUnique({
       where: {
         id: questionId,
@@ -23,52 +23,43 @@ export default async function submitAnswer(
     });
 
     if (question.multiAnswer) {
-      // Construct an array of answer objects
-      const answerObjects = answers.length === 0 ? [] : answers.map((answer) => ({ value: answer }));
-      console.log ("answerObjects", answerObjects);
+      const answerObjectsWithMetadata = answers.map((answer, index) => ({
+        value: answer,
+        metadata: metadataObjects[index] || {},
+      }));
+      console.log("answerObjectsWithMetadata", answerObjectsWithMetadata);
+
       const savedAnswer = await prisma.question.update({
         where: {
           id: questionId,
         },
         data: {
-          // Use the 'push' operation to add new answers
           answers: {
-            set: answerObjects,
+            set: answerObjectsWithMetadata,
           },
         },
       });
-      console.log("savedAnswer", savedAnswer);
-      console.log("Answers added to question: ", questionId);
 
+      console.log("savedAnswer", savedAnswer);
       return savedAnswer;
     } else {
+      const singleAnswer = {
+        value: answers.length > 0 ? answers[0] : "",
+        metadata: metadataObjects.length > 0 ? metadataObjects[0] : {},
+      };
 
-      // if the answer is empty, set the answers array to empty
-      if (answers[0] === "") {
-        answers = [];
-      } else if (answers[0] === '{"type":"doc","content":[{"type":"paragraph"}]}') {
-        // if the answer is empty, set the answers array to empty
-        answers = [];
-      }
-
-      // Update the single answer (set the first answer in the array)
       const savedAnswer = await prisma.question.update({
         where: {
           id: questionId,
         },
         data: {
           answers: {
-            set: answers.length === 0 ? [] : [{ value: answers[0] }],
+            set: [singleAnswer],
           },
         },
       });
 
       console.log("savedAnswer", savedAnswer);
-      console.log(
-        "Answer set as the most recent answer to question: ",
-        questionId,
-      );
-
       return savedAnswer;
     }
   } catch (error) {

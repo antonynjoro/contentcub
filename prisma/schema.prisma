@@ -71,6 +71,7 @@ model Question {
 type Answer {
   id String @default(uuid())
   value String
+  metadata Json?
 }
 
 enum QuestionType {
