@@ -7,7 +7,6 @@ export const formatLongDate = (date: Date): string => {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
   });
 };
 
@@ -27,9 +26,9 @@ export const formatRelativeDate = (date: Date): string => {
     } else {
       return `${Math.floor(diffDays / 365)} years ago`;
     }
-  } else if (diffHours > 1) {
+  } else if (diffHours >= 1) {
     return `${diffHours} hours ago`;
-  } else if (diffMinutes > 1) {
+  } else if (diffMinutes >= 1) {
     return `${diffMinutes} minutes ago`;
   } else {
     return `just now`;

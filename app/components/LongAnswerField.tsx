@@ -9,8 +9,18 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import Blockquote from "@tiptap/extension-blockquote";
 import Link from "@tiptap/extension-link";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import History from "@tiptap/extension-history";
-import { useEffect, useState, useCallback } from "react";
+import { generateHTML } from "@tiptap/html";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import Document from "@tiptap/extension-document";
+import ListItem from "@tiptap/extension-list-item";
+
+import { useEffect, useState, useCallback, useMemo } from "react";
+
+import copyToClipboard from "../utils/copyToClipboard";
+
+import DOMPurify from "dompurify";
+
 import {
   BsLine,
   BsTypeBold,
@@ -85,13 +95,13 @@ export default function LongAnswerField({ onEditorChange, value }) {
   }, [value, updateInternalValue]);
 
   return (
-    <div className="grid auto-rows-min flex-grow	 grid-cols-1 min-h-[300px] overflow-y-auto  overflow-hidden max-h-fit  rounded-lg border border-gray-300 ">
+    <div className="grid max-h-fit min-h-[300px]	 flex-grow auto-rows-min grid-cols-1  overflow-hidden overflow-y-auto  rounded-lg border border-gray-300 ">
       <ToolBar editor={editor} />
 
       <EditorContent
         editor={editor}
-        className="tiptap-editor min-h-[6em] h-min overflow-y-auto overflow-hidden px-4 py-2"
-        />
+        className="tiptap-editor h-min min-h-[6em] overflow-hidden overflow-y-auto px-4 py-2"
+      />
     </div>
   );
 }
@@ -107,7 +117,7 @@ function ToolBar({ editor }) {
   };
 
   return (
-    <div className="mb-2 flex gap-2 overflow-hidden border-b bg-gray-50 px-4 py-3 sticky top-0 z-10">
+    <div className="sticky top-0 z-10 mb-2 flex gap-2 overflow-hidden border-b bg-gray-50 px-4 py-3">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={
@@ -206,5 +216,37 @@ function ToolBar({ editor }) {
         <MdRedo className={iconStyle} />
       </button>
     </div>
+  );
+}
+
+export function LongAnswerDisplay({ answerId, answerJSON, setCopyValue }) {
+  const output = useMemo(() => {
+    const html = generateHTML(JSON.parse(answerJSON), [
+      Document,
+      Paragraph,
+      Text,
+      Bold,
+      Italic,
+      Heading,
+      BulletList,
+      OrderedList,
+      ListItem,
+      Link,
+    ]);
+    // Sanitize the HTML with DOMPurify
+    return DOMPurify.sanitize(html);
+  }, [answerJSON]);
+
+  useEffect(() => {
+    setCopyValue(output);
+  }, [output, setCopyValue]);
+
+  return (
+    <>
+      <div
+        className="tiptap-editor"
+        dangerouslySetInnerHTML={{ __html: output }}
+      ></div>
+    </>
   );
 }

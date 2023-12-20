@@ -11,6 +11,8 @@ export default function Button({
   isOutlined = false,
   isDestructive = false,
   tooltipText = "",
+  size = "md",
+  isDisabled = false,
 }) {
   const { user } = useUser();
 
@@ -24,6 +26,16 @@ export default function Button({
     buttonClass += 'bg-gray-200 text-gray-900 hover:bg-gray-300';
   } else {
     buttonClass += 'bg-gray-900 text-white hover:bg-gray-800';
+  }
+
+  if (size === 'sm') {
+    buttonClass += ' text-sm';
+  } else if (size === 'lg') {
+    buttonClass += ' text-lg';
+  }
+
+  if (isDisabled) {
+    buttonClass += ' opacity-50 cursor-not-allowed';
   }
   
   const trackClick = (e) => {

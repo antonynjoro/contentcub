@@ -72,7 +72,7 @@ export default function QuestionsWrapper({
                 
               <div className="bg-blue flex justify-end gap-3 items-center">
               <p className="text-gray-700">
-                    {questions.findIndex(
+                    Question {questions.findIndex(
                         (question) => question.id === currentQuestion.id,
                     ) + 1}{" "}
                     of {questions.length}

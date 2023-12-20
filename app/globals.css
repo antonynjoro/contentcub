@@ -32,6 +32,11 @@
     font-weight: bold;
     margin-bottom: 0.75rem;
   }
+
+  .tiptap-editor a {
+    color: #0f7c54;
+    text-decoration: underline;
+  }
   
 
   

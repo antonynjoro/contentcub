@@ -17,7 +17,16 @@ export default async function deleteRequest(requestId: string) {
 
     // Prisma transaction to delete questions then the request
     await prisma.$transaction(async (prisma) => {
-      // Delete the questions associated with the request
+      // Delete comments associated with questions associated with the request
+      await prisma.comment.deleteMany({
+        where: {
+          question: {
+            requestId,
+          },
+        },
+      });
+
+      // Delete questions associated with the request
       await prisma.question.deleteMany({
         where: {
           requestId,
@@ -60,6 +69,10 @@ export default async function deleteRequest(requestId: string) {
           }
         });
       }
+
+      
+
+      
 
 
       // Delete the request

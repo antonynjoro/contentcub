@@ -32,6 +32,9 @@ export default function Question({
           setAnswers(updatedAnswers);
           setInitiallyFetchedAnswers(updatedAnswers);
         })
+        .then(() => {
+          toast.success("saved");
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -171,7 +174,7 @@ export default function Question({
 
   function ImagePreview({ url, index=0 }) {
     return (
-      <Link className="relative max-w-[200px]" href={url}>
+      <Link className="relative max-w-[200px] group" href={url}>
         <Image
           src={url}
           width={100}
@@ -179,7 +182,7 @@ export default function Question({
           className="h-auto w-full rounded-md"
         />
         <button
-          className="absolute -right-1 -top-1 rounded-full bg-red-500 p-0.5"
+          className=" opacity-0 group-hover:opacity-100 transition ease-in-out delay-150 absolute -right-1 -top-1 rounded-full bg-red-500 p-0.5"
           onClick={(e) => {
             e.preventDefault();
             setAnswers((prevAnswers) => [

@@ -98,6 +98,7 @@ export default function QuestionNavItem({
       {/* Ensure this container has a width */}
       <div
         className={`${questionTypes[type].colorClass} flex gap-2 rounded-md p-1.5 text-black`}
+        title={questionTypes[type].description}
       >
         <IconComponent className="h-6 w-6" />
       </div>

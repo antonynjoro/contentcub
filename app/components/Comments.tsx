@@ -90,7 +90,7 @@ export default function Comments({ questionId, senderType, senderId }) {
   return (
     <>
       <div className="border-b border-gray-300 bg-white">
-        <h2 className=" p-4 text-lg font-medium text-gray-800">Comments</h2>
+        <h2 className=" p-4 text-lg font-medium text-gray-800">Comments ({comments.length})</h2>
       </div>
       <div className="flex flex-grow flex-col-reverse gap-6 overflow-hidden overflow-y-scroll p-4">
       {!questionId || (comments.length === 0) ? (

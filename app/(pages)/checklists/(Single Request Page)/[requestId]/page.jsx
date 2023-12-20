@@ -267,8 +267,8 @@ export default function Page({ params }) {
           />
         </div>
         {/* Second Column */}
-        <div className="col-span-8 flex h-full flex-col overflow-hidden border-x bg-gray-400 p-4  ">
-          <AnsweredQuestions currentQuestion={currentQuestion} />
+        <div className="col-span-8 flex h-full flex-col overflow-hidden border-x  ">
+          <AnsweredQuestions requestTitle={requestTitle} currentQuestion={currentQuestion} requestId={requestId} />
         </div>
 
         {/* Third Colun */}

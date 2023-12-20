@@ -25,11 +25,15 @@
     "@tiptap/extension-italic": "^2.1.12",
     "@tiptap/extension-link": "^2.1.12",
     "@tiptap/extension-text-style": "^2.1.12",
+    "@tiptap/html": "^2.1.13",
     "@tiptap/pm": "^2.1.12",
     "@tiptap/react": "^2.1.12",
     "@tiptap/starter-kit": "^2.1.12",
     "@uploadthing/react": "^5.7.0",
+    "dompurify": "^3.0.6",
+    "file-saver": "^2.0.5",
     "framer-motion": "^10.16.4",
+    "jszip": "^3.10.1",
     "mixpanel-browser": "^2.48.1",
     "next": "14.0.1",
     "react": "^18",
@@ -42,6 +46,7 @@
     "uploadthing": "^5.7.4"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/mixpanel-browser": "^2.47.5",
     "@types/react": "18.2.34",
     "autoprefixer": "^10.0.1",
