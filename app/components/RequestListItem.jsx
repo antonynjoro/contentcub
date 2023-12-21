@@ -6,6 +6,7 @@ import { formatLongDate, formatRelativeDate } from "../utils/dateUtils";
 import Link from "next/link";
 import DeleteRequestModal from "./DeleteRequestModal";
 import { useState } from "react";
+import { MdMoreVert } from "react-icons/md";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -80,7 +81,7 @@ export default function RequestListItem({ request, handleDeleteRequest }) {
         <Menu as="div" className="relative flex-none">
           <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
             <span className="sr-only">Open options</span>
-            <HiEllipsisVertical className="h-5 w-5" aria-hidden="true" />
+            <MdMoreVert className="h-5 w-5" aria-hidden="true" />
           </Menu.Button>
           <Transition
             as={Fragment}
@@ -101,7 +102,7 @@ export default function RequestListItem({ request, handleDeleteRequest }) {
                       "block px-3 py-1 text-sm leading-6 text-gray-900",
                     )}
                   >
-                    Edit<span className="sr-only">, {request.name}</span>
+                    Edit<span className="sr-only">, {request.title}</span>
                   </a>
                 )}
               </Menu.Item>
@@ -114,7 +115,7 @@ export default function RequestListItem({ request, handleDeleteRequest }) {
                       "block px-3 py-1 text-sm leading-6 text-gray-900",
                     )}
                   >
-                    Submit Answers <span className="sr-only">, {request.name}</span>
+                    Submit Answers <span className="sr-only">, {request.title}</span>
                   </a>
                 )}
               </Menu.Item>
@@ -128,7 +129,7 @@ export default function RequestListItem({ request, handleDeleteRequest }) {
                     )}
                     onClick={() => setShowDeleteRequestModal(true)}
                   >
-                    Delete<span className="sr-only">, {request.name}</span>
+                    Delete<span className="sr-only">, {request.title}</span>
                   </button>
                 )}
               </Menu.Item>

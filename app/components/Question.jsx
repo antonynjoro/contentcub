@@ -9,7 +9,7 @@ import debounce from "../utils/debounce";
 import submitAnswer from "../actions/submitAnswer";
 import fetchAnswer from "../actions/fetchAnswer";
 import Image from "next/image";
-import { HiXCircle } from "react-icons/hi2";
+import { HiDocument, HiXCircle } from "react-icons/hi2";
 import { HiX } from "react-icons/hi";
 import Link from "next/link";
 
@@ -199,7 +199,7 @@ export default function Question({
 
   function ImagePreview({ url, index=0 }) {
     return (
-      <Link className="relative max-w-[200px] group" href={url}>
+      <Link className="relative max-w-[200px] max-h-40 group" href={url}>
         <Image
           src={url}
           width={100}
@@ -240,14 +240,30 @@ export default function Question({
       <p className="text-base text-gray-600">{description}</p>
       <div
         className={`flex max-w-full overflow-hidden  pt-4 ${
-          type === "textLong" && " h-full flex-grow"
-        } ${type === "imageUploadMultiple" && " h-full min-h-[200px] flex-grow"}`}
+          type === "textLong" && " h-full flex-grow "
+        } ${
+          type === "imageUploadMultiple" && " h-full min-h-[200px] flex-grow "
+        }
+        ${((type === "imageUpload")|| (type === "fileUpload")) && " min-h-[64px] "}`}
       >
         {handleType(type)}
       </div>
       {type === "imageUploadMultiple" && answers.length > 0 && renderImages}
       {type === "imageUpload" && answers.length > 0 && (
         <ImagePreview url={answers[answers.length - 1]} />
+      )}
+      {type === "fileUpload" && answers.length > 0 && (
+        <a
+          className="text-gray-500 hover:underline justify-self-start flex justify-start gap-1"
+          href={answers[answers.length - 1]}
+        >
+          <div className="group relative flex w-max flex-col justify-center gap-1 pt-4">
+            <div className=" flex h-[150px] w-[150px] items-center justify-center rounded-md border border-gray-300">
+              <HiDocument className=" h-16 w-16 text-gray-500 " />
+            </div>
+            <p className="">View Uploaded PDF</p>
+          </div>
+        </a>
       )}
     </div>
   );

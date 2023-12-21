@@ -213,10 +213,10 @@ export default function Page({ params }) {
 
   
 
-  async function handleDeleteQuestion() {
+  async function handleDeleteQuestion(questionToDelete) {
 
     const newQuestions = questions.filter(
-      (question) => question.id !== currentQuestion.id,
+      (question) => question.id !== questionToDelete.id
     );
 
     setQuestions(newQuestions);
@@ -227,9 +227,8 @@ export default function Page({ params }) {
     }
 
     // delete question from server
-    deleteQuestion(requestId, currentQuestion.id);
-
-    toast.success("Question deleted");
+    deleteQuestion(requestId, questionToDelete.id)
+    .then((res) => {toast.success("Question deleted")})
 
     const request = await fetchRequest(requestId, user.id);
     if (!request) {
@@ -268,7 +267,7 @@ export default function Page({ params }) {
         </div>
         {/* Second Column */}
         <div className="col-span-8 flex h-full flex-col overflow-hidden border-x  ">
-          <AnsweredQuestions requestTitle={requestTitle} currentQuestion={currentQuestion} requestId={requestId} />
+          <AnsweredQuestions requestTitle={requestTitle} currentQuestion={currentQuestion} requestId={requestId} handleDeleteQuestion={handleDeleteQuestion} />
         </div>
 
         {/* Third Colun */}

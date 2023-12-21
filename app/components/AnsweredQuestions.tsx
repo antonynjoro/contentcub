@@ -10,15 +10,24 @@ import { HiOutlineClipboard } from "react-icons/hi2";
 import copyToClipboard from "../utils/copyToClipboard";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { HiDownload } from "react-icons/hi";
+import { HiDownload, HiMenu } from "react-icons/hi";
 import ImageAnswerDisplay from "./ImageAnswerDisplay";
 import PdfAnswerDisplay from "./PdfAnswerDisplay";
+import { MdMoreVert } from "react-icons/md";
+import IconButton from "./IconButton";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
-export default function AnsweredQuestions({ currentQuestion, requestId, requestTitle }) {
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export default function AnsweredQuestions({ currentQuestion, requestId, requestTitle, handleDeleteQuestion }) {
   const [copyValue, setcopyValue] = useState(null); // this is the value that will be copied to the clipboard
   const [copyButtonLabel, setCopyButtonLabel] = useState("Copy Text"); // this is the label of the copy button
   const [copyButtonDisabled, setCopyButtonDisabled] = useState(false); // this is the label of the copy button
   const [filename, setFilename] = useState(null); // this is the name of the file to be downloaded if the question is a file upload
+  const [menuVisible, setMenuVisible] = useState(false); // toggles the menu visibility
 
   const router = useRouter();
 
@@ -108,6 +117,8 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
     return Promise.resolve();
   }
 
+  
+
   return (
     currentQuestion && (
       <div className=" flex flex-grow flex-col">
@@ -124,7 +135,7 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
               {currentQuestion?.answers?.length > 0 ? "Answered" : "Unanswered"}
             </Chip>
           </div>
-          <div className="justify-self-end"></div>
+          
           {currentQuestion?.answers?.length > 0 &&
             (currentQuestion.type === "textShort" ||
               currentQuestion.type === "textLong") && (
@@ -140,6 +151,8 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
                 {copyButtonLabel}
               </Button>
             )}
+            
+          
           {currentQuestion?.answers?.length > 0 &&
             (currentQuestion.type === "imageUpload" ||
               currentQuestion.type === "imageUploadMultiple" ||
@@ -158,6 +171,46 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
                 {copyButtonLabel}
               </Button>
             )}
+           
+
+<Menu as="div" className="relative flex-none">
+          <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+            <span className="sr-only">Open options</span>
+            <div className="p-1.5 border rounded">
+            <MdMoreVert className="h-6 w-6 " aria-hidden="true" />
+            </div>
+          </Menu.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={() => {
+                      handleDeleteQuestion(currentQuestion);
+                    }
+                    }
+                    className={classNames(
+                      active ? "bg-gray-50" : "",
+                      "block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left",
+                    )}
+                  >
+                    Delete Checklist Item<span className="sr-only">, {currentQuestion.title}</span>
+                  </button>
+                )}
+              </Menu.Item>
+             
+            </Menu.Items>
+          </Transition>
+        </Menu>
+
         </div>
         <div className="flex flex-grow flex-col gap-2 p-4">
           {currentQuestion.answers.length === 0 && (
