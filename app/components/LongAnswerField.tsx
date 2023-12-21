@@ -14,6 +14,7 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Document from "@tiptap/extension-document";
 import ListItem from "@tiptap/extension-list-item";
+import HardBreak from "@tiptap/extension-hard-break";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 
@@ -222,6 +223,7 @@ function ToolBar({ editor }) {
 export function LongAnswerDisplay({ answerId, answerJSON, setCopyValue }) {
   const output = useMemo(() => {
     const html = generateHTML(JSON.parse(answerJSON), [
+      StarterKit,
       Document,
       Paragraph,
       Text,
@@ -232,6 +234,7 @@ export function LongAnswerDisplay({ answerId, answerJSON, setCopyValue }) {
       OrderedList,
       ListItem,
       Link,
+      HardBreak
     ]);
     // Sanitize the HTML with DOMPurify
     return DOMPurify.sanitize(html);
