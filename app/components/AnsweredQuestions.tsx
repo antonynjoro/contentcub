@@ -12,6 +12,7 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { HiDownload } from "react-icons/hi";
 import ImageAnswerDisplay from "./ImageAnswerDisplay";
+import PdfAnswerDisplay from "./PdfAnswerDisplay";
 
 export default function AnsweredQuestions({ currentQuestion, requestId, requestTitle }) {
   const [copyValue, setcopyValue] = useState(null); // this is the value that will be copied to the clipboard
@@ -200,7 +201,20 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
             ))}
             </div>
           }
-
+          {currentQuestion.type === "fileUpload" &&
+          <div className="grid grid-cols-4 gap-4 items-stretch">
+           { currentQuestion.answers.map((answer) => (
+              <PdfAnswerDisplay
+                key={answer.id}
+                pdfLink={answer.value}
+                metadata={answer.metadata}
+                requestTitle={requestTitle}
+                questionTitle={currentQuestion.title}
+                />
+            ))}
+            </div>
+            }
+            
         </div>
       </div>
     )

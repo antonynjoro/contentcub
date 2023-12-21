@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import IconButton from "./IconButton";
 import { HiTrash } from "react-icons/hi2";
 import { saveAs } from "file-saver";
+import generateReadableFileSize from "../utils/generateReadableFileSize";
 
 
 export default function ImageAnswerDisplay({ imageLink, metadata, requestTitle, questionTitle }) {
@@ -45,18 +46,7 @@ export default function ImageAnswerDisplay({ imageLink, metadata, requestTitle, 
   
 
 
-  function generateReadableFileSize(bytes: number) {
-    if (bytes === 0) {
-      return "0 bytes";
-    }
-
-    const k = 1024;
-    const dm = 2;
-    const sizes = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k)); // get the index of the size
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]; // return the size and the size name
-  }
+  
 
   return (
     <div className="flex flex-col items-start justify-center gap-1 relative group">
