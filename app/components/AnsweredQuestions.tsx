@@ -103,6 +103,8 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
         });
       });
     }
+    
+    return Promise.resolve();
   }
 
   return (
@@ -144,7 +146,10 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
               <Button
                 size="sm"
                 handleClick={() => {
-                  handleDownload();
+                  handleDownload().then(() => {
+                    toast.success("Downloaded successfully")
+                }
+                  );
                 }}
               >
                 <HiDownload className="h-4 w-4" />
@@ -186,8 +191,10 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
             {currentQuestion.answers.map((answer) => (
               <div key={answer.id}>
                 <ImageAnswerDisplay
-                  src={answer.value}
-                  alt={currentQuestion.title}
+                  imageLink={answer.value}
+                  metadata={answer.metadata}
+                  requestTitle={requestTitle}
+                  questionTitle={currentQuestion.title}
                 />
               </div>
             ))}

@@ -49,8 +49,8 @@ export default function IconButton({
     const sizeConfig = SIZES[size] || SIZES.md;
   
     const buttonStyles = destructive
-      ? "hover:bg-red-100 hover:border-red-300 text-gray-600 hover:text-red-800"
-      : "hover:bg-slate-100 text-gray-600 group-hover:text-gray-800";
+      ? " hover:bg-red-100 hover:border-red-300 text-gray-600 hover:text-red-800 "
+      : " hover:bg-slate-100 text-gray-600 group-hover:text-gray-800 ";
   
     return (
       <div className="group relative flex flex-shrink" title={tooltipText}>
@@ -60,6 +60,7 @@ export default function IconButton({
           className={`
             ${sizeConfig.padding}
             group rounded-md border border-gray-300
+            bg-white text-gray-400
             ${buttonStyles}
             focus:outline-none focus:ring-2 focus:ring-slate-200
             active:bg-slate-200 active:text-gray-700
