@@ -9,12 +9,29 @@ import { useUser } from "@clerk/nextjs";
 import RequestListItem from "../../components/RequestListItem.jsx";
 import deleteRequest from "../../actions/deleteRequest";
 import { toast } from "react-hot-toast";
+import fetchCurrentUser from "../../actions/fetchCurrentUser";
 
 export default function Request() {
   const [requests, setRequests] = useState([]);
   const [addRequestModalOpen, setAddRequestModalOpen] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
   const [isLoadingRequest, setIsLoadingRequest] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    if (isLoaded) {
+    // fetch current user to determine if they are a user or a client
+    fetchCurrentUser(user.id)
+      .then((data) => {
+        setCurrentUser(data);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+      
+  }, [user, isLoaded]);
 
   useEffect(() => {
     setIsLoadingRequest(true);
@@ -54,22 +71,24 @@ export default function Request() {
     <div>
       <NavBar />
       <div className=" mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="md:flex md:items-center md:justify-between pt-6">
+        <div className="pt-6 md:flex md:items-center md:justify-between min-h-[76px]">
           <div className="min-w-0 flex-1">
             <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
               Checklists
             </h2>
           </div>
-          <div className="mt-4 flex md:ml-4 md:mt-0">
-          <Button handleClick={() => setAddRequestModalOpen(true)}>
-            <HiPlus className=" mr-1 inline-block" />
-            Create Checklist
-          </Button>
-          </div>
+          {currentUser?.type === "user" && (
+            <div className="mt-4 flex md:ml-4 md:mt-0">
+              <Button handleClick={() => setAddRequestModalOpen(true)}>
+                <HiPlus className=" mr-1 inline-block" />
+                Create Checklist
+              </Button>
+            </div>
+          )}
         </div>
         {requests.length === 0 && !isLoadingRequest && (
           <div className="flex flex-col items-center justify-center">
-            <p className="text-gray-500 text-sm">
+            <p className="text-sm text-gray-500">
               You do not have any checklists yet.
             </p>
             <Button
@@ -79,18 +98,18 @@ export default function Request() {
               Create Checklist
             </Button>
           </div>
-        )
-        }
+        )}
         <ul role="list" className="divide-y divide-gray-100">
           <Suspense fallback={<div>Loading...</div>}>
             {requests.map((request) => {
               return (
-              <RequestListItem 
-                request={request} 
-                key={request.id}
-                handleDeleteRequest={handleDeleteRequest}
-              />
-              )
+                <RequestListItem
+                  request={request}
+                  key={request.id}
+                  handleDeleteRequest={handleDeleteRequest}
+                  currentUser={currentUser}
+                />
+              );
             })}
           </Suspense>
         </ul>
