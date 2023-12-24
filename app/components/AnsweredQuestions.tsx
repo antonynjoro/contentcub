@@ -22,7 +22,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function AnsweredQuestions({ currentQuestion, requestId, requestTitle, handleDeleteQuestion }) {
+export default function AnsweredQuestions({
+  currentQuestion,
+  requestId,
+  requestTitle,
+  handleDeleteQuestion,
+}) {
   const [copyValue, setcopyValue] = useState(null); // this is the value that will be copied to the clipboard
   const [copyButtonLabel, setCopyButtonLabel] = useState("Copy Text"); // this is the label of the copy button
   const [copyButtonDisabled, setCopyButtonDisabled] = useState(false); // this is the label of the copy button
@@ -52,23 +57,30 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
       setCopyButtonLabel("Download File");
     } else if (currentQuestion.type === "imageUploadMultiple") {
       setCopyButtonLabel("Download Images");
-    } else if ((currentQuestion.type === "textShort") || (currentQuestion.type === "textLong")) {
+    } else if (
+      currentQuestion.type === "textShort" ||
+      currentQuestion.type === "textLong"
+    ) {
       setCopyButtonLabel("Copy Text");
-    } 
+    }
   }, [currentQuestion]);
 
   useEffect(() => {
     // make the filename the combination of the request title and the question title
     if (currentQuestion && requestTitle) {
-      if ((currentQuestion.type === "imageUpload") || (currentQuestion.type === "fileUpload") || (currentQuestion.type === "imageUploadMultiple")) {
+      if (
+        currentQuestion.type === "imageUpload" ||
+        currentQuestion.type === "fileUpload" ||
+        currentQuestion.type === "imageUploadMultiple"
+      ) {
         setFilename(`${requestTitle} - ${currentQuestion.title}`);
       }
     }
   }, [currentQuestion, requestTitle]);
 
   function handleCopyButtonClicked() {
-     // copy contents of the answer to the clipboard
-     copyToClipboard(copyValue).then(() => {
+    // copy contents of the answer to the clipboard
+    copyToClipboard(copyValue).then(() => {
       setCopyButtonLabel("Copied!");
       toast.success("Copied text to the clipboard!");
       setTimeout(() => {
@@ -77,11 +89,11 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
     });
   }
 
-  function getFileExtension(url:string) {
+  function getFileExtension(url: string) {
     // Extracts the extension from a URL (e.g., '.jpg', '.png', '.svg', '.pdf')
     return url.slice(((url.lastIndexOf(".") - 1) >>> 0) + 2);
   }
-  
+
   function handleDownload() {
     if (
       currentQuestion.type === "imageUpload" ||
@@ -91,33 +103,33 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
       const url = currentQuestion.answers[0].value;
       const extension = getFileExtension(url);
       const downloadFilename = `${filename}.${extension}`;
-  
+
       saveAs(url, downloadFilename);
     } else if (currentQuestion.type === "imageUploadMultiple") {
       // Download all images in a zip file
       const zip = new JSZip();
       const zipFilename = `${filename} - images.zip`;
-  
-      const downloadPromises = currentQuestion.answers.map(async (answer, index) => {
-        const response = await fetch(answer.value);
-        const blob = await response.blob();
-        const extension = getFileExtension(answer.value);
-        const newFilename = `${filename} - ${index + 1}.${extension}`;
-        
-        zip.file(newFilename, blob);
-      });
-  
+
+      const downloadPromises = currentQuestion.answers.map(
+        async (answer, index) => {
+          const response = await fetch(answer.value);
+          const blob = await response.blob();
+          const extension = getFileExtension(answer.value);
+          const newFilename = `${filename} - ${index + 1}.${extension}`;
+
+          zip.file(newFilename, blob);
+        },
+      );
+
       Promise.all(downloadPromises).then(() => {
         zip.generateAsync({ type: "blob" }).then((content) => {
           saveAs(content, zipFilename);
         });
       });
     }
-    
+
     return Promise.resolve();
   }
-
-  
 
   return (
     currentQuestion && (
@@ -135,7 +147,7 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
               {currentQuestion?.answers?.length > 0 ? "Answered" : "Unanswered"}
             </Chip>
           </div>
-          
+
           {currentQuestion?.answers?.length > 0 &&
             (currentQuestion.type === "textShort" ||
               currentQuestion.type === "textLong") && (
@@ -151,8 +163,7 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
                 {copyButtonLabel}
               </Button>
             )}
-            
-          
+
           {currentQuestion?.answers?.length > 0 &&
             (currentQuestion.type === "imageUpload" ||
               currentQuestion.type === "imageUploadMultiple" ||
@@ -161,9 +172,8 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
                 size="sm"
                 handleClick={() => {
                   handleDownload().then(() => {
-                    toast.success("Downloaded successfully")
-                }
-                  );
+                    toast.success("Downloaded successfully");
+                  });
                 }}
               >
                 <HiDownload className="h-4 w-4" />
@@ -171,46 +181,60 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
                 {copyButtonLabel}
               </Button>
             )}
-           
 
-<Menu as="div" className="relative flex-none">
-          <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
-            <span className="sr-only">Open options</span>
-            <div className="p-1.5 border rounded">
-            <MdMoreVert className="h-6 w-6 " aria-hidden="true" />
-            </div>
-          </Menu.Button>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={() => {
-                      handleDeleteQuestion(currentQuestion);
-                    }
-                    }
-                    className={classNames(
-                      active ? "bg-gray-50" : "",
-                      "block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left",
-                    )}
-                  >
-                    Delete Checklist Item<span className="sr-only">, {currentQuestion.title}</span>
-                  </button>
-                )}
-              </Menu.Item>
-             
-            </Menu.Items>
-          </Transition>
-        </Menu>
+          <Menu as="div" className="relative flex-none">
+            <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+              <span className="sr-only">Open options</span>
+              <div className="rounded border p-1.5">
+                <MdMoreVert className="h-6 w-6 " aria-hidden="true" />
+              </div>
+            </Menu.Button>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => {
+                        router.push(`/checklists/${requestId}/submit`);
+                      }}
+                      className={classNames(
+                        active ? "bg-gray-50" : "",
+                        "block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900",
+                      )}
+                    >
+                      Add Answer
+                      <span className="sr-only">, {currentQuestion.title}</span>
+                    </button>
+                  )}
+                </Menu.Item>
 
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => {
+                        handleDeleteQuestion(currentQuestion);
+                      }}
+                      className={classNames(
+                        active ? "bg-gray-50" : "",
+                        "block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900",
+                      )}
+                    >
+                      Delete Checklist Item
+                      <span className="sr-only">, {currentQuestion.title}</span>
+                    </button>
+                  )}
+                </Menu.Item>
+              </Menu.Items>
+            </Transition>
+          </Menu>
         </div>
         <div className="flex flex-grow flex-col gap-2 p-4">
           {currentQuestion.answers.length === 0 && (
@@ -240,34 +264,34 @@ export default function AnsweredQuestions({ currentQuestion, requestId, requestT
                 />
               </div>
             ))}
-          {(currentQuestion.type === "imageUpload" || currentQuestion.type === "imageUploadMultiple") &&
-            <div className="grid grid-cols-4 gap-4 items-stretch">
-            {currentQuestion.answers.map((answer) => (
-              <div key={answer.id}>
-                <ImageAnswerDisplay
-                  imageLink={answer.value}
+          {(currentQuestion.type === "imageUpload" ||
+            currentQuestion.type === "imageUploadMultiple") && (
+            <div className="grid grid-cols-4 items-stretch gap-4">
+              {currentQuestion.answers.map((answer) => (
+                <div key={answer.id}>
+                  <ImageAnswerDisplay
+                    imageLink={answer.value}
+                    metadata={answer.metadata}
+                    requestTitle={requestTitle}
+                    questionTitle={currentQuestion.title}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          {currentQuestion.type === "fileUpload" && (
+            <div className="grid grid-cols-4 items-stretch gap-4">
+              {currentQuestion.answers.map((answer) => (
+                <PdfAnswerDisplay
+                  key={answer.id}
+                  pdfLink={answer.value}
                   metadata={answer.metadata}
                   requestTitle={requestTitle}
                   questionTitle={currentQuestion.title}
                 />
-              </div>
-            ))}
+              ))}
             </div>
-          }
-          {currentQuestion.type === "fileUpload" &&
-          <div className="grid grid-cols-4 gap-4 items-stretch">
-           { currentQuestion.answers.map((answer) => (
-              <PdfAnswerDisplay
-                key={answer.id}
-                pdfLink={answer.value}
-                metadata={answer.metadata}
-                requestTitle={requestTitle}
-                questionTitle={currentQuestion.title}
-                />
-            ))}
-            </div>
-            }
-            
+          )}
         </div>
       </div>
     )

@@ -30,6 +30,7 @@ export default function Comments({ questionId, senderType, senderId }) {
     senderType: senderType as "client" | "user",
     questionId: "",
   });
+  const [isDisabled, setIsDisabled] = useState(false);
 
 
   // // TODO remove this when we have the real data
@@ -70,10 +71,20 @@ export default function Comments({ questionId, senderType, senderId }) {
   }, [questionId]);
 
   function handlePostComment() {
+    
+
     console.log("Post Comment");
     
     console.log("New Comment Haiya!", newComment);
     if (senderType == 'client' || senderType == 'user') {
+      setIsDisabled(true);
+
+      if (!newComment.commentText) {
+        toast.error("Comment cannot be empty");
+        setIsDisabled(false);
+        return;
+      }
+
       postCommentToServer(newComment)
       .then((res) => {
         setComments(res);
@@ -82,21 +93,26 @@ export default function Comments({ questionId, senderType, senderId }) {
       })
       .catch((err) => {
         toast.error("Error posting comment");
+      })
+      .finally(() => {
+        setIsDisabled(false);
       });
     } else return
+    
     
   }
 
   return (
     <>
       <div className="border-b border-gray-300 bg-white">
-        <h2 className=" p-4 text-lg font-medium text-gray-800">Comments ({comments.length})</h2>
+        <h2 className=" p-4 text-lg font-medium text-gray-800">
+          Comments ({comments.length})
+        </h2>
       </div>
       <div className="flex flex-grow flex-col-reverse gap-6 overflow-hidden overflow-y-scroll p-4">
-      {!questionId || (comments.length === 0) ? (
-        <p className="p-4 text-center text-gray-400">No comments yet</p>
-      ) : (
-        
+        {!questionId || comments.length === 0 ? (
+          <p className="p-4 text-center text-gray-400">No comments yet</p>
+        ) : (
           comments.map((comment) => (
             <ChatBubble
               key={comment.id}
@@ -108,17 +124,20 @@ export default function Comments({ questionId, senderType, senderId }) {
               senderType={comment.senderType}
             />
           ))
-
-      )}
-              </div>
+        )}
+      </div>
       {questionId && (
         <div className="border-t p-2">
           <PostCommentField
+            isDisabled={isDisabled}
             placeholder="Post a comment..."
             buttonLabel="Post"
             commentText={newComment.commentText}
-            setCommentText={(value:string) =>
-              setNewComment((prevState) => ({ ...prevState, commentText: value }))
+            setCommentText={(value: string) =>
+              setNewComment((prevState) => ({
+                ...prevState,
+                commentText: value,
+              }))
             }
             handlePostComment={handlePostComment}
           />

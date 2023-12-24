@@ -33,10 +33,13 @@ export default function PostCommentField({
   commentText,
   setCommentText,
   handlePostComment,
+  isDisabled = false,
 }) {
   const [selected, setSelected] = useState(moods[5])
 
   const handleKeyDown = (e) => {
+    if (isDisabled) return;
+
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handlePostComment();
@@ -78,6 +81,9 @@ export default function PostCommentField({
                 className="inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={(e) => {
                   e.preventDefault();
+
+                  if (isDisabled) return;
+
                   handlePostComment();
                 }}
               >
