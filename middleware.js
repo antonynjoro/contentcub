@@ -7,7 +7,9 @@ export default authMiddleware({
   // "/" will be accessible to all users
    publicRoutes: ["/api/webhooks(.*)",
                   "/",
-                  "/api/uploadthing"]
+                  "/api/uploadthing",
+                  "/contentcub-for-web-designers"
+            ],
 });
  
 export const config = {

@@ -4,7 +4,6 @@ import Image from "next/image"
 export default function page() {
   return (
     <>
-      <LandingPageNav />
       <section>
         <div className="py-20 md:py-28">
           <div className="container mx-auto px-4">
@@ -107,7 +106,7 @@ export default function page() {
               src="https://www.youtube.com/embed/Th-6bI1IlRQ?si=fJLShVu8Fw2oPAFO"
               title="YouTube video player"
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; "
+              allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; "
               allowfullscreen
               className="rounded-7xl relative h-[600px] w-full rounded-md"
             ></iframe>

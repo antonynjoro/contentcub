@@ -1,6 +1,7 @@
 import React from "react";
 import { HiCheckCircle } from "react-icons/hi2";
 import LandingPageNav from "./components/LandingPageNav";
+import Image from "next/image";
 
 const meta = {
   title: "",
@@ -14,7 +15,6 @@ export default function Index() {
   return (
     <React.Fragment>
       <>
-        <LandingPageNav />
         <section
         style={{
           backgroundImage: 'url("flex-ui-assets/elements/pattern-white.svg")',
@@ -26,8 +26,7 @@ export default function Index() {
               <div className="-mx-4 flex flex-wrap xl:items-center">
                 <div className="mb-16 w-full px-4 md:mb-0 md:w-1/2">
                   <h1 className="mb-6 text-3xl font-semibold leading-tight tracking-tight md:text-5xl lg:text-6xl ">
-                    Get the content you need from your design clients without
-                    the email pingpong.
+                    The web design content you need without the email pingpong
                   </h1>
                   <p className="text-gray-500 mb-8 text-lg md:text-xl ">
                     Spend your time creating that website, not hunting for
@@ -41,7 +40,7 @@ export default function Index() {
                         className="inline-block w-full rounded-md border border-fuchsia-900 bg-fuchsia-950 px-10 py-5 text-center text-base font-medium leading-4 text-white shadow-sm hover:bg-fuchsia-900 focus:ring-2 focus:ring-fuchsia-500 focus:ring-opacity-50 md:text-lg"
                         href="/sign-up"
                       >
-                        Try for free
+                        Get Stared for Free
                       </a>
                       <p className="pl-1 pt-1 text-sm text-gray-500">
                         No credit card required.
@@ -69,10 +68,12 @@ export default function Index() {
                       src="flex-ui-assets/elements/dots3-green.svg"
                       alt=""
                     />
-                    <img
+                    <Image
                       className="rounded-xl relative border-8 border-fuchsia-900/50 "
-                      src="contentcub-workflow.gif"
+                      src="/contentcub-workflow-square.gif"
                       alt=""
+                      width={600}
+                      height={600}
                     />
                   </div>
                 </div>
@@ -80,7 +81,7 @@ export default function Index() {
             </div>
           </div>
         </section>
-        <section className=" flex justify-center pt-10">
+        <section className=" flex justify-center pt-10" id="product">
         <div className="w-full px-4 md:w-3/4">
           <div className="mb-10 flex items-center flex-col justify-center ">
             <h2 className=" text-2xl font-semibold leading-tight tracking-tight md:text-4xl lg:text-5xl mb-2 ">
@@ -107,7 +108,7 @@ export default function Index() {
               src="https://www.youtube.com/embed/Th-6bI1IlRQ?si=fJLShVu8Fw2oPAFO"
               title="YouTube video player"
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; "
+              allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; "
               allowfullscreen
               className="rounded-7xl relative h-[600px] w-full rounded-md"
             ></iframe>
