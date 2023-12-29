@@ -105,9 +105,8 @@ export default function page() {
               height="315"
               src="https://www.youtube.com/embed/Th-6bI1IlRQ?si=fJLShVu8Fw2oPAFO"
               title="YouTube video player"
-              frameborder="0"
               allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; "
-              allowfullscreen
+              allowFullScreen
               className="rounded-7xl relative h-[600px] w-full rounded-md"
             ></iframe>
           </div>

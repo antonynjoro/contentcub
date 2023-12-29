@@ -81,7 +81,7 @@ export default function Index() {
             </div>
           </div>
         </section>
-        <section className=" flex justify-center pt-10" id="product">
+        <section className=" flex justify-center pt-20" id="product">
         <div className="w-full px-4 md:w-3/4">
           <div className="mb-10 flex items-center flex-col justify-center ">
             <h2 className=" text-2xl font-semibold leading-tight tracking-tight md:text-4xl lg:text-5xl mb-2 ">
@@ -107,9 +107,8 @@ export default function Index() {
               height="315"
               src="https://www.youtube.com/embed/Th-6bI1IlRQ?si=fJLShVu8Fw2oPAFO"
               title="YouTube video player"
-              frameborder="0"
               allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; "
-              allowfullscreen
+              allowFullScreen
               className="rounded-7xl relative h-[600px] w-full rounded-md"
             ></iframe>
           </div>
