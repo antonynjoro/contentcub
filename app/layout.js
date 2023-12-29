@@ -6,6 +6,8 @@ import NavBar from "./components/NavBar.jsx";
 import Head from "next/head";
 import HotjarContext from "./context/HotjarContext.jsx";
 import MixpanelContext from "./context/MixpanelContext.jsx";
+import { Analytics } from '@vercel/analytics/react';
+
 
 
 const fira_sans = Fira_Sans({
@@ -42,6 +44,7 @@ export default function RootLayout({ children }) {
         <MixpanelContext />
           <ToasterContext />
           {children}
+          <Analytics/>
         </body>
       </html>
     </ClerkProvider>
