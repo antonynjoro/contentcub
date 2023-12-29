@@ -1,16 +1,27 @@
 "use server";
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export default async function deleteQuestion(requestId:string, questionId:string) {
+export default async function deleteQuestion(
+  requestId: string,
+  questionId: string,
+) {
   try {
-    const deletedQuestion = await prisma.question.delete({
-      where: {
-        id: questionId,
-      },
+    await prisma.$transaction(async (prisma) => {
+      await prisma.comment.deleteMany({
+        where: {
+          questionId: questionId,
+        },
+      });
+
+      const deletedQuestion = await prisma.question.delete({
+        where: {
+          id: questionId,
+        },
+      });
+      return deletedQuestion;
     });
-    return deletedQuestion;
   } catch (error) {
     console.error(error);
     return null;
