@@ -2,10 +2,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { UserButton, useUser } from "@clerk/nextjs";
+
 
 
 export default function LandingPageNav() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { isSignedIn, user, isLoaded } = useUser();
 
   return (
     <section
@@ -66,6 +69,7 @@ export default function LandingPageNav() {
                   </ul>
                 </div>
                 <div className="w-1/2 xl:w-1/3">
+                  {!isSignedIn && (
                   <div className="hidden items-center justify-end xl:flex">
                     <Link
                       className="text-coolGray-500 hover:text-coolGray-900 mr-2 inline-block rounded-md bg-transparent px-4 py-2 font-medium leading-5"
@@ -80,7 +84,20 @@ export default function LandingPageNav() {
                       Start for Free
                     </Link>
                   </div>
+                  )}
+                  {isSignedIn && (
+                    <div className="hidden items-center justify-end xl:flex">
+                      <Link
+                        className="text-coolGray-500 hover:text-coolGray-900 mr-2 inline-block rounded-md bg-transparent px-4 py-2 font-medium leading-5"
+                        href="/checklists"
+                      >
+                        Go to App
+                      </Link>
+                      <UserButton />
+                    </div>
+                  )}
                 </div>
+                
               </div>
               <button
                 className="navbar-burger self-center xl:hidden"
