@@ -271,7 +271,7 @@ export default function Index() {
               <p className="text-coolGray-500 mb-6 text-lg md:text-xl ">
                 Choose ease and transparency! Our straightforward pricing means
                 no surprises, just one monthly fee that covers everything you
-                need. Whether you're a solo designer or part of a larger team,
+                need. Whether you are a solo designer or part of a larger team,
                 our single-tier plan is designed to grow with you.
               </p>
               <div className="border-coolGray-200 mx-auto mb-12 flex max-w-max overflow-hidden rounded-md border shadow-lg"></div>
