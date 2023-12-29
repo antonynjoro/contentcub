@@ -28,7 +28,7 @@ export default function page() {
                 </p>
                 <p className="text-coolGray-500 mb-8 text-lg md:text-xl ">
                   <span className=" font-semibold">Design, Not Drudgery:</span>{" "}
-                  ContentCub recognizes the value of your creative time. We've
+                  ContentCub recognizes the value of your creative time. We have
                   developed a tool that streamlines the content collection
                   process, transforming it from a frustrating chore into a
                   smooth, efficient workflow.
