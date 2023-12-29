@@ -2,6 +2,7 @@ import React from "react";
 import { HiCheckCircle } from "react-icons/hi2";
 import LandingPageNav from "./components/LandingPageNav";
 import Image from "next/image";
+import Link from "next/link";
 
 const meta = {
   title: "",
@@ -36,23 +37,23 @@ export default function Index() {
                   </p>
                   <div className="flex flex-wrap">
                     <div className="w-full py-1 md:mr-4 md:w-auto md:py-0">
-                      <a
+                      <Link
                         className="inline-block w-full rounded-md border border-fuchsia-900 bg-fuchsia-950 px-10 py-5 text-center text-base font-medium leading-4 text-white shadow-sm hover:bg-fuchsia-900 focus:ring-2 focus:ring-fuchsia-500 focus:ring-opacity-50 md:text-lg"
                         href="/sign-up"
                       >
                         Get Stared for Free
-                      </a>
+                      </Link>
                       <p className="pl-1 pt-1 text-sm text-gray-500">
                         No credit card required.
                       </p>
                     </div>
                     <div className="w-full py-1 md:w-auto md:py-0">
-                      <a
+                      <Link
                         className="text-coolGray-800 hover:bg-coolGray-100 focus:ring-coolGray-200 border-coolGray-200 inline-block w-full rounded-md border bg-white px-7 py-5 text-center text-base font-medium leading-4 shadow-sm focus:ring-2 focus:ring-opacity-50 md:text-lg"
                         href="#"
                       >
                         Sign Up
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -107,7 +108,7 @@ export default function Index() {
               height="315"
               src="https://www.youtube.com/embed/Th-6bI1IlRQ?si=fJLShVu8Fw2oPAFO"
               title="YouTube video player"
-              allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; "
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; "
               allowFullScreen
               className="rounded-7xl relative h-[600px] w-full rounded-md"
             ></iframe>
@@ -323,12 +324,12 @@ export default function Index() {
                   </ul>
                   <div className="border-coolGray-100 border-b" />
                   <div className="px-8 pt-8">
-                    <a
+                    <Link
                       className="focus:ring-gray -500 inline-block w-full rounded-md bg-fuchsia-950 px-7 py-4 text-center text-base font-medium leading-6 text-white shadow-sm hover:bg-fuchsia-900 focus:ring-2 focus:ring-opacity-50 md:text-lg"
                       href="#"
                     >
                       Proceed to Checkout
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

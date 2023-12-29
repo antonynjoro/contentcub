@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 export default function LandingPageNav() {
@@ -15,7 +16,7 @@ export default function LandingPageNav() {
             <nav className="flex justify-between p-6 px-4">
               <div className="flex w-full items-center justify-between">
                 <div className="w-1/2 xl:w-1/3">
-                  <a className=" flex max-w-max items-center" href="/">
+                  <Link className=" flex max-w-max items-center" href="/">
                     <Image
                       className="h-10"
                       src="/logo.svg"
@@ -24,59 +25,60 @@ export default function LandingPageNav() {
                       height={60}
                     />
                     <p className=" text-2xl ">ContentCub</p>
-                  </a>
+                  </Link>
                 </div>
                 <div className="w-2/3 xl:w-1/3">
                   <ul className="hidden xl:flex xl:justify-around gap-5">
                     <li className="">
-                      <a
+                      <Link
                         className="text-coolGray-500 hover:text-coolGray-900 font-medium"
                         href="/#product"
                       >
                         Product
-                      </a>
+                      </Link>
                     </li>
                     <li className="">
-                      <a
+                      <Link
                         className="text-coolGray-500 hover:text-coolGray-900 font-medium"
                         href="/contentcub-for-web-designers"
+                        prefetch={true}
                       >
                         Great for Web Designers
-                      </a>
+                      </Link>
                     </li>
                     
                     <li className="">
-                      <a
+                      <Link
                         className="text-coolGray-500 hover:text-coolGray-900 font-medium"
                         href="/#pricing"
                       >
                         Pricing
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         className="text-coolGray-500 hover:text-coolGray-900 font-medium"
                         href="/#faqs"
                       >
                         FAQs
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
                 <div className="w-1/2 xl:w-1/3">
                   <div className="hidden items-center justify-end xl:flex">
-                    <a
+                    <Link
                       className="text-coolGray-500 hover:text-coolGray-900 mr-2 inline-block rounded-md bg-transparent px-4 py-2 font-medium leading-5"
                       href="/sign-in"
                     >
                       Log In
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="inline-block rounded-md bg-fuchsia-950 px-4 py-2 text-sm font-medium leading-5 text-white hover:bg-gray-800 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
                       href="/sign-up"
                     >
                       Start for Free
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -124,7 +126,7 @@ export default function LandingPageNav() {
               >
                 <nav className="relative h-full overflow-y-auto p-6">
                   <div className="flex h-full flex-col justify-between">
-                    <a className="inline-block" href="#"
+                    <Link className="inline-block" href="#"
                       onClick={() => {
                         setMobileMenuOpen(!mobileMenuOpen);
 
@@ -132,13 +134,13 @@ export default function LandingPageNav() {
                     >
                       <img
                         className="h-8"
-                        src="/flex-ui-assets/logos/flex-ui-yellow-light.svg"
+                        src="/logo.svg"
                         alt=""
                       />
-                    </a>
+                    </Link>
                     <ul className="py-6">
                       <li>
-                        <a
+                        <Link
                           className="text-coolGray-500 hover:text-coolGray-900 hover:bg-coolGray-50 block rounded-md px-4 py-3 font-medium"
                           href="/#product"
                           onClick={() => {
@@ -147,22 +149,23 @@ export default function LandingPageNav() {
                           }}
                         >
                           Product
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           className="text-coolGray-500 hover:text-coolGray-900 hover:bg-coolGray-50 block rounded-md px-4 py-3 font-medium"
-                          href="/#features"
                           onClick={() => {
                             setMobileMenuOpen(!mobileMenuOpen);
     
                           }}
-                        >
-                          Features
-                        </a>
+                          href="/contentcub-for-web-designers"
+                          prefetch={true}
+                          >
+                            Great for Web Designers
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           className="text-coolGray-500 hover:text-coolGray-900 hover:bg-coolGray-50 block rounded-md px-4 py-3 font-medium"
                           href="/#pricing"
                           onClick={() => {
@@ -171,10 +174,10 @@ export default function LandingPageNav() {
                           }}
                         >
                           Pricing
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           className="text-coolGray-500 hover:text-coolGray-900 hover:bg-coolGray-50 block rounded-md px-4 py-3 font-medium"
                           href="/#faqs"
                           onClick={() => {
@@ -183,25 +186,25 @@ export default function LandingPageNav() {
                           }}
                         >
                           FAQs
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                     <div className="flex flex-wrap">
                       <div className="mb-2 w-full">
-                        <a
+                        <Link
                           className="text-coolGray-500 hover:text-coolGray-900 inline-block w-full rounded-md bg-transparent px-4 py-2 text-center text-sm font-medium leading-5"
                           href="/sign-in"
                         >
                           Log In
-                        </a>
+                        </Link>
                       </div>
                       <div className="w-full">
-                        <a
+                        <Link
                           className="inline-block w-full rounded-md bg-fuchsia-950 px-4 py-2 text-center text-sm font-medium leading-5 text-white hover:bg-gray-800 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
                           href="/sign-up"
                         >
                           Start for Free
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
