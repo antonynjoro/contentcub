@@ -81,7 +81,7 @@ export default function Index() {
             </div>
           </div>
         </section>
-        <section className=" flex justify-center pt-20" id="product">
+        <section className=" flex justify-center pt-10 lg:pt-24" id="product">
         <div className="w-full px-4 md:w-3/4">
           <div className="mb-10 flex items-center flex-col justify-center ">
             <h2 className=" text-2xl font-semibold leading-tight tracking-tight md:text-4xl lg:text-5xl mb-2 ">
