@@ -173,7 +173,7 @@ export default function Question({
     } else if (type === "imageUploadMultiple") {
       return (
         <UploadDropzone
-          endpoint="imageUploader"
+          endpoint="multiImageUploader"
           onClientUploadComplete={(res) => {
             // Append all uploaded image URLs to the answers array
             const newAnswers = res.map((file) => file.url);
