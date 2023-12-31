@@ -12,7 +12,11 @@ import { HiX } from "react-icons/hi";
 import fetchClientsOnRequest from "../actions/fetchClientsOnRequest";
 import removeClientFromRequest from "../actions/removeClientFromRequest";
 
-export default function SendRequestModal({ handleModalClose, requestId, setIsRequestSent }) {
+export default function SendRequestModal({
+  handleModalClose,
+  requestId,
+  setIsRequestSent,
+}) {
   const [clientEmail, setClientEmail] = useState("");
   const [fieldHasError, setFieldHasError] = useState(false);
   const [clientsOnRequest, setClientsOnRequest] = useState([]);
@@ -37,32 +41,37 @@ export default function SendRequestModal({ handleModalClose, requestId, setIsReq
       toast.promise(
         sendRequest(requestId, clientEmail), // Promise
         {
-          loading: 'Sending the Checklist...',
-          success: 'Checklist sent!',
-          error: 'Something went wrong!'
+          loading: "Sending the Checklist...",
+          success: "Checklist sent!",
+          error: (err) => {
+            // Check if the error message matches the specific error from sendRequest
+            if (err.message.includes("is already in the request")) {
+              return "The client is already in the checklist!"
+            } else {
+              return "Something went wrong!"; // Generic error message for other errors
+            }
+          },
         },
         {
           // Optional: Additional toast options like styling
           style: {
-            minWidth: '250px',
+            minWidth: "250px",
           },
           success: {
             duration: 5000,
           },
-        }
+        },
       );
-  
+
       handleModalClose((prev) => !prev);
     }
   }
-  
-  
 
   function handleRemoveClientButtonClicked(clientId) {
     removeClientFromRequest(requestId, clientId)
       .then((res) => {
         setClientsOnRequest((prevClients) =>
-            prevClients.filter((client) => client.id !== clientId),
+          prevClients.filter((client) => client.id !== clientId),
         );
       })
       .then((data) => {
@@ -73,7 +82,6 @@ export default function SendRequestModal({ handleModalClose, requestId, setIsReq
       });
   }
 
-  
   return (
     <ModalContainer handleModalClose={handleModalClose}>
       <h2 className="text-2xl font-bold">Send Checkist</h2>
