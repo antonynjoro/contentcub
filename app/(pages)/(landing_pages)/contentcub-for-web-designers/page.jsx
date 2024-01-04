@@ -62,7 +62,7 @@ export default function page() {
                     alt=""
                   />
                   <img
-                    className="absolute -bottom-8 -right-7 z-10 w-28 md:w-auto"
+                    className="absolute -bottom-8 -right-7 z-10 w-0 md:w-auto"
                     src="flex-ui-assets/elements/dots3-green.svg"
                     alt=""
                   />
@@ -91,7 +91,7 @@ export default function page() {
           </div>
           <div className="relative mx-auto flex md:mr-0">
             <img
-              className="absolute -right-14 -top-12 z-10 w-28 md:w-auto"
+              className="absolute -right-14 -top-12 z-10 w-0 md:w-auto"
               src="flex-ui-assets/elements/circle3-red.svg"
               alt=""
             />

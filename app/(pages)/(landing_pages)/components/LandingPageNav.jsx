@@ -130,7 +130,7 @@ export default function LandingPageNav() {
           }}
         >
           <div
-            className="fixed bottom-0 left-0 top-0  w-4/6 max-w-xs bg-white opacity-100"
+            className="fixed bottom-0 left-0 top-0 h-full  w-4/6 max-w-xs bg-white opacity-100"
             onClick={(e) => {
               e.stopPropagation();
             }}
