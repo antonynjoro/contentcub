@@ -47,7 +47,7 @@ export default function QuestionNav({
     <>
       <div className="flex items-center  border-b p-4 pt-5">
         <button
-          className="flex-none text-gray-500 hover:text-gray-900 mr-4"
+          className=" md:hidden flex-none text-gray-500 hover:text-gray-900 mr-4 "
           onClick={() => {
             setQuestionNavOpen(false);
           }}
