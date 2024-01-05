@@ -254,7 +254,7 @@ export default function Page({ params }) {
           isLoading={isLoading}
         />
       </div>
-      <div className=" flex flex-grow overflow-hidden    sm:grid sm:grid-cols-12">
+      <div className=" flex flex-grow overflow-hidden    md:grid md:grid-cols-12">
         {/* first column */}
         <div className={`col-span-full md:col-span-2  h-full overflow-hidden bg-white md:flex flex-col 
         ${columnOneActive ? " flex grow " : "hidden"}
