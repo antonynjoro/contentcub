@@ -17,53 +17,31 @@ import { MdMoreVert } from "react-icons/md";
 import IconButton from "./IconButton";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import React from 'react'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import classNames from "../utils/classNames";
+
+import router from "next/router";
+
+
+
+
 
 export default function AnsweredQuestions({
   currentQuestion,
   requestId,
   requestTitle,
   handleDeleteQuestion,
+  openQuestionNav,
 }) {
   const [copyValue, setcopyValue] = useState(null); // this is the value that will be copied to the clipboard
-  const [copyButtonLabel, setCopyButtonLabel] = useState("Copy Text"); // this is the label of the copy button
   const [copyButtonDisabled, setCopyButtonDisabled] = useState(false); // this is the label of the copy button
   const [filename, setFilename] = useState(null); // this is the name of the file to be downloaded if the question is a file upload
   const [menuVisible, setMenuVisible] = useState(false); // toggles the menu visibility
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!currentQuestion) {
-      return;
-    }
-
-    if (currentQuestion?.answers?.length === 0) {
-      // if the question has no answer, set the copied value to null
-      setcopyValue(null);
-      setCopyButtonDisabled(true);
-    } else {
-      // if the question has an answer, set the copied value to the first answer
-      setcopyValue(currentQuestion.answers[0].value);
-      setCopyButtonDisabled(false);
-    }
-
-    if (currentQuestion.type === "imageUpload") {
-      setCopyButtonLabel("Download Image");
-    } else if (currentQuestion.type === "fileUpload") {
-      setCopyButtonLabel("Download File");
-    } else if (currentQuestion.type === "imageUploadMultiple") {
-      setCopyButtonLabel("Download Images");
-    } else if (
-      currentQuestion.type === "textShort" ||
-      currentQuestion.type === "textLong"
-    ) {
-      setCopyButtonLabel("Copy Text");
-    }
-  }, [currentQuestion]);
+  
 
   useEffect(() => {
     // make the filename the combination of the request title and the question title
@@ -78,16 +56,7 @@ export default function AnsweredQuestions({
     }
   }, [currentQuestion, requestTitle]);
 
-  function handleCopyButtonClicked() {
-    // copy contents of the answer to the clipboard
-    copyToClipboard(copyValue).then(() => {
-      setCopyButtonLabel("Copied!");
-      toast.success("Copied text to the clipboard!");
-      setTimeout(() => {
-        setCopyButtonLabel("Copy Text");
-      }, 2000);
-    });
-  }
+ 
 
   function getFileExtension(url: string) {
     // Extracts the extension from a URL (e.g., '.jpg', '.png', '.svg', '.pdf')
@@ -130,12 +99,62 @@ export default function AnsweredQuestions({
 
     return Promise.resolve();
   }
+  const [copyButtonLabel, setCopyButtonLabel] = useState("Copy Text"); // this is the label of the copy button
+
+
+    function handleCopyButtonClicked() {
+        // copy contents of the answer to the clipboard
+        copyToClipboard(copyValue).then(() => {
+          setCopyButtonLabel("Copied!");
+          toast.success("Copied text to the clipboard!");
+          setTimeout(() => {
+            setCopyButtonLabel("Copy Text");
+          }, 2000);
+        });
+      }
+
+      useEffect(() => {
+        if (!currentQuestion) {
+          return;
+        }
+    
+        if (currentQuestion?.answers?.length === 0) {
+          // if the question has no answer, set the copied value to null
+          setcopyValue(null);
+          setCopyButtonDisabled(true);
+        } else {
+          // if the question has an answer, set the copied value to the first answer
+          setcopyValue(currentQuestion.answers[0].value);
+          setCopyButtonDisabled(false);
+        }
+    
+        if (currentQuestion.type === "imageUpload") {
+          setCopyButtonLabel("Download Image");
+        } else if (currentQuestion.type === "fileUpload") {
+          setCopyButtonLabel("Download File");
+        } else if (currentQuestion.type === "imageUploadMultiple") {
+          setCopyButtonLabel("Download Images");
+        } else if (
+          currentQuestion.type === "textShort" ||
+          currentQuestion.type === "textLong"
+        ) {
+          setCopyButtonLabel("Copy Text");
+        }
+      }, [currentQuestion]);
 
   return (
     currentQuestion && (
-      <div className=" flex flex-grow flex-col">
+      <div className=" flex flex-grow flex-col overflow-hidden">
         <div className="flex h-[3.8rem] items-center gap-2 border-b border-gray-300 bg-white px-4 py-2.5">
           <div className="flex flex-grow gap-2">
+            <button
+              onClick={() => {
+                openQuestionNav((prev) => !prev);
+              }}
+              className="block md:hidden"
+            >
+              <HiMenu className="h-6 w-6" />
+            </button>
             <h2 className="  text-lg font-medium text-gray-800">
               {currentQuestion.title}
             </h2>
@@ -147,40 +166,41 @@ export default function AnsweredQuestions({
               {currentQuestion?.answers?.length > 0 ? "Answered" : "Unanswered"}
             </Chip>
           </div>
+          <div className="hidden md:block">
+            {currentQuestion?.answers?.length > 0 &&
+              (currentQuestion.type === "textShort" ||
+                currentQuestion.type === "textLong") && (
+                <Button
+                  size="sm"
+                  isDisabled={copyButtonDisabled}
+                  handleClick={() => {
+                    handleCopyButtonClicked();
+                  }}
+                >
+                  <HiOutlineClipboard className="h-4 w-4" />
 
-          {currentQuestion?.answers?.length > 0 &&
-            (currentQuestion.type === "textShort" ||
-              currentQuestion.type === "textLong") && (
-              <Button
-                size="sm"
-                isDisabled={copyButtonDisabled}
-                handleClick={() => {
-                  handleCopyButtonClicked();
-                }}
-              >
-                <HiOutlineClipboard className="h-4 w-4" />
+                  {copyButtonLabel}
+                </Button>
+              )}
 
-                {copyButtonLabel}
-              </Button>
-            )}
+            {currentQuestion?.answers?.length > 0 &&
+              (currentQuestion.type === "imageUpload" ||
+                currentQuestion.type === "imageUploadMultiple" ||
+                currentQuestion.type === "fileUpload") && (
+                <Button
+                  size="sm"
+                  handleClick={() => {
+                    handleDownload().then(() => {
+                      toast.success("Downloaded successfully");
+                    });
+                  }}
+                >
+                  <HiDownload className="h-4 w-4" />
 
-          {currentQuestion?.answers?.length > 0 &&
-            (currentQuestion.type === "imageUpload" ||
-              currentQuestion.type === "imageUploadMultiple" ||
-              currentQuestion.type === "fileUpload") && (
-              <Button
-                size="sm"
-                handleClick={() => {
-                  handleDownload().then(() => {
-                    toast.success("Downloaded successfully");
-                  });
-                }}
-              >
-                <HiDownload className="h-4 w-4" />
-
-                {copyButtonLabel}
-              </Button>
-            )}
+                  {copyButtonLabel}
+                </Button>
+              )}
+          </div>
 
           <Menu as="div" className="relative flex-none">
             <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
@@ -199,6 +219,58 @@ export default function AnsweredQuestions({
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                {currentQuestion?.answers?.length > 0 &&
+                  (currentQuestion.type === "textShort" ||
+                    currentQuestion.type === "textLong") && (
+                    <div className="block md:hidden">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            onClick={() => {
+                              handleCopyButtonClicked();
+                            }}
+                            className={classNames(
+                              active ? "bg-gray-50" : "",
+                              "block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900",
+                            )}
+                          >
+                            Copy Text
+                            <span className="sr-only">
+                              , {currentQuestion.title}
+                            </span>
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </div>
+                  )}
+                {currentQuestion?.answers?.length > 0 &&
+                  (currentQuestion.type === "imageUpload" ||
+                    currentQuestion.type === "imageUploadMultiple" ||
+                    currentQuestion.type === "fileUpload") && (
+                    <div className="block md:hidden">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            onClick={() => {
+                              handleDownload().then(() => {
+                                toast.success("Downloaded successfully");
+                              }
+                              );
+                            }}
+                            className={classNames(
+                              active ? "bg-gray-50" : "",
+                              "block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900",
+                            )}
+                          >
+                            Download All
+                            <span className="sr-only">
+                              , {currentQuestion.title}
+                            </span>
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </div>
+                  )}
                 <Menu.Item>
                   {({ active }) => (
                     <button
@@ -236,7 +308,7 @@ export default function AnsweredQuestions({
             </Transition>
           </Menu>
         </div>
-        <div className="flex flex-grow flex-col gap-2 p-4">
+        <div className="flex flex-grow flex-col gap-2 overflow-y-scroll p-4">
           {currentQuestion.answers.length === 0 && (
             <EmptyAnswerDisplay
               requestId={requestId}
@@ -266,7 +338,7 @@ export default function AnsweredQuestions({
             ))}
           {(currentQuestion.type === "imageUpload" ||
             currentQuestion.type === "imageUploadMultiple") && (
-            <div className="grid grid-cols-4 items-stretch gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-stretch gap-4">
               {currentQuestion.answers.map((answer) => (
                 <div key={answer.id}>
                   <ImageAnswerDisplay

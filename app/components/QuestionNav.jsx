@@ -6,6 +6,7 @@ import AddQuestionModal from "./AddQuestionModal";
 import Button from "./Button";
 import QuestionNavItem from "./QuestionNavItem";
 import { usePathname } from 'next/navigation';
+import { HiX } from "react-icons/hi";
 
 export default function QuestionNav({
   questions,
@@ -16,6 +17,7 @@ export default function QuestionNav({
   isLoading,
   setAddQuestionModalOpen,
   addQuestionModalOpen,
+  setQuestionNavOpen,
 }) {
   const [questionEditable, setQuestionEditable] = useState(false);
   const pathname = usePathname();
@@ -38,11 +40,20 @@ export default function QuestionNav({
 
   function handleNavItemClick(id) {
     setCurrentQuestion(questions.find((question) => question.id === id));
+    setQuestionNavOpen(false);
   }
 
   return (
     <>
       <div className="flex items-center  border-b p-4 pt-5">
+        <button
+          className="flex-none text-gray-500 hover:text-gray-900 mr-4"
+          onClick={() => {
+            setQuestionNavOpen(false);
+          }}
+        >
+          <HiX className="h-6 w-6" />
+        </button>
         <h2 className="flex-grow align-middle  text-base  ">Checklist</h2>
         {!isLoading && questionEditable && (
           <>

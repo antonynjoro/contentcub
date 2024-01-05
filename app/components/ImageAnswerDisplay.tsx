@@ -50,7 +50,7 @@ export default function ImageAnswerDisplay({ imageLink, metadata, requestTitle, 
 
   return (
     <div className="flex flex-col items-start justify-center gap-1 relative group">
-      <div className="flex gap-2 absolute top-1 right-1 group-hover:opacity-100 opacity-0 transition-all ease-in-out duration-300 delay-75">
+      <div className="flex gap-2 absolute top-1 right-1 group-hover:opacity-100 md:opacity-0 transition-all ease-in-out duration-300 delay-75">
         <Button
           size="sm"
           isOutlined

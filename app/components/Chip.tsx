@@ -28,7 +28,7 @@ export default function Chip({ children, chipType = "default" }: ChipProps) {
   const style = chipStyles[chipType];
 
   return (
-    <span className={`inline-flex items-center rounded-md  px-2 py-1 text-xs font-medium  ring-1 ring-inset  ${style}`}>
+    <span className={`inline-flex shrink self-center items-center rounded-md  px-2 py-1 text-xs font-medium  ring-1 ring-inset  ${style}`}>
       {children}
     </span>
   );

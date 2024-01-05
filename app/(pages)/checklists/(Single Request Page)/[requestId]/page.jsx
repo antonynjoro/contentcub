@@ -138,6 +138,8 @@ export default function Page({ params }) {
   const [requestStatus, setRequestStatus] = useState(""); // ["draft", "sent", "answered" "closed"]
   const [requestTitle, setRequestTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [columnOneActive, setColumnOneActive] = useState(false);
+  const [columnThreeActive, setColumnThreeActive] = useState(false);
 
   useEffect(() => {
     // TODO: Fetch questions from the server
@@ -238,6 +240,7 @@ export default function Page({ params }) {
     console.log("request", request);
     setQuestions(request.questions);
   }
+  
 
   
 
@@ -253,7 +256,9 @@ export default function Page({ params }) {
       </div>
       <div className=" flex flex-grow overflow-hidden    sm:grid sm:grid-cols-12">
         {/* first column */}
-        <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white ">
+        <div className={`col-span-full md:col-span-2  h-full overflow-hidden bg-white md:flex flex-col 
+        ${columnOneActive ? " flex grow " : "hidden"}
+        `}>
           <QuestionNav
             questions={questions}
             setQuestions={setQuestions}
@@ -263,15 +268,26 @@ export default function Page({ params }) {
             isLoading={isLoading}
             setAddQuestionModalOpen={setAddQuestionModalOpen}
             addQuestionModalOpen={addQuestionModalOpen}
+            setQuestionNavOpen={setColumnOneActive}
           />
         </div>
         {/* Second Column */}
-        <div className="col-span-8 flex h-full flex-col overflow-hidden border-x  ">
-          <AnsweredQuestions requestTitle={requestTitle} currentQuestion={currentQuestion} requestId={requestId} handleDeleteQuestion={handleDeleteQuestion} />
+        {(!columnOneActive && !columnThreeActive) && (
+        <div className=" col-span-full md:col-span-8 flex h-full flex-col overflow-hidden border-x  ">
+          <AnsweredQuestions
+            requestTitle={requestTitle}
+            currentQuestion={currentQuestion}
+            requestId={requestId}
+            handleDeleteQuestion={handleDeleteQuestion}
+            openQuestionNav={setColumnOneActive}
+          />
         </div>
+        )}
 
         {/* Third Colun */}
-        <div className="col-span-2 flex h-full flex-col overflow-hidden border-x bg-white  ">
+        <div className={`col-span-2 hidden md:flex h-full flex-col overflow-hidden border-x bg-white  
+        ${columnThreeActive ? " flex" : ""}
+        `}>
           <Comments
             questionId={currentQuestion?.id}
             senderType={currentUserData.type}

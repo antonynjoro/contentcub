@@ -35,9 +35,9 @@ export default function RequestListItem({
     <>
       <li
         key={request.id}
-        className="flex items-center  gap-x-6   border-b border-gray-200 px-6 first:border-b-0 odd:bg-gray-50 hover:bg-gray-100"
+        className="flex   gap-x-6 max-w-full   border-b border-gray-200 px-6 first:border-b-0 odd:bg-gray-50 hover:bg-gray-100"
       >
-        <Link href={singleRequestPage} className=" flex-grow py-5">
+        <Link href={singleRequestPage} className=" flex-grow py-5 max-w-full">
           <div className="min-w-0">
             <div className="flex items-start gap-x-3">
               <p className="text-sm font-semibold leading-6 text-gray-900">
@@ -52,7 +52,7 @@ export default function RequestListItem({
                 {request.status}
               </p>
             </div>
-            <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+            <div className="mt-1 flex-grow overflow-hidden flex-col items-center gap-x-2  text-xs leading-5 text-gray-500 md:flex">
               <p className="whitespace-nowrap">
                 Created{" "}
                 <time dateTime={longDate} title={`${longDate}`}>
@@ -63,7 +63,7 @@ export default function RequestListItem({
                 <circle cx={1} cy={1} r={1} />
               </svg>
               <p
-                className="truncate"
+                className="md:max-w-full"
                 title={
                   otherClientEmails.length > 0 && otherClientEmails.join(", ")
                 }
@@ -76,14 +76,14 @@ export default function RequestListItem({
             </div>
           </div>
         </Link>
-        <div className="flex flex-none items-center gap-x-4">
+        <div className="flex shrink items-center gap-x-4">
           <a
             href={singleRequestPage}
             className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
           >
             View<span className="sr-only">, {request.title}</span>
           </a>
-          <Menu as="div" className="relative flex-none">
+          <Menu as="div" className="relative flex-grow ">
             <Menu.Button className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
               <span className="sr-only">Open options</span>
               <MdMoreVert className="h-5 w-5" aria-hidden="true" />
