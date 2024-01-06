@@ -7,6 +7,7 @@ import { fetchComments } from "../actions/fetchComments";
 import PostCommentField from "./PostCommentField";
 import toast from "react-hot-toast";
 import postCommentToServer from "../actions/postCommentToServer";
+import { HiX } from "react-icons/hi";
 
 // Mock comment data
 const mockComments = [
@@ -21,7 +22,13 @@ const mockComments = [
   },
 ];
 
-export default function Comments({ questionId, senderType, senderId }) {
+export default function Comments({ 
+  questionId, 
+  senderType, 
+  senderId, 
+  setCommentsTabActive,
+  setCommentCount,
+}) {
   const { user } = useUser();
   const [comments, setComments] = useState([]); // [{commentId, senderId,senderFullName, senderImageUrl, senderType, createdAt, commentText}]
   const [newComment, setNewComment] = useState({
@@ -49,7 +56,8 @@ export default function Comments({ questionId, senderType, senderId }) {
         setComments(res);
 
       }
-      ).catch((err) => {
+      )
+      .catch((err) => {
         console.log(err);
       });
     }
@@ -102,10 +110,22 @@ export default function Comments({ questionId, senderType, senderId }) {
     
   }
 
+  useEffect(() => {
+    setCommentCount(comments.length);
+  }, [comments.length]);
+
   return (
     <>
-      <div className="border-b border-gray-300 bg-white">
-        <h2 className=" p-4 text-lg font-medium text-gray-800">
+      <div className="flex gap-2 border-b border-gray-300 bg-white p-4">
+        <button
+          className=" flex-none shrink text-gray-500 hover:text-gray-900 md:hidden "
+          onClick={() => {
+            setCommentsTabActive(false);
+          }}
+        >
+          <HiX className="h-6 w-6" />
+        </button>
+        <h2 className="  text-lg font-medium text-gray-800 grow">
           Comments ({comments.length})
         </h2>
       </div>

@@ -22,6 +22,7 @@ import QuestionNav from "../../../../components/QuestionNav.jsx";
 import Comments from "../../../../components/Comments";
 import fetchCurrentUser from "../../../../actions/fetchCurrentUser";
 import AnsweredQuestions from "../../../../components/AnsweredQuestions";
+import CommentsMobileBubble from "../../../../components/CommentsMobileBubble";
 
 // const questions = [
 //   {
@@ -140,6 +141,7 @@ export default function Page({ params }) {
   const [isLoading, setIsLoading] = useState(true);
   const [columnOneActive, setColumnOneActive] = useState(false);
   const [columnThreeActive, setColumnThreeActive] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
     // TODO: Fetch questions from the server
@@ -273,7 +275,7 @@ export default function Page({ params }) {
         </div>
         {/* Second Column */}
         {(!columnOneActive && !columnThreeActive) && (
-        <div className=" col-span-full md:col-span-8 flex h-full flex-col overflow-hidden border-x  ">
+        <div className=" col-span-full md:col-span-8 flex h-full w-full flex-col overflow-hidden border-x  ">
           <AnsweredQuestions
             requestTitle={requestTitle}
             currentQuestion={currentQuestion}
@@ -284,14 +286,48 @@ export default function Page({ params }) {
         </div>
         )}
 
+        {/* Comments mobile bubble (Absolute) */}
+        {(!columnOneActive && !columnThreeActive) && (
+        <div className="md:hidden fixed bottom-0 right-0 mr-4 mb-4 flex gap-3">
+          <CommentsMobileBubble
+            commentCount={commentCount}
+            setCommentsActive={setColumnThreeActive}
+          />
+          <QuestionNavigationButtons
+            handleNextButtonClick={() => {
+              const currentQuestionIndex = questions.findIndex(
+                (question) => question.id === currentQuestion.id,
+              );
+              if (currentQuestionIndex === questions.length - 1) {
+                setCurrentQuestion(questions[0]);
+              } else {
+                setCurrentQuestion(questions[currentQuestionIndex + 1]);
+              }
+            }}
+            handlePreviousButtonClick={() => {
+              const currentQuestionIndex = questions.findIndex(
+                (question) => question.id === currentQuestion.id,
+              );
+              if (currentQuestionIndex === 0) {
+                setCurrentQuestion(questions[questions.length - 1]);
+              } else {
+                setCurrentQuestion(questions[currentQuestionIndex - 1]);
+              }
+            }}
+          />
+        </div>
+        )}
+
         {/* Third Colun */}
-        <div className={`col-span-2 hidden md:flex h-full flex-col overflow-hidden border-x bg-white  
-        ${columnThreeActive ? " flex" : ""}
+        <div className={`col-span-2  md:flex h-full flex-col overflow-hidden border-x bg-white  
+        ${columnThreeActive ? " flex-grow" : "hidden"}
         `}>
           <Comments
             questionId={currentQuestion?.id}
             senderType={currentUserData.type}
             senderId={currentUserData.id}
+            setCommentsTabActive={setColumnThreeActive}
+            setCommentCount={setCommentCount}
           />
         </div>
       </div>

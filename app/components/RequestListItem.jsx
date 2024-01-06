@@ -35,7 +35,7 @@ export default function RequestListItem({
     <>
       <li
         key={request.id}
-        className="flex   gap-x-6 max-w-full   border-b border-gray-200 px-6 first:border-b-0 odd:bg-gray-50 hover:bg-gray-100"
+        className="flex gap-x-6 max-w-full border-b border-gray-200 px-6 first:border-b-0 odd:bg-gray-50 hover:bg-gray-100"
       >
         <Link href={singleRequestPage} className=" flex-grow py-5 max-w-full">
           <div className="min-w-0">
@@ -52,14 +52,14 @@ export default function RequestListItem({
                 {request.status}
               </p>
             </div>
-            <div className="mt-1 flex-grow overflow-hidden flex-col items-center gap-x-2  text-xs leading-5 text-gray-500 md:flex">
+            <div className="mt-1 flex-grow overflow-hidden flex-col md:flex-row md:items-center gap-x-2  text-xs leading-5 text-gray-500 flex">
               <p className="whitespace-nowrap">
                 Created{" "}
                 <time dateTime={longDate} title={`${longDate}`}>
                   {relativeDate}
                 </time>
               </p>
-              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current hidden md:block">
                 <circle cx={1} cy={1} r={1} />
               </svg>
               <p

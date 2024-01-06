@@ -144,7 +144,7 @@ export default function AnsweredQuestions({
 
   return (
     currentQuestion && (
-      <div className=" flex flex-grow flex-col overflow-hidden">
+      <div className=" flex flex-grow w-full flex-col overflow-hidden justify-stretch ">
         <div className="flex h-[3.8rem] items-center gap-2 border-b border-gray-300 bg-white px-4 py-2.5">
           <div className="flex flex-grow gap-2">
             <button

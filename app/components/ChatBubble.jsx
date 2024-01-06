@@ -16,13 +16,13 @@ export default function ChatBubble({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex gap-2">
+      <div className="flex flex-row md:flex-col sm:flex-row lg:flex-row gap-2">
         <Image
           src={imageUrl ? imageUrl : "/profile-placeholder-image.png"}
           alt="avatar"
           width={40}
           height={40}
-          className="aspect-square rounded-full"
+          className="aspect-square rounded-full h-10 w-10"
         />
 
         <div className="flex flex-col">
