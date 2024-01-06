@@ -115,7 +115,7 @@ export default function Comments({
   }, [comments.length]);
 
   return (
-    <>
+    <div className="h-full flex flex-col">
       <div className="flex gap-2 border-b border-gray-300 bg-white p-4">
         <button
           className=" flex-none shrink text-gray-500 hover:text-gray-900 md:hidden "
@@ -147,7 +147,7 @@ export default function Comments({
         )}
       </div>
       {questionId && (
-        <div className="border-t p-2">
+        <div className="border-t flex-shrink p-2">
           <PostCommentField
             isDisabled={isDisabled}
             placeholder="Post a comment..."
@@ -163,6 +163,6 @@ export default function Comments({
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
