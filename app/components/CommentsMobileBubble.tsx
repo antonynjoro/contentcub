@@ -28,9 +28,9 @@ export default function CommentsMobileBubble({
       <HiMiniChatBubbleLeftRight className="h-8 w-8" />
       <span className="sr-only">View Comments</span>
       {commentCount > 0 && (
-        <div className={` absolute -right-1 -top-1 flex  items-center justify-center self-start rounded-full  font-semibold  shadow-sm text-white
-        ${size === "sm" ? "text-xs h-4 w-4" : "h-5 w-5"}
-        ${isSecondary ? "bg-fuchsia-700 " : "bg-fuchsia-200 text-gray-950 "}
+        <div className={` absolute -right-1 -top-1 flex  items-center justify-center self-start rounded-full  font-semibold  shadow-sm 
+        ${size === "sm" ? " text-xs h-4 w-4 " : " h-5 w-5 "}
+        ${isSecondary ? " bg-fuchsia-700 text-white  " : "bg-fuchsia-200 text-gray-950 "}
         `}>
           <span className="">{commentCount}</span>
           <span className="sr-only">Comments</span>
