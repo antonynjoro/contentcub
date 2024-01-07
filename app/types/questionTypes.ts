@@ -1,12 +1,21 @@
+import { RequestModel } from "./requestTypes";
+import { User } from "./userTypes";
+import { Client } from "./clientTypes";
+import { comment } from "./commentTypes";
+
 export type Question = {
     id: string;
+    requestId?: string;
+    request?: RequestModel; // To be defined
     type: PrismaQuestionType;
     title: string;
     description?: string;
     multiAnswer?: boolean;
-    answers: string[];
+    answers: string[]; // Adjust if needed
+    comments: comment[]; // Already defined
     createdAt: Date;
-};
+  };
+  
 
 
 

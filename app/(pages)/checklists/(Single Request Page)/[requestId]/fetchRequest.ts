@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "../../../../libs/prismadb.jsx";
+import { RequestModel } from "../../../../types/requestTypes";
 
 
 /**
@@ -13,7 +14,7 @@ import prisma from "../../../../libs/prismadb.jsx";
 export default async function fetchRequest(
   requestId: string,
   userId: string,
-): Promise<Request | null> {
+): Promise<RequestModel | null> {
 
 
 

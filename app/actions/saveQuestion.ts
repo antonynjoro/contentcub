@@ -1,6 +1,6 @@
 "use server";
 
-import { Question } from '../(pages)/checklists/(Single Request Page)/[requestId]/types';
+import { Question } from '../types/questionTypes';
 import prisma from "../libs/prismadb.jsx";
 import { auth } from "@clerk/nextjs";
 

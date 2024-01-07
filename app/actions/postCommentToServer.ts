@@ -2,7 +2,7 @@
 
 "use server"
 import prisma from "../libs/prismadb"
-import { comment } from "./types"
+import { comment } from "../types/commentTypes"
 import { fetchComments } from "./fetchComments"
 
 type commentInput = {

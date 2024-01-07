@@ -274,7 +274,7 @@ export default function Page({ params }) {
           />
         </div>
         {/* Second Column */}
-        {(!columnOneActive && !columnThreeActive) && (
+        {!(columnOneActive || columnThreeActive) && (
         <div className=" col-span-full md:col-span-8 flex h-full w-full flex-col overflow-hidden border-x  ">
           <AnsweredQuestions
             requestTitle={requestTitle}

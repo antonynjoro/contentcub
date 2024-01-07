@@ -232,8 +232,8 @@ export default function Question({
 
   return (
     <div
-      className={`flex w-full max-w-full flex-grow flex-col flex-nowrap items-stretch justify-center  overflow-hidden p-6 sm:p-20 ${
-        type === "textLong" && "sm:p-4 sm:pb-6"
+      className={`flex w-full max-w-full flex-grow flex-col flex-nowrap items-stretch justify-center  overflow-hidden md:p-6 sm:p-20 ${
+        type === "textLong" && " p-0 pb-4 sm:p-4 sm:pb-6"
       }`}
     >
       <h2 className="text-2xl font-bold text-gray-900">{title}</h2>

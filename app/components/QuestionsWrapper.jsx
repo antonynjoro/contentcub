@@ -59,7 +59,7 @@ export default function QuestionsWrapper({
               animate="animate"
               exit="exit"
               transition={{ duration: 0.3, type: "tween" }} // You can adjust the type of transition if you want to
-              className="m-4 flex flex-grow flex-col justify-stretch overflow-hidden rounded-md border bg-white p-6 shadow-sm sm:p-12"
+              className="md:m-4 flex flex-grow flex-col justify-stretch overflow-hidden md:rounded-md md:border bg-white p-6 shadow-sm sm:p-12"
             >
               <Question
                 questionId={currentQuestion.id}
@@ -69,19 +69,27 @@ export default function QuestionsWrapper({
                 requestId={requestId}
               />
               {/* <div className="flex justify-between"> */}
-                
-              <div className="bg-blue flex justify-end gap-3 items-center">
-              <p className="text-gray-700">
-                    Question {questions.findIndex(
-                        (question) => question.id === currentQuestion.id,
-                    ) + 1}{" "}
-                    of {questions.length}
+
+              <div className="bg-blue flex flex-col-reverse  md:flex-row md:items-center items-end md:justify-end gap-2 md:gap-3">
+                <p className="md:text-gray-700 text-gray-500 md:text-base text-sm font-semibold md:font-normal">
+                  Question{" "}
+                  {questions.findIndex(
+                    (question) => question.id === currentQuestion.id,
+                  ) + 1}{" "}
+                  of {questions.length}
                 </p>
-                { handleDeleteQuestion &&
-                    <Button handleClick={handleDeleteQuestion} isDestructive={true}>
-                  <HiTrash className="h-5 w-5 text-red-500 " />
-                  Delete Question
-                </Button>}
+                {handleDeleteQuestion && (
+                  <div className="hidden md:flex">
+                    <Button
+                      handleClick={handleDeleteQuestion}
+                      isDestructive={true}
+                    >
+                      <HiTrash className="h-5 w-5 text-red-500 " />
+                      Delete Question
+                    </Button>
+                  </div>
+                )}
+
                 <QuestionNavigationButtons
                   handleNextButtonClick={handleNextButtonClick}
                   handlePreviousButtonClick={handlePreviousButtonClick}

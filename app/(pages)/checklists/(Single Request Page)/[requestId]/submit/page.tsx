@@ -12,27 +12,43 @@ import RequestHeader from "../../../../../components/RequestHeader";
 import QuestionNav from "../../../../../components/QuestionNav";
 import Comments from "../../../../../components/Comments";
 import fetchCurrentUser from "../../../../../actions/fetchCurrentUser";
+import { RequestModel } from "../../../../../types/requestTypes";
+import { HiMenu, HiChat } from "react-icons/hi";
+import CommentsMobileBubble from "../../../../../components/CommentsMobileBubble";
+
+
+interface CurrentUserDataModel {
+  id: string;
+  type: string;
+}
 
 export default function Page({ params }) {
   const router = useRouter();
   const [requestId] = useState(params.requestId);
   const { isLoaded, isSignedIn, user } = useUser();
 
-  const [currentUserData, setCurrentUserData] = useState({}); 
+  const [currentUserData, setCurrentUserData] = useState<CurrentUserDataModel>({
+    id: "",
+    type: "",
+  });
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(undefined);
-  const [addQuestionModalOpen, setAddQuestionModalOpen] = useState(false);
+  const [addQuestionModalOpen, setAddQuestionModalOpen] = useState<boolean>(false);
   const [requestStatus, setRequestStatus] = useState(""); // ["draft", "sent", "answered" "closed"]
   const [requestTitle, setRequestTitle] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [commentCount, setCommentCount] = useState<number>(0);
+  const [questionNavOpen, setQuestionNavOpen] = useState<boolean>(false); // for mobile`
+  const [commentsTabActive, setCommentsTabActive] = useState<boolean>(false);
+
 
   // fetch current user data for comments
   useEffect(() => {
     if (currentUserData && isLoaded) {
       fetchCurrentUser(user.id)
         .then((res) => {
-          setCurrentUserData(res)
+          setCurrentUserData(res);
           console.log("currentUserType", res);
         })
         .catch((err) => {
@@ -48,18 +64,18 @@ export default function Page({ params }) {
       if (!isLoaded) return;
       if (!isSignedIn) return;
       console.log("fetching questions");
-      const request = await fetchRequest(requestId, user.id);
+      const request: RequestModel = await fetchRequest(requestId, user.id);
       if (!request) {
         router.push("/404");
         return;
-      } 
+      }
       // if user is not the owner of the request and not a client of the request
       if (
         request.user.externalId !== user.id &&
         request.clients.every((client) => client.externalId !== user.id)
       ) {
         router.push("/404");
-       }
+      }
 
       console.log("request", request);
       setQuestions(request.questions);
@@ -145,40 +161,77 @@ export default function Page({ params }) {
           title={requestTitle}
           status={requestStatus}
           requestId={requestId}
+          isLoading={isLoading}
         />
       </div>
-      <div className="grid flex-grow grid-cols-12 overflow-hidden sm:flex-row">
+      {/* Mobile question nav menu button and comments button */}
+      {!(questionNavOpen || commentsTabActive) && (
+        // Menu button
+        <div className=" flex col-span-full h-min w-full md:hidden py-2 px-4 border-b border-gray-200  bg-white">
+          <button
+            className="flex w-full items-center gap-4   "
+            onClick={() => setQuestionNavOpen(!questionNavOpen)}
+          >
+            <HiMenu className="h-8 w-8" />
+            View All Questions
+          </button>
+
+          {/* Comments button */}
+          <CommentsMobileBubble
+            commentCount={commentCount}
+            setCommentsActive={setCommentsTabActive}
+            size={"sm"}
+            isSecondary={true}
+          />
+        </div>
+      )}
+
+      <div className="relative grid flex-grow grid-cols-12 overflow-hidden">
         {/* first column */}
-        <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white border-r ">
+        <div
+          className={`col-span-full h-full  flex-col overflow-hidden border-r bg-white md:col-span-2 md:flex 
+        ${questionNavOpen ? "flex" : "hidden"}`}
+        >
           <QuestionNav
             questions={questions}
             setQuestions={setQuestions}
             currentQuestion={currentQuestion}
             setCurrentQuestion={setCurrentQuestion}
             requestId={requestId}
-          />
-        </div>
-        {/* second column */}
-        <div className="col-span-8 flex h-full flex-col overflow-hidden bg-gray-50 ">
-          <QuestionsWrapper
+            setAddQuestionModalOpen={setAddQuestionModalOpen}
             isLoading={isLoading}
-            currentQuestion={currentQuestion}
-            handleNextButtonClick={handleNextButtonClick}
-            handlePreviousButtonClick={handlePreviousButtonClick}
-            requestId={requestId}
-            questions={questions}
-            setCurrentQuestion={setCurrentQuestion}
+            addQuestionModalOpen={addQuestionModalOpen}
+            setQuestionNavOpen={setQuestionNavOpen}
           />
         </div>
+
+        {/* second column */}
+        {!(questionNavOpen || commentsTabActive) && (
+          <div className="col-span-full flex h-full flex-col overflow-hidden bg-gray-50 md:col-span-8 md:mt-0  ">
+            <QuestionsWrapper
+              isLoading={isLoading}
+              currentQuestion={currentQuestion}
+              requestId={requestId}
+              questions={questions}
+              setCurrentQuestion={setCurrentQuestion}
+              handleDeleteQuestion={handleDeleteQuestion}
+            />
+          </div>
+        )}
         {/* third column */}
-        <div className="col-span-2 flex h-full flex-col overflow-hidden bg-white border-l ">
-          <Comments 
+
+        <div
+          className={`col-span-full h-full flex-col overflow-hidden border-l bg-white md:col-span-2 md:flex 
+        ${commentsTabActive ? "flex" : "hidden"}`}
+        >
+          <Comments
             questionId={currentQuestion?.id}
             senderType={currentUserData.type}
             senderId={currentUserData.id}
+            setCommentCount={setCommentCount}
+            setCommentsTabActive={setCommentsTabActive}
           />
-          </div>
-
+        </div>
       </div>
     </div>
   );
