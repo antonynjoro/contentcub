@@ -95,7 +95,7 @@ export default function SendRequestModal({
         autoFocus={true}
       />
 
-      <div className="flex flex-col gap-2 pt-4">
+      <div className="flex flex-col gap-2 md:pt-4">
         <h3 className="text-lg font-bold">Clients in this request</h3>
         <div className="flex flex-col gap-2">
           {clientsOnRequest.length === 0 ? (
@@ -106,7 +106,7 @@ export default function SendRequestModal({
                 className="flex flex-row items-center justify-between"
                 key={client.id}
               >
-                <div className="flex items-center gap-x-3">
+                <div className="flex md:flex-row flex-col  md:items-center gap-x-3">
                   {client.firstName?.length > 0 ? (
                     <p>
                       {client.firstName} {client?.lastName}
@@ -132,7 +132,7 @@ export default function SendRequestModal({
         </div>
       </div>
 
-      <div className="flex gap-4 pt-6">
+      <div className="flex md:flex-row flex-col gap-4 pt-6">
         {clientsOnRequest.length > 0 && (
           <Button
             size="md"
@@ -151,7 +151,7 @@ export default function SendRequestModal({
             </div>
           </Button>
         )}
-        <div className="flex flex-grow flex-row justify-end gap-4">
+        <div className="flex flex-grow flex-col md:flex-row justify-end gap-4">
           <Button
             handleClick={() => handleModalClose((prev) => !prev)}
             isSecondary={true}
