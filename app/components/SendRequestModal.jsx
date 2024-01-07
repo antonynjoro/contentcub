@@ -46,7 +46,7 @@ export default function SendRequestModal({
           error: (err) => {
             // Check if the error message matches the specific error from sendRequest
             if (err.message.includes("is already in the request")) {
-              return "The client is already in the checklist!"
+              return "The client is already in the checklist!";
             } else {
               return "Something went wrong!"; // Generic error message for other errors
             }
@@ -75,7 +75,7 @@ export default function SendRequestModal({
         );
       })
       .then((data) => {
-        toast.success("Client removed!");
+        toast.success("Contact removed!");
       })
       .catch((error) => {
         toast.error("Something went wrong!");
@@ -106,7 +106,7 @@ export default function SendRequestModal({
                 className="flex flex-row items-center justify-between"
                 key={client.id}
               >
-                <div className="flex md:flex-row flex-col  md:items-center gap-x-3">
+                <div className="flex flex-col gap-x-3  md:flex-row md:items-center">
                   {client.firstName?.length > 0 ? (
                     <p>
                       {client.firstName} {client?.lastName}
@@ -132,7 +132,7 @@ export default function SendRequestModal({
         </div>
       </div>
 
-      <div className="flex md:flex-row flex-col gap-4 pt-6">
+      <div className="flex flex-col gap-2 pt-6 md:flex-row md:gap-4">
         {clientsOnRequest.length > 0 && (
           <Button
             size="md"
@@ -151,17 +151,28 @@ export default function SendRequestModal({
             </div>
           </Button>
         )}
-        <div className="flex flex-grow flex-col md:flex-row justify-end gap-4">
-          <Button
+        <div className="flex flex-grow flex-col justify-end gap-2 md:flex-row md:gap-4">
+          <div className="hidden md:block">
+            <Button
+              handleClick={() => handleModalClose((prev) => !prev)}
+              isSecondary={true}
+            >
+              Cancel
+            </Button>
+          </div>
+        
+        <Button handleClick={handleSendRequestButtonClicked}>
+          Send Checklist
+        </Button>
+        <div className="absolute right-2 top-2 md:hidden">
+          <IconButton
             handleClick={() => handleModalClose((prev) => !prev)}
-            isSecondary={true}
-          >
-            Cancel
-          </Button>
-          <Button handleClick={handleSendRequestButtonClicked}>
-            Send Checklist
-          </Button>
+            IconComponent={HiX}
+            size="md"
+            tooltipText={"Close"}
+          />
         </div>
+      </div>
       </div>
     </ModalContainer>
   );

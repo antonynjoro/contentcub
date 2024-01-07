@@ -8,7 +8,7 @@ export default function ModalContainer({children, handleModalClose}) {
       onClick={() => handleModalClose()}
     >
       <div
-        className="flex md:w-[600px] flex-col gap-6 rounded-xl bg-white md:p-12 shadow-2xl p-5 m-5"
+        className="flex md:w-[600px] flex-col gap-2 md:gap-6 rounded-xl bg-white md:p-12 shadow-2xl p-5 m-5 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

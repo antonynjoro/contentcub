@@ -19,7 +19,7 @@ export default function AddRequestModal({handleModalClose, handleAddRequestName}
     <ModalContainer  handleModalClose={handleModalClose}>
         <div className="flex flex-col gap-6">
             <div className="flex flex-col">
-            <h2 className="text-2xl font-bold">Create a new Checklist</h2>
+            <h2 className=" text-xl md:text-2xl font-bold">Create a new Checklist</h2>
             <p className="text-gray-500 text-sm">Create a new checklist to send to your clients.</p>
             </div>
             <ShortAnswerField
