@@ -14,107 +14,6 @@ import fetchCurrentUser from "../../../../actions/fetchCurrentUser";
 import AnsweredQuestions from "../../../../components/AnsweredQuestions";
 import CommentsMobileBubble from "../../../../components/CommentsMobileBubble";
 
-// const questions = [
-//   {
-//     id: "Wcvoew2330sc20c",
-//     type: "textShort",
-//     title: "What is your name?",
-//     description: "Please enter your name below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20d",
-//     type: "textLong",
-//     title: "What does your company do?",
-//     description: "In a few sentences, please describe what your company does",
-//   },
-//   {
-//     id: "Wcvoew2330sc20e",
-//     type: "fileUpload",
-//     title: "any other files?",
-//     description:
-//       "Please upload any other files that you think would be helpful",
-//   },
-//   {
-//     id: "Wcvoew2330sc20f",
-//     type: "imageUpload",
-//     title: "Upload your Logo",
-//     description: "Please upload your company logo in a high resolution format",
-//   },
-//   {
-//     id: "Wcvoew2330sc20g",
-//     type: "textShort",
-//     title: "What is your email address?",
-//     description: "Please enter your email address below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20h",
-//     type: "textShort",
-//     title: "What is your phone number?",
-//     description: "Please enter your phone number below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20i",
-//     type: "textShort",
-//     title: "What is your company name?",
-//     description: "Please enter your company name below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20j",
-//     type: "textShort",
-//     title: "What is your job title?",
-//     description: "Please enter your job title below",
-//   },
-
-//   {
-//     id: "Wcvoew2330sc20m",
-//     type: "textShort",
-//     title: "What is your age?",
-//     description: "Please enter your age below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20n",
-//     type: "textShort",
-//     title: "What is your address?",
-//     description: "Please enter your address below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20o",
-//     type: "textShort",
-//     title: "What is your favorite color?",
-//     description: "Please enter your favorite color below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20p",
-//     type: "textShort",
-//     title: "What is your favorite food?",
-//     description: "Please enter your favorite food below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20q",
-//     type: "textShort",
-//     title: "What is your favorite movie?",
-//     description: "Please enter your favorite movie below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20t",
-//     type: "fileUpload",
-//     title: "Upload your resume",
-//     description: "Please upload your resume in a PDF format",
-//   },
-//   {
-//     id: "Wcvoew2330sc20u",
-//     type: "imageUpload",
-//     title: "Upload your profile picture",
-//     description: "Please upload a profile picture in a high resolution format",
-//   },
-//   {
-//     id: "Wcvoew2330sc20v",
-//     type: "textLong",
-//     title: "What is your company's mission statement?",
-//     description: "Please enter your company's mission statement below",
-//   },
-// ];
-
 
 
 export default function Page({ params }) {
@@ -286,8 +185,11 @@ export default function Page({ params }) {
           </div>
         )}
 
-        {(questions.length === 0) && !(columnOneActive || columnThreeActive) && (
-          <div className=" col-span-full flex h-full w-full flex-col overflow-hidden border-x md:col-span-8  ">
+        {/* Second Column - Empty State */}
+        {(questions.length === 0)  && (
+          <div className={` col-span-full flex h-full w-full flex-col overflow-hidden border-x md:col-span-8  
+          ${!(columnOneActive || columnThreeActive) ? " flex-grow" : "hidden md:flex"}
+          `}>
             <EmptyChecklistState
               setAddQuestionModalOpen={setAddQuestionModalOpen}
               setColumnOneActive={setColumnOneActive}
@@ -353,7 +255,7 @@ function EmptyChecklistState({ setAddQuestionModalOpen, setColumnOneActive }) {
     <div className="flex flex-grow items-center justify-center border border-dashed m-4 border-gray-400 rounded-md">
       <div className="flex flex-col items-center justify-center gap-4">
         <p className="text-gray-500 text-center">
-          You haven't added any questions yet
+          You haven&apos;t added any questions yet
         </p>
         <button
           className="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-600"
