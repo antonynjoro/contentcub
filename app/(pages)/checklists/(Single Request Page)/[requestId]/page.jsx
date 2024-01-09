@@ -256,7 +256,7 @@ function EmptyChecklistState({ setAddQuestionModalOpen, setColumnOneActive }) {
     <div className="flex flex-grow items-center justify-center border border-dashed m-4 border-gray-400 rounded-md">
       <div className="flex flex-col items-center justify-center gap-4">
         <p className="text-gray-500 text-center">
-          You haven&apos;t added any questions yet
+          Your checklist is empty.
         </p>
         <button
           className="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-600"
@@ -265,7 +265,7 @@ function EmptyChecklistState({ setAddQuestionModalOpen, setColumnOneActive }) {
             setColumnOneActive(true);
           }}
         >
-          Add Question
+          Add checklist item
         </button>
       </div>
     </div>
