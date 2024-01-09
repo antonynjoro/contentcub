@@ -9,15 +9,16 @@ import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 
 const navigation = [
+  { name: "Home", href: "/", current: false },
   { name: "Checklists", href: "/checklists", current: true },
   // { name: "Team", href: "#", current: false },
   // { name: "Projects", href: "#", current: false },
   // { name: "Calendar", href: "#", current: false },
 ];
 const userNavigation = [
-  { name: "Your Profile", href: "/user-profile" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  // { name: "Your Profile", href: "/user-profile" },
+  // { name: "Settings", href: "#" },
+  // { name: "Sign out", href: "#" },
 ];
 
 function classNames(...classes) {
@@ -66,14 +67,14 @@ export default function NavBar() {
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                <button
+                {/* <button
                   type="button"
                   className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
                   <HiOutlineBell className="h-6 w-6" aria-hidden="true" />
-                </button>
+                </button> */}
 
                 {/* Profile dropdown */}
                 <div className="ml-3">
@@ -131,47 +132,10 @@ export default function NavBar() {
             </div>
             {isSignedIn && (
               <div className="border-t border-gray-200 pb-3 pt-4">
-                <div className="flex items-center px-4">
-                  <div className="flex-shrink-0">
-                    <Image
-                      className="h-10 w-10 rounded-full"
-                      src={isLoaded ? user.imageUrl : ""}
-                      alt={isLoaded ? user.fullName : ""}
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <div className="text-base font-medium text-gray-800">
-                      {isLoaded ? user.fullName : "Loading..."}
-                    </div>
-                    <div className="text-sm font-medium text-gray-500">
-                      {isLoaded
-                        ? user.emailAddresses[0].emailAddress
-                        : "Loading..."}
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">View notifications</span>
-                    <HiOutlineBell className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                <div className="mt-3 space-y-1">
-                  {userNavigation.map((item) => (
-                    <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                      onClick={() => signOut()}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
-                  ))}
+                <div className="px-4">
+                <UserButton
+                  showName
+                />
                 </div>
               </div>
             )}
