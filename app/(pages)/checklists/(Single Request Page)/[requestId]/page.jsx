@@ -137,8 +137,9 @@ export default function Page({ params }) {
 
   // if there are no questions, display the question column on mobile
   useEffect(() => {
-    if (questions.length < 1) {
+    if (questions.length === 0) {
       setColumnOneActive(true);
+      setAddQuestionModalOpen(true);
     }
   }, [questions]);
   
