@@ -140,6 +140,8 @@ export default function Page({ params }) {
     if (questions.length === 0) {
       setColumnOneActive(true);
       setAddQuestionModalOpen(true);
+    } else {
+      setColumnOneActive(false);
     }
   }, [questions]);
   
