@@ -1,129 +1,20 @@
 "use client";
-import NavBar from "../../../../components/NavBar";
 import React, { Suspense, use } from "react";
-import IconButton from "../../../../components/IconButton.jsx";
-import QuestionNavItem from "../../../../components/QuestionNavItem.jsx";
-import Question from "../../../../components/Question.jsx";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import AddQuestionModal from "../../../../components/AddQuestionModal.jsx";
-import { HiTrash } from "react-icons/hi2";
 import QuestionNavigationButtons from "../../../../components/QuestionNavigationButtons.jsx";
-import Button from "../../../../components/Button";
 import fetchRequest from "./fetchRequest";
 import RequestHeader from "../../../../components/RequestHeader.jsx";
-import Chip from "../../../../components/Chip";
 import deleteQuestion from "../../../../actions/deleteQuestion";
-import { currentUser, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation.js";
 import { toast } from "react-hot-toast";
-import QuestionsWrapper from "../../../../components/QuestionsWrapper.jsx";
 import QuestionNav from "../../../../components/QuestionNav.jsx";
 import Comments from "../../../../components/Comments";
 import fetchCurrentUser from "../../../../actions/fetchCurrentUser";
 import AnsweredQuestions from "../../../../components/AnsweredQuestions";
 import CommentsMobileBubble from "../../../../components/CommentsMobileBubble";
 
-// const questions = [
-//   {
-//     id: "Wcvoew2330sc20c",
-//     type: "textShort",
-//     title: "What is your name?",
-//     description: "Please enter your name below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20d",
-//     type: "textLong",
-//     title: "What does your company do?",
-//     description: "In a few sentences, please describe what your company does",
-//   },
-//   {
-//     id: "Wcvoew2330sc20e",
-//     type: "fileUpload",
-//     title: "any other files?",
-//     description:
-//       "Please upload any other files that you think would be helpful",
-//   },
-//   {
-//     id: "Wcvoew2330sc20f",
-//     type: "imageUpload",
-//     title: "Upload your Logo",
-//     description: "Please upload your company logo in a high resolution format",
-//   },
-//   {
-//     id: "Wcvoew2330sc20g",
-//     type: "textShort",
-//     title: "What is your email address?",
-//     description: "Please enter your email address below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20h",
-//     type: "textShort",
-//     title: "What is your phone number?",
-//     description: "Please enter your phone number below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20i",
-//     type: "textShort",
-//     title: "What is your company name?",
-//     description: "Please enter your company name below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20j",
-//     type: "textShort",
-//     title: "What is your job title?",
-//     description: "Please enter your job title below",
-//   },
 
-//   {
-//     id: "Wcvoew2330sc20m",
-//     type: "textShort",
-//     title: "What is your age?",
-//     description: "Please enter your age below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20n",
-//     type: "textShort",
-//     title: "What is your address?",
-//     description: "Please enter your address below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20o",
-//     type: "textShort",
-//     title: "What is your favorite color?",
-//     description: "Please enter your favorite color below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20p",
-//     type: "textShort",
-//     title: "What is your favorite food?",
-//     description: "Please enter your favorite food below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20q",
-//     type: "textShort",
-//     title: "What is your favorite movie?",
-//     description: "Please enter your favorite movie below",
-//   },
-//   {
-//     id: "Wcvoew2330sc20t",
-//     type: "fileUpload",
-//     title: "Upload your resume",
-//     description: "Please upload your resume in a PDF format",
-//   },
-//   {
-//     id: "Wcvoew2330sc20u",
-//     type: "imageUpload",
-//     title: "Upload your profile picture",
-//     description: "Please upload a profile picture in a high resolution format",
-//   },
-//   {
-//     id: "Wcvoew2330sc20v",
-//     type: "textLong",
-//     title: "What is your company's mission statement?",
-//     description: "Please enter your company's mission statement below",
-//   },
-// ];
 
 export default function Page({ params }) {
   const router = useRouter();
@@ -244,6 +135,15 @@ export default function Page({ params }) {
   }
   
 
+  // if there are no questions, display the question column on mobile
+  useEffect(() => {
+    if (questions.length === 0) {
+      setColumnOneActive(true);
+      setAddQuestionModalOpen(true);
+    } else {
+      setColumnOneActive(false);
+    }
+  }, [questions]);
   
 
   return (
@@ -258,9 +158,11 @@ export default function Page({ params }) {
       </div>
       <div className=" flex flex-grow overflow-hidden    md:grid md:grid-cols-12">
         {/* first column */}
-        <div className={`col-span-full md:col-span-2  h-full overflow-hidden bg-white md:flex flex-col 
+        <div
+          className={`col-span-full h-full  flex-col overflow-hidden bg-white md:col-span-2 md:flex 
         ${columnOneActive ? " flex grow " : "hidden"}
-        `}>
+        `}
+        >
           <QuestionNav
             questions={questions}
             setQuestions={setQuestions}
@@ -274,54 +176,68 @@ export default function Page({ params }) {
           />
         </div>
         {/* Second Column */}
-        {!(columnOneActive || columnThreeActive) && (
-        <div className=" col-span-full md:col-span-8 flex h-full w-full flex-col overflow-hidden border-x  ">
-          <AnsweredQuestions
-            requestTitle={requestTitle}
-            currentQuestion={currentQuestion}
-            requestId={requestId}
-            handleDeleteQuestion={handleDeleteQuestion}
-            openQuestionNav={setColumnOneActive}
-          />
-        </div>
+        {!(columnOneActive || columnThreeActive) && (questions.length > 0) && (
+          <div className=" col-span-full flex h-full w-full flex-col overflow-hidden border-x md:col-span-8  ">
+            <AnsweredQuestions
+              requestTitle={requestTitle}
+              currentQuestion={currentQuestion}
+              requestId={requestId}
+              handleDeleteQuestion={handleDeleteQuestion}
+              openQuestionNav={setColumnOneActive}
+            />
+          </div>
+        )}
+
+        {/* Second Column - Empty State */}
+        {(questions.length === 0)  && (
+          <div className={` col-span-full flex h-full w-full flex-col overflow-hidden border-x md:col-span-8  
+          ${!(columnOneActive || columnThreeActive) ? " flex-grow" : "hidden md:flex"}
+          `}>
+            <EmptyChecklistState
+              setAddQuestionModalOpen={setAddQuestionModalOpen}
+              setColumnOneActive={setColumnOneActive}
+            />
+          </div>
         )}
 
         {/* Comments mobile bubble (Absolute) */}
-        {(!columnOneActive && !columnThreeActive) && (
-        <div className="md:hidden fixed bottom-0 right-0 mr-4 mb-4 flex gap-3">
-          <CommentsMobileBubble
-            commentCount={commentCount}
-            setCommentsActive={setColumnThreeActive}
-          />
-          <QuestionNavigationButtons
-            handleNextButtonClick={() => {
-              const currentQuestionIndex = questions.findIndex(
-                (question) => question.id === currentQuestion.id,
-              );
-              if (currentQuestionIndex === questions.length - 1) {
-                setCurrentQuestion(questions[0]);
-              } else {
-                setCurrentQuestion(questions[currentQuestionIndex + 1]);
-              }
-            }}
-            handlePreviousButtonClick={() => {
-              const currentQuestionIndex = questions.findIndex(
-                (question) => question.id === currentQuestion.id,
-              );
-              if (currentQuestionIndex === 0) {
-                setCurrentQuestion(questions[questions.length - 1]);
-              } else {
-                setCurrentQuestion(questions[currentQuestionIndex - 1]);
-              }
-            }}
-          />
-        </div>
+        {!columnOneActive && !columnThreeActive && (
+          <div className="fixed bottom-0 right-0 mb-4 mr-4 flex gap-3 md:hidden">
+            <CommentsMobileBubble
+              commentCount={commentCount}
+              setCommentsActive={setColumnThreeActive}
+            />
+            <QuestionNavigationButtons
+              handleNextButtonClick={() => {
+                const currentQuestionIndex = questions.findIndex(
+                  (question) => question.id === currentQuestion.id,
+                );
+                if (currentQuestionIndex === questions.length - 1) {
+                  setCurrentQuestion(questions[0]);
+                } else {
+                  setCurrentQuestion(questions[currentQuestionIndex + 1]);
+                }
+              }}
+              handlePreviousButtonClick={() => {
+                const currentQuestionIndex = questions.findIndex(
+                  (question) => question.id === currentQuestion.id,
+                );
+                if (currentQuestionIndex === 0) {
+                  setCurrentQuestion(questions[questions.length - 1]);
+                } else {
+                  setCurrentQuestion(questions[currentQuestionIndex - 1]);
+                }
+              }}
+            />
+          </div>
         )}
 
         {/* Third Colun */}
-        <div className={`col-span-2  md:flex h-full flex-col overflow-hidden border-x bg-white  
+        <div
+          className={`col-span-2  h-full flex-col overflow-hidden border-x bg-white md:flex  
         ${columnThreeActive ? " flex-grow" : "hidden"}
-        `}>
+        `}
+        >
           <Comments
             questionId={currentQuestion?.id}
             senderType={currentUserData.type}
@@ -330,6 +246,29 @@ export default function Page({ params }) {
             setCommentCount={setCommentCount}
           />
         </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+function EmptyChecklistState({ setAddQuestionModalOpen, setColumnOneActive }) {
+  return (
+    <div className="flex flex-grow items-center justify-center border border-dashed m-4 border-gray-400 rounded-md">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <p className="text-gray-500 text-center">
+          Your checklist is empty.
+        </p>
+        <button
+          className="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+          onClick={() => {
+            setAddQuestionModalOpen(true);
+            setColumnOneActive(true);
+          }}
+        >
+          Add checklist item
+        </button>
       </div>
     </div>
   );

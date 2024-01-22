@@ -122,7 +122,7 @@ export default async function sendRequest(
     {
       userFirstName: user.firstName,
       requestTitle: request.title,
-      inviteLink: `https://contentcub.co/checklists/${requestId}/submit`,
+      inviteLink: `${process.env.NEXT_PUBLIC_BASE_URL}/checklists/${requestId}/submit`,
     }
   );
 
