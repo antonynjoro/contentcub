@@ -7,6 +7,8 @@ import Head from "next/head";
 import HotjarContext from "./context/HotjarContext.jsx";
 import MixpanelContext from "./context/MixpanelContext.jsx";
 import { Analytics } from '@vercel/analytics/react';
+import { GoogleTagManager } from '@next/third-parties/google'
+
 
 
 
@@ -45,6 +47,7 @@ export default function RootLayout({ children }) {
           <ToasterContext />
           {children}
           <Analytics/>
+          <GoogleTagManager gtmId="GTM-N2JR9NTV" />
         </body>
       </html>
     </ClerkProvider>
